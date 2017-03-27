@@ -24,7 +24,7 @@ define("APJ",  LIBS.DIRECTORY_SEPARATOR."APJ");
 define("IMAGES",  APP.DIRECTORY_SEPARATOR."images".DIRECTORY_SEPARATOR);
 // URL raíz de la aplicación **DEBE MODIFICARSE**
 define("ROOTURL", "/MiAplicacion");
-// Dominio
+// Dominio **DEBE MODIFICARSE**
 if (DEVELOPMENT) {
   $domain="localhost";
 } else {
