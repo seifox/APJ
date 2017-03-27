@@ -1,0 +1,4 @@
+Carpeta "JQuery"
+
+Contiene la libreria de jQuery y jQuery-UI en el caso que no quiera usarla en linea.
+Se puede reemplazar con la ultima versión

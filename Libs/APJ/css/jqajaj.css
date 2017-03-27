@@ -1,0 +1,107 @@
+#dialogoverlay{
+  opacity: .8;
+  position: fixed;
+  top:0px;
+  left:0px;
+  background: #ACACAC;
+  margin:0;
+  width:100%;
+  z-index:9999;
+}
+#dialogbox{
+  background: #000;
+  border-radius: 10px;
+  display:none;
+  font-family: Arial, Helvetica, sans-serif;
+  margin:0;
+  min-width: 300px;
+  position:fixed;
+  z-index: 9999;
+}
+#dialogbox > div{
+  background:#FFF;
+  margin:4px;
+}
+#dialogbox > div > #dialogboxhead{
+  background:#FFF;
+  background-repeat: no-repeat;
+  background-position: left center;
+  color: #000000;
+  font-size: 19px;
+  font-weight: bolder;
+  padding:10px;
+  padding-left: 40px;
+  margin-left: 5px;
+  
+}
+#dialogbox > div > #dialogboxbody{
+  font-size: 12px;
+  font-weight: bolder;
+  padding:20px;
+}
+.infoBody {
+  background-color: #000080;
+  color: #FFFFFF;
+}
+.warningBody {
+  background-color: #E0BE1A;
+  color: #000000;
+}
+.errorBody {
+  background-color: #C24949;
+  color: #FFFFFF;
+}
+.confirmBody {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+.promptBody {
+  background-color: #CCCCCC;
+  color: #000000;
+}
+.processBody {
+  background-color: #008000;
+  color: #FFFFFF;
+}
+#dialogbox > div > #dialogboxfoot{
+  background:#FFF;
+  padding:10px;
+  text-align: right;
+}
+#dialogbox > div > #dialogboxfoot > button {
+  background:#423F40;
+  border:none;
+  color:#FFF;
+  cursor:pointer;
+  font-size: 10px;
+  min-width: 50px;
+  padding:6px;
+}
+#dialogOk, #dialogCancel {
+  background:#423F40;
+  border:none;
+  color:#FFF;
+  cursor:pointer;
+  font-size:10px;
+  min-width:50px;
+  padding:6px;
+}
+#busyoverlay {
+  opacity:.3;
+  position:fixed;
+  top:0px;
+  left:0px;
+  background:#ACACAC;
+  margin:0;
+  width:100%;
+  z-index:9998;
+}
+#busybox {
+  position:fixed;
+  display:none;
+  margin:0;
+  min-width: 32px;
+  position:fixed;
+  z-index: 9999;
+  margin:0px;
+}

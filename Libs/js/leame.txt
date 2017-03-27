@@ -1,0 +1,8 @@
+Carpeta "js"
+Tiene como proposito de almacenar archivos JavaScript adicionales (Helpers)
+Trae como ejemplo: 
+1.- adjustTbody.js utilidad para ajustar el header de una tabla con vscroll
+2.- datePicker.js utilidad para reemplazar <input> de tipo "date" con la funcion datepicker() de jQuery UI, en el caso que el navegador no soporte los tipos "date"
+
+
+
