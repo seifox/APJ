@@ -107,8 +107,7 @@ class APJController
     if (!isset($_SESSION['id']) or !isset($_SESSION['IPaddress']) or !isset($_SESSION['userAgent'])) {
       $this->redirect(LOGIN,true);
     }
-    $controller=$this->getController();
-    $app=md5($controller);
+    $app=md5($this->getController());
     if (in_array($app,$_SESSION['app'])==FALSE) {
       $this->redirect(LOGIN,true);
     }
