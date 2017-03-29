@@ -7,9 +7,16 @@
 - El modelo tiene un ORM basado en PDO muy simple, pero potente, que facilita la manipulación y el intercambio de datos, entre el modelo, el controlador y la vista.
 - A pesar de que está enfocado en la comunicación asíncrona, entre el controlador y la vista, también puede trabajar en forma síncrona
 - Especialmente diseñado para el desarrollo de aplicaciones web.
+
 ### Motivación:
 >Después de aprender y probar muchos frameworks para PHP, ninguno me satisfacía por completo, en especial cuando se trataba del intercambio asíncrono de datos, comunicación con javascript desde PHP para modificación del DOM de las vistas. Así que me decidí hacer mi propio framework, el cual satisficiera mis necesidades y cuya curva de aprendizaje sea baja. 
 >En resumen un framework simple pero potente que cubriera mis necesidades en el desarrollo de aplicaciones web con PHP.
+
+### Requerimientos:
+1. Apache con PHP 5.3 o mayor (XAMPP, LAMP, Appserv u otro)
+1. MySQL o MariaDB que tenga PDO e INNODB habilitado (también es posible hacer conexiones con otros tipos de bases de datos con DSN)
+1. Un navegador actualizado compatible con HTML5 (Chrome, Edge, Safari o Firefox)
+
 ### Instalación:
 >Por ahora la instalación es manual, luego implementare la instalación por medio de “Composer”
 1. Bajar el framework y copiar el contenido de APJ en la carpeta para su proyecto.
