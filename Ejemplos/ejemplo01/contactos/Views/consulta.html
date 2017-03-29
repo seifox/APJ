@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Content-Type" content="application/x-www-form-urlencoded; charset=UTF-8">
+    <meta http-equiv="Lang" content="es">
+    <title>Consulta</title>
+    <script type="text/javascript" src="Libs/jQuery/jquery.min.js"></script>
+    <script type="text/javascript" src="Libs/jQuery/jquery.VerifyDateTime.min.js"></script>    
+    <script type="text/javascript" src="Libs/APJ/js/jqajaj.min.js"></script>
+    <script type="text/javascript">
+    var url = "APJ:{self()}";
+    var timeout = APJ:{timeout()};
+    </script>
+    <link rel="stylesheet" type="text/css" href="Libs/APJ/css/jqajaj.css">
+    <link rel="stylesheet" type="text/css" href="css/comun.css">
+  </head>
+  <body>
+    <section>
+      <h2>Consulta de Contactos</h2>
+      <article>
+        <form id="form" name="form">
+          <label for="busqueda">Busqueda:</label>
+          <input type="text" name="busqueda" id="busqueda" size="30" maxlength="100">
+          <label for="conPaginacion">Con páginacion:</label>
+          <input type="checkbox" name="conPaginacion" id="conPaginacion" value="1" checked="checked">
+          <button type="button" onclick="APJSubmit('form','consulta',[1])">Filtrar</button>
+        </form>
+      </article>
+      <article class="scrollv" style="max-height: 400px;">
+        <table class="tabla">
+          <caption>LISTA DE CONTACTOS</caption>
+          <thead>
+            <tr>
+              <th>País</th>
+              <th>DNI</th>
+              <th>Nombres</th>
+              <th>Apellido Paterno</th>
+              <th>Apellido Materno</th>
+              <th>Ciudad</th>
+              <th>Dirección</th>
+              <th>Fono</th>
+              <th>email</th>
+              <th>Fecha nacimiento</th>
+              <th>Edad</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo">
+            APJ:{consulta(1)}
+          </tbody>
+        </table>
+      </article>
+    </section>
+    <div id="paging">APJ:{paginacion(1)}</div>
+  </body>
+</html>

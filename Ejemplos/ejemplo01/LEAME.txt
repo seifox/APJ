@@ -1,0 +1,47 @@
+﻿Ejemplo 01: 
+ADMINISTRADOR DE CONTACTOS CON APJ
+
+REQUERIMIENTOS:
+1.- Apache con PHP 5.3 o mayor (XAMPP, LAMP, Appserv u otro)
+2.- MySQL o MariaDB que tenga PDO e INNODB habilitado
+3.- El framework APJ versión 1.17.03 o mayor
+4.- Un navegador actualizado compatible con HTML5 (Chrome, Edge, Safari o Firefox)
+*Por ahora de los nombrados, Firefox es el menos compatible con HTML5, por los tipos de <input> que soporta
+
+INSTALACION
+1.- Copie la carpeta “contactos” a su carpeta raíz del servidor (localhost)
+2.- Ejecute el contenido del archivo “contacos.sql” en phpMyAdmin o desde la consola de MySQL, para crear la base de datos de ejemplo.
+3.- Descargue (https://github.com/seifox/APJ) y copie la carpeta del Framework APJ (Libs e init.php) en la carpeta “contactos”.
+4.- Modifique en el archivo /contactos/init.php los siguientes datos:
+	- La constante APPNAME, cambie el valor por “Contactos”
+	- La constante ROOTURL, cambie el valor por “/contactos”
+	- Guarde los cambios
+5.- Modifique el archivo /contactos/Libs/APJ/APJPDO.ini.php: 
+	- modifique “user” por root u otro usuario con permiso a MySQL/MariaDB
+	- modifique “password” por una contraseña válida
+	- Guarde los cambios
+
+EJECUCION
+1.- Abra el navegador y coloque la dirección HTTP://localhost/contactos/ debería abrir la página de acceso
+al mantenedor de contactos.
+2.- Acceda con el usuario “admin” y contraseña “A123456” (sin comillas)
+3.- Pruebe la aplicación desde las opciones del menú
+
+LA APLICACIÓN
+Esta aplicación fue hecha sin un controlador principal, solo index (el menú) ejecuta cada controlador en forma independiente 
+dentro de un <iframe>, de tal forma que al abrirse cada uno se auto-instancia para ejecutarse y controla la sesión de usuarios 
+y los permisos.
+
+El controlador “login.php” fue modificado para dar acceso a los módulos presentes. Normalmente ello se controla desde alguna 
+tabla con los permisos que tiene cada usuario.
+
+La aplicación trae un módulo de acceso, mantenedores de Países, Ciudades y Contactos. Una consulta y la página de bienvenida (home)
+
+Pruebe el administrador de contactos y fíjese como opera APJ entre la vista y el controlador.
+
+Los archivos:
+	Lo que se encuentra en /contactos/ son los controladores (módulos)
+	Lo que se encuentra en /contactos/Views/ son las vistas (html)
+	Lo que se encunetra en /contactos/Models/ son los modelos (acceso a la BD)
+
+Para mayor información descargue y vea el manual de referencia de APJ

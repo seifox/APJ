@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="images/favicon.png" sizes="224x224">
+    <script type="text/javascript" src="Libs/jQuery/jquery.min.js"></script>     
+    <script type="text/javascript" src="Libs/APJ/js/jqajaj.min.js"></script>
+    <script type="text/javascript">
+      var url="APJ:{self()}";
+      var timeout = APJ:{timeout()};
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link rel="stylesheet" type="text/css" href="Libs/APJ/css/jqajaj.css">
+    <title>Login</title>
+  </head>
+
+  <body>
+    <div class="center"><h1>Acceso a Contactos</h1></div>
+    <div class="container">
+
+      <form class="form-signin" name="loginForm" id="loginForm">
+        <h2 class="form-signin-heading">Acceso</h2>
+        <label for="usuario" class="sr-only">Usuario</label>
+        <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Usuario" required autofocus>
+        <label for="contrasena" class="sr-only">Contraseña</label>
+        <input type="password" id="contrasena" name="contrasena" class="form-control" placeholder="Contrasena" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="guardar_clave" id="guardar_clave" value="1"> Recordarme
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="APJSubmit('loginForm','Control');">Ingresar</button>
+        <input type="hidden" name="control" value="1">
+      </form>
+
+    </div> <!-- /container -->
+  </body>
+</html>

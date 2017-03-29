@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Content-Type" content="application/x-www-form-urlencoded; charset=UTF-8">
+    <meta http-equiv="Lang" content="es">
+    <title>Ciudades</title>
+    <script type="text/javascript" src="Libs/jQuery/jquery.min.js"></script>    
+    <script type="text/javascript" src="Libs/APJ/js/jqajaj.min.js"></script>
+    <script type="text/javascript">
+    var url = "APJ:{self()}";
+    var timeout = APJ:{timeout()};
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/comun.css">
+    <link rel="stylesheet" type="text/css" href="Libs/APJ/css/jqajaj.css">
+  </head>
+  <body>
+    <section>
+      <h2>Mantención de Ciudades</h2>
+      <form id="form" name="form">
+        <article class="scrollv" style="max-height: 400px;">
+          <table class="tabla">
+            <thead>
+              <tr>
+                <th>PAIS</th>
+                <th>CIUDAD</th>
+                <td colspan="3" class="actions">ACCIONES</td>
+              </tr>
+              <tr class="fields">
+                <td>
+                  <input type="hidden" name="id" id="id">
+                  <select name="codigo_pais" id="codigo_pais" onchange="APJCall('cambiaGrilla',this.value);">
+                    APJ:{optPaises()}
+                  </select>
+                </td>
+                <td>
+                  <input type="text" name="ciudad" id="ciudad" maxlength="50" size="50" title="Nombre de la Ciudad">
+                </td>
+                <td>
+                  <button class="smallButton" type="button" onclick="APJSubmit('form','guardar');return false;" title="Guardar">+</button>
+                </td>
+                <td>
+                  <button id="reset" class="smallButton" type="button" title="Limpiar formulario">C</button>
+                </td>
+                <td><div id="menos"></div></td>
+              </tr>
+            </thead>
+            <tbody id="grillaCiudades">
+              APJ:{grillaCiudades(CL)}
+            </tbody>
+          </table>
+        </article>
+      </form>
+    </section>
+  </body>
+  <script>
+    $(document).ready(function() {
+      $("#reset").click(function() {
+        $(".fields :input").val("");
+        $("#menos").empty();
+        $("#codigo").focus();
+      });
+    })
+  </script>
+  
+</html>

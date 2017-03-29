@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="images/favicon.png" sizes="224x224">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="Libs/APJ/css/jqajaj.css">
+  <title>APJ:{nombreAplicacion()}</title>
+  <style>
+    #mainiframe {
+      min-width:100vw;
+      min-height:100vh;
+      border: none;
+      overflow:scroll;
+    }
+  </style>
+  <script type="text/javascript" src="Libs/jQuery/jquery.min.js"></script>
+  <script type="text/javascript" src="Libs/APJ/js/jqajaj.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    var url = "APJ:{self()}";
+    var timeout = APJ:{timeout()};
+    
+    $(document).ready(function(){
+      // Captura los links
+      $('a').click(function(event){
+        event.preventDefault();
+        var lnk=$(this).data('link');
+        if (lnk) {
+          jBusy();
+          APJCall('contenedor',lnk);
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+<section>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="active"><a href="#" data-link="Home">Home</a></li>
+    <li role="presentation" class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        Mantención <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="#" data-link="Paises">Paises</a></li>
+        <li><a href="#" data-link="Ciudades">Ciudades</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="#" data-link="Contactos">Contactos</a></li>
+      </ul>
+    </li>
+    <li role="presentation"><a href="#" data-link="Consulta">Consulta</a></li>
+    <li role="presentation"><a href="#" data-link="Fin">Salir</a></li>
+  </ul>
+</section>
+<section>
+  <div id="container">
+    <iframe name="mainiframe" id="mainiframe" src="Views/home.html" onload="jClose()" scrolling="yes">Este navegador no soporta iframes</iframe>
+  </div>
+</section>
+</body>
+</html>
