@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `contactos`
 --
-CREATE DATABASE IF NOT EXISTS `contactos` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS `contactos` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `contactos`;
 
 -- --------------------------------------------------------
@@ -730,20 +730,20 @@ INSERT INTO `paises` (`codigo`, `pais`) VALUES
 DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `usuario` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `contrasena` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Contraseña',
-  `nombre` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Nombre completo del usuario',
-  `ultima_contrasena` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Última contraseña utilizada',
+  `usuario` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `contrasena` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Contraseña',
+  `nombre` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Nombre completo del usuario',
+  `ultima_contrasena` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Última contraseña utilizada',
   `nivel` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Nivel de acceso',
   `bloqueado` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Define si la cuenta está bloqueada',
-  `motivo_bloqueo` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Descripción del motivo del bloqueo',
+  `motivo_bloqueo` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Descripción del motivo del bloqueo',
   `intentos` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Número de intentos fallidos de acceso',
   `ultimo_intento` datetime DEFAULT NULL COMMENT 'Fecha y hora del ultimo intento de acceso',
   `ultimo_acceso` datetime DEFAULT NULL COMMENT 'Fecha y hora del último acceso',
   `ultimo_cambio` date NOT NULL COMMENT 'Fecha último cambio de contraseña',
   `duracion_contrasena` smallint(3) NOT NULL DEFAULT '120' COMMENT 'Vigencia en días de la contraseña',
   `vence` date NOT NULL COMMENT 'Fecha de vencimiento de la cuenta',
-  `cookie` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Nombre de la cookie de acceso',
+  `cookie` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Nombre de la cookie de acceso',
   `creacion` date NOT NULL COMMENT 'Fecha de creación de la cuenta',
   `modificacion` datetime NOT NULL COMMENT 'Fecha de última modificación',
   PRIMARY KEY (`id`),
