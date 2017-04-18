@@ -83,3 +83,12 @@
 	- Mejoras en metodos:
 		execute()
 		getValue()
+
+## APJ 1.17.04
+- Mejoras en APJController
+  - Se agregó el método showDown(input, container) a APJController  y su función javascript jShowDown
+    input, container) a jqajaj, que permite hacer listas desplegables de búsqueda bajo un elemento como <input>.
+  - Se agregó la clase css showDown para definirla en el contenedor de la lista desplegable
+  - Se agregó jqajaj.min.css, la versión compactada de jqajaj.css
+  - Se agregaron las propiedades toLower (array), toUpper (array) a APJModel, que permite definir que       columnas deben guardarse como mayúsculas o minúsculas de forma automática.
+  - Mejoras menores en comentario de métodos y propiedades
