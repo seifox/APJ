@@ -1,8 +1,9 @@
 <?php
 /**
-* jQAction</br>
-* Class that sets parameters for jQAction object</br>
-* Clase que define los parametros del objeto jQAction
+* Class that sets parameters for jQAction object<br>
+* Clase que define los parámetros del objeto jQAction
+* Version: 1.17.0418
+* Author: Ricardo Seiffert
 */
 class jQAction
 {

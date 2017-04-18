@@ -1,12 +1,14 @@
 <?php
-/*
-  APJ Session
-  Versión: 1.16.0307
+/**
+* Controls the user session<br>
+* Controla la sesión de usuarios
+* Versión: 1.17.0418
+* Author: Ricardo Seiffert
 */
 class APJSession
 {
   /**
-  * Verifies that the session is still active</br>
+  * Verifies that the session is still active<br>
   * Verifica que la sesion está aún activa
   * @param $name (string) session name
   * @return boolean
@@ -17,7 +19,7 @@ class APJSession
     return self::same();
   }
   /**
-  * Start session</br>
+  * Start session<br>
   * Comienza la sesión
   * @param $name (string) session name
   * @param $limit (int) session time limit (secs)
@@ -47,7 +49,7 @@ class APJSession
    }
    
   /**
-  * Set session name</br>
+  * Set session name<br>
   * Define el nombre de la sesión
   * @param $name (string)
   */
@@ -57,7 +59,7 @@ class APJSession
   }
   
   /**
-  * Basic session information</br>
+  * Basic session information<br>
   * Información básica de la sesión
   */
   static protected function basicData() {
@@ -66,7 +68,7 @@ class APJSession
   }
   
   /**
-  * Determines if is the same Ip and machine</br>
+  * Determines if is the same Ip and machine<br>
   * Determina si es la misma Ip y maquina
   * @return (boolean) 
   */
@@ -83,7 +85,7 @@ class APJSession
   }
 
   /**
-  * Session validation</br>
+  * Session validation<br>
   * Validación de sesión
   * @return (boolean)
   */
@@ -98,7 +100,7 @@ class APJSession
   } 
    
   /**
-  * Regenerates the session</br>
+  * Regenerates the session<br>
   * Regenera la sesión
   */
   static function regenerate() {
@@ -121,7 +123,7 @@ class APJSession
   }  
 
   /**
-  * Destroys the session</br>
+  * Destroys the session<br>
   * Destruye la sesión
   */
   static function destroy() {

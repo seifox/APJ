@@ -105,3 +105,16 @@
   z-index: 9999;
   margin:0px;
 }
+.showDown {
+  z-index: 101;
+  display:none;
+  position: absolute;
+  display: none;
+  background: #fff;
+  color: #333;
+  overflow: auto;
+  top: 200px;
+  left: 200px;
+  height: 250px;
+  width:auto;
+}

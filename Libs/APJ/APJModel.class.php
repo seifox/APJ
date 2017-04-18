@@ -1,24 +1,26 @@
 <?php
 /*
-  APJ Base Model that extends APJPDO class
-  Versión: 1.17.0323
+* APJ Base Model that extends APJPDO class<br>
+* Modelo de base que extiende la clase APJPDO
+* Versión: 1.17.0418
+* Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
 {
   /**
-  * Table name</br>
+  * Table name<br>
   * Nombre de la Tabla
   * @var string
   */
   public $table = NULL;
   /**
-  * Primary key</br>
+  * Primary key<br>
   * Clave primaria
   * @var string
   */
   public $pk = array();
   /**
-  * Fields values</br>
+  * Fields values<br>
   * Valores de campos
   * @var array
   */
@@ -36,7 +38,7 @@ class APJModel extends APJPDO
   */
   public $fields = array();
   /**
-  * Defines if fields must by trimmed
+  * Defines if columns must by trimmed
   * Define si se recortan los valores de los campos
   * @var boolean
   */
@@ -67,7 +69,21 @@ class APJModel extends APJPDO
   public $where = NULL;
 
   /**
-  * Paging properties</br>
+  * Associative array of columns to be stored in lowercase<br>
+  * Array asociativo de columnas que deben guardarse en minúsculas
+  * @var array
+  */
+  public $toLower = array();
+
+  /**
+  * Associative array of columns to be stored in uppercase<br>
+  * Array asociativo de columnas que deben guardarse en mayúsculas
+  * @var array
+  */
+  public $toUpper = array();
+  
+  /**
+  * Paging properties<br>
   * Propiedades de paginación
   * @var int
   */
@@ -78,7 +94,7 @@ class APJModel extends APJPDO
   
   
   /**
-  * Constructor (connects to database)</br>
+  * Constructor (connects to database)<br>
   * Constructor (conecta con la base de datos)
   */
   public function __construct() {
@@ -187,7 +203,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Show table model in a textarea (for documentation)</br>
+  * Show table model in a textarea (for documentation)<br>
   * Muestra el modelo de la tabla en un textarea (para documentación)
   * @param $short (boolean) short description
   */
@@ -263,13 +279,14 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Set model field properties and value, if exist in strcture (overloading)</br>
+  * Set model field properties and value, if exist in strcture (overloading)<br>
   * Crea el campo del modelo con su valor, si existe en la estructura (sobrecarga) 
   * @param $name (string) field name
   * @param $value (mixed) field value
   */
   public function __set($name,$value){
     if (isset($this->structure[$name]['Type'])) {
+      $value = $this->_upperLower($name,$value);
       $this->variables[$name] = $this->getValue($value,$this->structure[$name]['Type'],$this->trim);
       return;
     }
@@ -281,6 +298,21 @@ class APJModel extends APJPDO
     E_USER_NOTICE);
   }
 
+  /**
+  * Converts the values of the specified columns to lowercase or uppercase<br>
+  * Convierte a minúsculas o mayúsculas los valores de las columnas especificadas
+  * @param string $name
+  * @param mixed $value
+  */
+  private function _upperLower($name,$value) {
+    if (in_array($name,$this->toUpper)) {
+      return strtoupper($value);
+    }
+    if (in_array($name,$this->toLower)) {
+      return strtolower($value);
+    }
+    return $value;
+  }
   
   /**
   * Get model fields values (overloading)
@@ -304,7 +336,7 @@ class APJModel extends APJPDO
   
   // Validación Básica, retorna true si hay errores y completa errors[] con los errores
   /**
-  * Basic fields validation by model and set errors propertie</br>
+  * Basic fields validation by model and set errors propertie<br>
   * Validación básica según modelo y rellena la propiedad errors
   * @return bool true = has errors, false = no errors
   */
@@ -376,7 +408,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Formats fields values according to data type defined in init.php file</br>
+  * Formats fields values according to data type defined in init.php file<br>
   * Formatea los valores de los campos según los tipos de datos definidos en el archivo init.php
   * @param $row (array) row array
   * @return (array) formatted row array
@@ -452,7 +484,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Validate dates by format</br>
+  * Validate dates by format<br>
   * Valida fechas segun fromato
   * @param $date (mixed)
   * @param $format (string)
@@ -480,7 +512,7 @@ class APJModel extends APJPDO
   }
 
   /**
-  * Update table</br>
+  * Update table<br>
   * Actualiza tabla
   * @param (optional) (mixed) where condition as array o string
   * @param (optional) (array) field values in associative array
@@ -503,7 +535,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Insert into table</br>
+  * Insert into table<br>
   * Insertar en la tabla
   * @param (array) (optional) Associative array of values
   * @param (boolean) (optional) Ignore duplicate records
@@ -529,7 +561,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Replace into table</br>
+  * Replace into table<br>
   * Reemplaza en la tabla
   * @return (mixed) number of affected records or false if any error
   */
@@ -552,7 +584,7 @@ class APJModel extends APJPDO
   }
 
   /**
-  * Deletes a record</br>
+  * Deletes a record<br>
   * Elimina un registro
   * @param ($mixed) array or string where condition
   * @return (mixed) number of affected records or false if any error
@@ -617,7 +649,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Returns the minimum value of a field</br>
+  * Returns the minimum value of a field<br>
   * Retorna el valor mínimo de un campo
   * @param $field (string)
   */
@@ -629,7 +661,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Returns the maximum value of a field</br>
+  * Returns the maximum value of a field<br>
   * Retorna el valor máximo de un campo
   * @param $field (string)
   */
@@ -641,7 +673,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Returns the average value of a field</br>
+  * Returns the average value of a field<br>
   * Retorna el valor promedio de un campo
   * @param $field (string)
   */
@@ -653,7 +685,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Returns the sum of a field</br>
+  * Returns the sum of a field<br>
   * Retorna la suma de un campo
   * @param $field (string)
   */
@@ -665,7 +697,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Returns the count of a field</br>
+  * Returns the count of a field<br>
   * Retorna la cuenta de un campo
   * @param $field (string)
   */
@@ -677,7 +709,7 @@ class APJModel extends APJPDO
   }  
 
   /**
-  * Returns an array of paged results</br>
+  * Returns an array of paged results<br>
   * Retorna un array con resultado paginados
   * @param array $data
   * @param int $limit

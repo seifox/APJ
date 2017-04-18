@@ -1,19 +1,21 @@
 <?php 
 /**
-* Log Class
-* Version: 1.16.0307
+* Logs PDO errors<br>
+* Registros de errores de PDO
+* Versión: 1.17.0418
+* Author: Ricardo Seiffert
 */
 class APJLog 
 {
   /**
-  * APJPDO Log Filename</br>
+  * APJPDO Log Filename<br>
   * Archivo del Log de APJPDO
   * @var string
   */
   private $path = 'APJPDO_logs';
   
   /**
-  * Constructor, defines the APJPDO log file path</br>
+  * Constructor, defines the APJPDO log file path<br>
   * Constructor, define la ruta del archivo Log de APJPDO
   */
   public function __construct() {

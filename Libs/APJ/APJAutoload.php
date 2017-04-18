@@ -1,7 +1,9 @@
 <?php
-/*
-  Classes Autoloader
-  Versión: 1.16.0307
+/**
+* Class Autoloader
+* Autocargador de clases
+* Versión: 1.17.0418
+* Author: Ricardo Seiffert
 */
 function APJAutoload($classname) {
   if (strpos($classname,"_")>0) {
@@ -18,11 +20,11 @@ function APJAutoload($classname) {
     case stripos($classname,CLASSES)===0:
       $prext=".class";
       break;
-    // Models Clasess
+    // Models Classes
     case stripos($classname,MODELS)===0:
       $prext=".model";
       break;
-    // Controllers Classess
+    // Controllers Classes
     default:
       $prext="";
       $prefilename=CONTROLLERS.DIRECTORY_SEPARATOR.strtolower($classname);

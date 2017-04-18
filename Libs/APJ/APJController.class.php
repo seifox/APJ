@@ -1,24 +1,26 @@
 <?php
 /**
-* APJ Base Controller
-* Versión: 1.17.0324
+* APJ's parent Controller
+* Controlador padre de APJ
+* Versión: 1.17.0418
+* Author: Ricardo Seiffert
 */
 class APJController
 {
   /**
-  * Can redner</br>
+  * Can redner<br>
   * Puede renderizar
   * @var bool
   */
   protected $canRender = true;
   /**
-  * Controller filename</br>
+  * Controller filename<br>
   * Archivo del Controlador
   * @var string
   */
   protected $_self = NULL;
   /**
-  * Form Object</br>
+  * Form Object<br>
   * Objeto Form (formulario)
   * @var stdClass
   */
@@ -46,7 +48,7 @@ class APJController
   protected $fieldTypes = array();
 
   /**
-  * Array paging properties</br>
+  * Array paging properties<br>
   * Propiedades de paginación de arreglos
   * @var int
   */
@@ -72,7 +74,7 @@ class APJController
       $this->jError("El metodo {$method} no existe!");
       $this->getResponse();
     } elseif ($page) {
-      $this->render($page);
+      $this->render($page,false);
     }
   }
   
@@ -80,17 +82,27 @@ class APJController
   * Renders the view</br>
   * Renderiza la vista
   * @param $page (string) View name
+  * @param $return (boolean) Returns the rendered view
   */
-  protected function render($page) {
+  protected function render($page,$return=false) {
     if ($this->canRender) {
       $url=VIEWS.DIRECTORY_SEPARATOR.$page;
       $html=$this->_getContent($url);
       if ($html) {
         $replace='<head><base href="'.ROOTURL.'/">';
         $html = str_replace('<head>', $replace, $html);
-        echo $html;
+        if ($return) {
+          return $html;
+        } else {
+          echo $html;
+        }
       } else {
-        echo "Can't open view ".$url;
+        $html="Can't open view ".$url;
+        if ($return) {
+          return $html;
+        } else {
+          echo $html;
+        }
       }
     }
   }
@@ -145,7 +157,7 @@ class APJController
   }
   
   /**
-  * Assign matching form fields to the Model</br>
+  * Assign matching form fields to the Model<br>
   * Asigna los campos coincidentes del formulario al Modelo
   * @param $model (string) Model name
   */
@@ -160,7 +172,7 @@ class APJController
   }
   
   /**
-  * Assign matching Form object fields to the Model</br>
+  * Assign matching Form object fields to the Model<br>
   * Asigna los campos coincidentes del objeto Form al Modelo
   * @param $model (string) Model name
   */
@@ -173,7 +185,7 @@ class APJController
   }
   
   /**
-  * Assigns Model values to Form object</br>
+  * Assigns Model values to Form object<br>
   * Asigna valores del Modelo al objeto Form
   * @param $model (string) Model name
   */
@@ -244,14 +256,18 @@ class APJController
   }
 
   /**
-  * Gets local file content</br>
+  * Gets local file content<br>
   * Obtiene el contenido de un archivo local
   * @param $url (string) file url
   * @return file content (string)
   */
   protected function getLocalContent($url) {
     if (file_exists($url) and is_readable($url)) {
-      $file = $this->getContent($url);
+      try {
+        $file = $this->getContent($url);
+      } catch (Exception $e) {
+        $file = NULL;
+      }
     } else {
       $file=NULL;
     }
@@ -259,17 +275,19 @@ class APJController
   }
   
   /**
-  * Gets a file content</br>
+  * Gets a file content<br>
   * Obtiene el contenido de un archivo
   * @param $url (string) file url
   * @return file content (string)
   */
   protected function getContent($url) {
-    if (ini_get('allow_url_fopen') ) {
+    if (ini_get('allow_url_fopen')!=1) {
+      ini_set('allow_url_fopen',1);
+    }
+    try {
       $file = file_get_contents($url);
-    } else {
-      ini_set('allow_url_fopen','1');
-      $file = file_get_contents($url);
+    } catch (Exception $e) {
+      $file = NULL;
     }
     return $file;
   }
@@ -312,7 +330,7 @@ class APJController
   }
   
   /**
-  * Return formatted current Date and Time</br>
+  * Return formatted current Date and Time<br>
   * Retorna la Fecha y Hora actual con formato
   * @param $format (string) datetime format
   * @return formatted DateTime (string)
@@ -381,7 +399,7 @@ class APJController
   }
   
   /**
-  * Converts Date and Time by format</br>
+  * Converts Date and Time by format<br>
   * Convierte Fecha y Hora según formato
   * @param $dateTime (DateTime)
   * @param $format (string) format
@@ -431,7 +449,7 @@ class APJController
   }
   
   /**
-  * Searches array elements in a string</br>
+  * Searches array elements in a string<br>
   * Busca elementos de un array en un string
   * @param $Array (array)
   * @param $String (string) where to search
@@ -443,7 +461,7 @@ class APJController
   }
   
   /**
-  * Generates the option of a select from given array</br>
+  * Generates the option of a select from given array<br>
   * Genera los option de un select según array dado
   * @param $array (array) Array of elements
   * @param $valueIndex (string) Value index name
@@ -465,7 +483,7 @@ class APJController
   
   
   /**
-  * Returns a substring delimited by 2 strings</br>
+  * Returns a substring delimited by 2 strings<br>
   * Retorna un substring delimitado por 2 strings
   * @param $string (string) entire string
   * @param $start (string) staring search string
@@ -485,7 +503,7 @@ class APJController
   }
   
   /**
-  * Return current filename to _self (used with url = "APJ:{self()}")</br>
+  * Return current filename to _self (used with url = "APJ:{self()}")<br>
   * Retorna el nombre del archivo actual a _self (para uso en url = "APJ:{self()}")
   * @return (string) filename
   */
@@ -495,7 +513,7 @@ class APJController
   }
   
   /**
-  * Return current controller name</br>
+  * Return current controller name<br>
   * Retorna el nombre del controlador actual
   * @return (string) Controller name
   */
@@ -505,7 +523,7 @@ class APJController
   }
 
   /**
-  * Returns an array with paged results from a data array</br>
+  * Returns an array with paged results from a data array<br>
   * Retorna un arreglo con resultado paginados de un arreglo de datos
   * @param array $data
   * @param int $limit
@@ -526,7 +544,7 @@ class APJController
   
   
   /**
-  * Return the timeout parameter for the view</br>
+  * Return the timeout parameter for the view<br>
   * Retorna el parametro timeout para la vista
   * @return (int) timeout value
   */
@@ -535,7 +553,7 @@ class APJController
   }
   
   /**
-  * Get response for Ajax</br>
+  * Get response for Ajax<br>
   * Obtiene respuesta para Ajax
   */
   protected function getResponse() {
@@ -553,7 +571,7 @@ class APJController
   }
   
   /**
-  * Creates a jQuery script</br>
+  * Creates a jQuery script<br>
   * Crea un script de jQuery
   * @param $script (string) Script text
   */
@@ -562,19 +580,29 @@ class APJController
   }
   
   /**
-  * Displays a information alert</br>
+  * Displays a search result to a showdown list
+  * Despliega el resultado de una busqueda en una lista desplegable
+  * @param string element to locate
+  * @param string element to toggle
+  */
+  protected function jShowDown($input,$container) {
+    jQ::Script("jShowDown('{$input}','{$container}')");  
+  }
+  
+  /**
+  * Displays a information alert<br>
   * Despliega una alerta de información
   * @param $message (string)
-  * @param (optional) $title (string)
-  * @param (optional) $callback (string) Callback function/method
-  * @param (optional) $params (array) Callback parameters
+  * @param (optional) title (string)
+  * @param (optional) callback (string) Callback function/method
+  * @param (optional) params (array) Callback parameters
   */
   protected function jInfo($message,$title='',$callback='',$params='') {
     return jQ::jInfo($message,$title,$callback,$params);
   }
   
   /**
-  * Displays a warning alert</br>
+  * Displays a warning alert<br>
   * Despliega una alerta de advertencia
   * @param $message (string)
   * @param (optional) $title (string)
@@ -586,7 +614,7 @@ class APJController
   }
   
   /**
-  * Displays a error alert</br>
+  * Displays a error alert<br>
   * Despliega una alerta de error
   * @param $message (string)
   * @param (optional) $title (string)
@@ -598,7 +626,7 @@ class APJController
   }
   
   /**
-  * Displays a Confirmation</br>
+  * Displays a Confirmation<br>
   * Despliega una confirmación
   * @param $message (string)
   * @param (optional) $title (string)
@@ -610,7 +638,7 @@ class APJController
   }
   
   /**
-  * Displays a value prompt</br>
+  * Displays a value prompt<br>
   * Despliega una captura de valor
   * @param $message (string)
   * @param (optional) $title (string)
@@ -622,7 +650,7 @@ class APJController
   }
   
   /**
-  * Displays a processing alert</br>
+  * Displays a processing alert<br>
   * Despliega una alerta de procesamiento
   * @param $message (string)
   * @param (optional) $title (string)
@@ -633,7 +661,7 @@ class APJController
   }
   
   /**
-  * Closes any alert window</br>
+  * Closes any alert window<br>
   * Cierra cualquier ventana de alerta
   */
   protected function jClose() {
@@ -641,7 +669,7 @@ class APJController
   }
 
   /**
-  * Displays an array of Errors, Warnings or Information</br>
+  * Displays an array of Errors, Warnings or Information<br>
   * Despliega un array de Errores, Advertencias o Información
   * @param $messages (array) Arrays with messages
   * @param $title (string) Title of message
@@ -657,7 +685,7 @@ class APJController
   }
 
   /**
-  * Displays an array of errors in a Error alert (jError)</br>
+  * Displays an array of errors in a Error alert (jError)<br>
   * Despliega un array de errores en una alerta de Error (jError)
   * @param $errors (array) Errors array
   * @param $title (string) jError Title
@@ -674,7 +702,7 @@ class APJController
   }
 
   /**
-  * Displays array of warnings in a Warning alert (jWarning)</br>
+  * Displays array of warnings in a Warning alert (jWarning)<br>
   * Despliega un array de advertencias de un modelo en una alerta de Advertencia (jWarning)
   * @param $warnings (array) Warnigs array
   * @param $title (string) jWarning Title
@@ -735,7 +763,7 @@ class APJController
   }
   
   /**
-  * Formats value according to type defined in init.php file</br>
+  * Formats value according to type defined in init.php file<br>
   * Formatea el valor según el tipos de datos definido en el archivo init.php
   * @param value (mixed) the value
   * @param type (mixed) the data type

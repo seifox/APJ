@@ -1,8 +1,9 @@
 <?php
 /**
-* jQSelector</br>
 * Class that defines the jQuery selector for jQ
 * Clase que define el selector jQuery para jQ
+* Versión: 1.17.0418
+* Author: Ricardo Seiffert
 */
 class jQSelector
 {

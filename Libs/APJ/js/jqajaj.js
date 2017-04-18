@@ -1,7 +1,7 @@
 /*
  Plugin jQuery PHP
  Plugin jAlert
- Version 1.17.0120 Beta
+ Version 1.17.0418 Beta
  require jQuery v1.5.x or grather
 */
 BlinkId=0;
@@ -147,7 +147,7 @@ jAlertClosed=true;
           statusDesc = "No conectado o Tiempo de espera agotado.<br>Verifique conexión de red";
           break;
         case 200:
-          statusDesc = "Sessión finalizada";
+          statusDesc = "Error de respuesta desde el servidor o sesion finalizada";
           sessionEnded();
           break;
         case 404: 
@@ -679,6 +679,21 @@ jAlertClosed=true;
   sessionEnded = function() {
     if (typeof toLogin === "function") { 
       toLogin();
+    }
+  }
+  // Muestra una lista bajo un control. Para hacer busquedas por texto
+  jShowDown = function(input,container) {
+    var contElem = $("#"+container);
+    var inputElem = $("#"+input);
+    var offset = inputElem.offset();
+    var top = offset.top;
+    var left = offset.left;
+    var bottom = top + inputElem.outerHeight() + 1;
+    if (contElem.is(':visible')) {
+      contElem.hide();
+    } else {
+      contElem.show();
+      contElem.offset({top: bottom, left: left});
     }
   }
   /* 

@@ -1,8 +1,9 @@
 <?php
-/*
-  APJPDO Class for MySQL PDO managment
-  Versión: 1.17.0322
-  Author: Ricardo Seiffert
+/**
+* APJPDO Class for MySQL PDO managment<br>
+* Clase para la gestión de PDO de MySQL
+* Versión: 1.17.0418
+* Author: Ricardo Seiffert
 */
 class APJPDO 
 {
@@ -68,7 +69,7 @@ class APJPDO
 	}
   
   /**
-  * Disconnect from database</br>
+  * Disconnect from database<br>
   * Desconecta de la base de datos
   */
 	public function disconnect()	{
@@ -102,7 +103,7 @@ class APJPDO
 	}
 	
   /**
-  * Binds data to parameters</br>
+  * Binds data to parameters<br>
   * Enlaza datos a los parametros
   * @param $param (string) parameter name
   * @param $value (mixed) parameter value
@@ -119,7 +120,7 @@ class APJPDO
 	}
   
   /**
-  * Bind a array of data to parameters</br>
+  * Bind a array of data to parameters<br>
   * Enlaza un array de datos a parámetros
   * @param $paramarray (array)
   */
@@ -142,7 +143,7 @@ class APJPDO
   }
   
   /**
-  * Returns all rows from query into array</br>
+  * Returns all rows from query into array<br>
   * Retorna todas las filas en un array
   * @param $query (string)
   * @param (optional) $params (array) binding parameters
@@ -164,7 +165,7 @@ class APJPDO
   }
 
   /**
-  * Returns a row from query into array</br>
+  * Returns a row from query into array<br>
   * Retorna todas las filas en un array
   * @param $query (string)
   * @param $params (array) binding parameters
@@ -183,7 +184,7 @@ class APJPDO
   }
 
   /**
-  * Returns next row from query into array</br>
+  * Returns next row from query into array<br>
   * Retorna las siguiente fila de una consulta en un array
   * @param (optional) $fetchmode (constant) can PDO::FETCH_ASSOC, PDO::FETCH_BOTH, PDO::FETCH_CLASS, PDO::FETCH_NUM
   * @return (mixed) array or false
@@ -196,7 +197,7 @@ class APJPDO
   }
 
   /**
-  * Execute a query binding parameters</br>
+  * Execute a query binding parameters<br>
   * Ejecuta una consulta enlazando parámetros
   * @param $query (string)
   * @param (optional) $params (array) binding parameters
@@ -214,7 +215,7 @@ class APJPDO
 	}
 
   /**
-  * Execute a query without binding parameters</br>
+  * Execute a query without binding parameters<br>
   * Ejecuta una consulta sin enlazar parámetros
   * @param string $query
   * @return number of rows or affected
@@ -233,7 +234,7 @@ class APJPDO
   }
   
   /**
-  * Return last inserted primary key value</br>
+  * Return last inserted primary key value<br>
   * Retorna la última clave promaria insertada
   * @return (mixed) last id
   */
@@ -242,7 +243,7 @@ class APJPDO
   }  
 
   /**
-  * Begins Transaction</br>
+  * Begins Transaction<br>
   * Comienza el control de transacción
   */
   public function beginTrans() {
@@ -269,7 +270,7 @@ class APJPDO
   }  
   
   /**
-  * Rolls back a transaction</br>
+  * Rolls back a transaction<br>
   * Deshace la transacción
   */
   public function rollBack() {
@@ -295,7 +296,7 @@ class APJPDO
   }
   
   /**
-  * Converts a value according to given data type</br>
+  * Converts a value according to given data type<br>
   * Convierte un valor según el tipo de dato dado
   * @param $value (mixed) 
   * @param $type (string) data type
