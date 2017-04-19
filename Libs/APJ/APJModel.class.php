@@ -74,7 +74,7 @@ class APJModel extends APJPDO
   * @var string
   */
   public $charset = 'utf-8';
-  
+
   /**
   * Associative array of columns to be stored in lowercase<br>
   * Array asociativo de columnas que deben guardarse en minúsculas
