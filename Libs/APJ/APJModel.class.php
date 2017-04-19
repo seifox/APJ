@@ -69,6 +69,13 @@ class APJModel extends APJPDO
   public $where = NULL;
 
   /**
+  * Define charset to use<br>
+  * Define el juego de caractéres a usar
+  * @var string
+  */
+  public $charset = 'utf-8';
+  
+  /**
   * Associative array of columns to be stored in lowercase<br>
   * Array asociativo de columnas que deben guardarse en minúsculas
   * @var array
@@ -306,10 +313,10 @@ class APJModel extends APJPDO
   */
   private function _upperLower($name,$value) {
     if (in_array($name,$this->toUpper)) {
-      return strtoupper($value);
+      return mb_strtoupper($value,$this->charset);
     }
     if (in_array($name,$this->toLower)) {
-      return strtolower($value);
+      return mb_strtolower($value,$this->charset);
     }
     return $value;
   }
