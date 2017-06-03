@@ -352,7 +352,7 @@ class APJController
   }
 
   /**
-  * Formats a value dependign on data type
+  * Formats a value dependign on data type<br>
   * Formatea un valor dependiendo del tipo de dato
   * @param (mixed) The value
   * @param (string) Data type
