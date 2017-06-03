@@ -2,7 +2,7 @@
 /**
 * Class that defines the jQuery selector for jQ
 * Clase que define el selector jQuery para jQ
-* Versión: 1.17.0418
+* Versión: 1.17.0602
 * Author: Ricardo Seiffert
 */
 class jQSelector
@@ -11,8 +11,12 @@ class jQSelector
   public $method = array();
   public $arguments = array();
 
-  public function __construct($selector) 
-  {
+  /**
+  * jQSelector constructor
+  * Constructor de jQselector
+  * @param {string} Selector
+  */
+  public function __construct($selector) {
     jQ::setSelector($this); 
     $this->selector = $selector;
   }
@@ -20,12 +24,11 @@ class jQSelector
   /**
   * Calls to inexistent methods (Overloading)
   * Invoca metodos inexistentes (Sobrecarga)
-  * @param $method (mixed)
-  * @param $arguments (array)
-  * @return {jQSelector|jQSelector}
+  * @param (string) Method name
+  * @param (array) Method arguments
+  * @return (object) jQSelector
   */
-  public function __call($method, $arguments) 
-  {
+  public function __call($method, $arguments) {
     array_push($this->method, $method);
     array_push($this->arguments, $arguments);
     return $this;
@@ -33,7 +36,8 @@ class jQSelector
 
   /**
   * Returns a new instance of jQSelector
-  * Retorna una nueva instancia de jQSelector
+  * Devuelve una nueva instancia de jQSelector
+  * @return (object) new jQSelector from $this->selector
   */
   public function newSelector() 
   {

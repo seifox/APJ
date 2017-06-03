@@ -2,7 +2,7 @@
 /**
 * Controls the user session<br>
 * Controla la sesión de usuarios
-* Versión: 1.17.0418
+* Versión: 1.17.0602
 * Author: Ricardo Seiffert
 */
 class APJSession
@@ -10,24 +10,24 @@ class APJSession
   /**
   * Verifies that the session is still active<br>
   * Verifica que la sesion está aún activa
-  * @param $name (string) session name
-  * @return boolean
+  * @param (string) session name
+  * @return boolean true if active
   */
-  static function active($name) {
+  public static function active($name) {
     self::setName($name);
     session_start();
     return self::same();
   }
   /**
   * Start session<br>
-  * Comienza la sesión
-  * @param $name (string) session name
-  * @param $limit (int) session time limit (secs)
-  * @param $path (string) path to session data
-  * @param $domain (string) session domain
-  * @param $secure (boolean) session uses security
+  * Inicia la sesión
+  * @param (string) session name
+  * @param (int) session time limit (secs)
+  * @param (string) path to session data (optional)
+  * @param (string) session domain(optional)
+  * @param (boolean) session uses security (optional)
   */
-   static function start($name, $limit = 0, $path = null, $domain = null, $secure = null) {
+   public static function start($name, $limit = 0, $path = null, $domain = null, $secure = null) {
       self::setName($name);
       $domain = isset($domain) ? $domain : isset($_SERVER['SERVER_NAME']);
       $https = isset($secure) ? $secure : isset($_SERVER['HTTPS']);
@@ -49,11 +49,11 @@ class APJSession
    }
    
   /**
-  * Set session name<br>
-  * Define el nombre de la sesión
-  * @param $name (string)
+  * Set hashed session name (md5)<br>
+  * Define el nombre de la sesión codificada (md5)
+  * @param (string) Starting session name
   */
-  static protected function setName($name) {
+  private static function setName($name) {
     $hashname = md5($name . '_Session');
     session_name($hashname);
   }
@@ -62,7 +62,7 @@ class APJSession
   * Basic session information<br>
   * Información básica de la sesión
   */
-  static protected function basicData() {
+  private static function basicData() {
     $_SESSION['IPaddress'] = md5($_SERVER['REMOTE_ADDR']);
     $_SESSION['userAgent'] = md5($_SERVER['HTTP_USER_AGENT']);
   }
@@ -70,9 +70,9 @@ class APJSession
   /**
   * Determines if is the same Ip and machine<br>
   * Determina si es la misma Ip y maquina
-  * @return (boolean) 
+  * @return (boolean) Same session
   */
-  static function same() {
+  private static function same() {
     if(!isset($_SESSION['IPaddress']) or !isset($_SESSION['userAgent']))
       return false;
     if ($_SESSION['IPaddress'] != md5($_SERVER['REMOTE_ADDR']))
@@ -87,9 +87,9 @@ class APJSession
   /**
   * Session validation<br>
   * Validación de sesión
-  * @return (boolean)
+  * @return (boolean) Valid session
   */
-  static protected function validate() {
+  private static function validate() {
     if(isset($_SESSION['OBSOLETE']) and !isset($_SESSION['EXPIRES']) )
       return false;
 
@@ -103,7 +103,7 @@ class APJSession
   * Regenerates the session<br>
   * Regenera la sesión
   */
-  static function regenerate() {
+  private static function regenerate() {
     if(isset($_SESSION['OBSOLETE']) and $_SESSION['OBSOLETE'] == true)
       return;
 
@@ -126,8 +126,9 @@ class APJSession
   * Destroys the session<br>
   * Destruye la sesión
   */
-  static function destroy() {
+  public static function destroy() {
     $_SESSION = array();
+    $_COOKIE = array();
     session_destroy();
   }  
 }

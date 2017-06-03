@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.17.0418
+* Versión: 1.17.0602
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -20,8 +20,8 @@ class APJModel extends APJPDO
   */
   public $pk = array();
   /**
-  * Fields values<br>
-  * Valores de campos
+  * Columns values<br>
+  * Valores de columnas
   * @var array
   */
   public $variables = array();
@@ -32,14 +32,14 @@ class APJModel extends APJPDO
   */
   public $structure = array();
   /**
-  * Model fields
-  * Campos del modelo
+  * Model columns
+  * columnas del modelo
   * @var array
   */
   public $fields = array();
   /**
   * Defines if columns must by trimmed
-  * Define si se recortan los valores de los campos
+  * Define si se recortan los valores de las columnas
   * @var boolean
   */
   public $trim = false;
@@ -50,8 +50,8 @@ class APJModel extends APJPDO
   */
   public $errors = array();
   /**
-  * Fields Alias/Comment
-  * Alias/Comentario de los campos
+  * columns Alias/Comment
+  * Alias/Comentario de las columnas
   * @var array
   */
   public $alias = array();
@@ -110,9 +110,9 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Defines the table name and model
-  * Define el nombre de la tabla y el modelo
-  * @param $table (string)
+  * Defines the table name and reads model
+  * Define el nombre de la tabla y lee el modelo
+  * @param (string) Table name
   */
   public function setTable($table) {
     $this->_clearError();
@@ -121,9 +121,9 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Set the Alias manualy
-  * Define los Alias manualmente
-  * @param array $names Array of names
+  * Set the columns Alias
+  * Define los Alias de las columnas
+  * @param (array) Array of alias names ('name'=>'Alias'...)
   */
   public function setAlias($names) {
     $i=0;
@@ -212,7 +212,7 @@ class APJModel extends APJPDO
   /**
   * Show table model in a textarea (for documentation)<br>
   * Muestra el modelo de la tabla en un textarea (para documentación)
-  * @param $short (boolean) short description
+  * @param (boolean) short description (default false)
   */
   public function showModel($short=false) {
     $this->_clearError();
@@ -286,10 +286,10 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Set model field properties and value, if exist in strcture (overloading)<br>
-  * Crea el campo del modelo con su valor, si existe en la estructura (sobrecarga) 
-  * @param $name (string) field name
-  * @param $value (mixed) field value
+  * Set model column properties and value, if exist in strcture (overloading)<br>
+  * Crea la columna del modelo con su valor, si existe en la estructura (sobrecarga) 
+  * @param (string) column name
+  * @param (mixed) column value
   */
   public function __set($name,$value){
     if (isset($this->structure[$name]['Type'])) {
@@ -308,8 +308,9 @@ class APJModel extends APJPDO
   /**
   * Converts the values of the specified columns to lowercase or uppercase<br>
   * Convierte a minúsculas o mayúsculas los valores de las columnas especificadas
-  * @param string $name
-  * @param mixed $value
+  * @param (string) Column name
+  * @param (mixed) Column value
+  * @return (mixed) New value
   */
   private function _upperLower($name,$value) {
     if (in_array($name,$this->toUpper)) {
@@ -322,9 +323,10 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Get model fields values (overloading)
-  * Obitene los valores de los campos del modelo (sobrecarga)
-  * @param $name (string)
+  * Get model columns values (overloading)
+  * Obitene los valores de las columnas del modelo (sobrecarga)
+  * @param (string) Name
+  * @return (mixed) Value
   */
   public function __get($name) {  
     if(is_array($this->variables)) {
@@ -341,11 +343,10 @@ class APJModel extends APJPDO
     return null;
   }
   
-  // Validación Básica, retorna true si hay errores y completa errors[] con los errores
   /**
-  * Basic fields validation by model and set errors propertie<br>
+  * Basic columns validation by model and set errors propertie<br>
   * Validación básica según modelo y rellena la propiedad errors
-  * @return bool true = has errors, false = no errors
+  * @return (boolean) true = has errors, false = no errors
   */
   public function basicValidation() {
     $this->_clearError();
@@ -415,10 +416,10 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Formats fields values according to data type defined in init.php file<br>
-  * Formatea los valores de los campos según los tipos de datos definidos en el archivo init.php
-  * @param $row (array) row array
-  * @return (array) formatted row array
+  * Formats columns values according to data type defined in init.php file<br>
+  * Formatea los valores de las columnas según los tipos de datos definidos en el archivo init.php
+  * @param (array) Row array
+  * @return (array) Formatted row array
   */
   public function setFormat($row) {
     $rowf=array();
@@ -426,7 +427,7 @@ class APJModel extends APJPDO
       // Asigna valor a campo del modelo
       $this->$fld = $value;
       $type=$this->structure[$fld]['Type'];
-      $rowf[$fld] = $this->format($type,$value);
+      $rowf[$fld] = $this->format($value,$type);
     }
     return $rowf;
   }
@@ -434,10 +435,11 @@ class APJModel extends APJPDO
   /**
   * Formats a value dependign on data type
   * Formatea un valor dependiendo del tipo de dato
-  * @param string $type data type
-  * @param mixed $value the value
+  * @param (mixed) Formatted value
+  * @param (string) Data type
+  * @return (mixed) Formatted value
   */
-  protected function format($type,$value) {
+  protected function format($value,$type) {
     $type=strtolower($type);
     $fmt = unserialize(FORMATS);
     switch ($type) {
@@ -493,10 +495,10 @@ class APJModel extends APJPDO
   /**
   * Validate dates by format<br>
   * Valida fechas segun fromato
-  * @param $date (mixed)
-  * @param $format (string)
-  * @param $strict (boolean) strict validation
-  * @return boolean true = invalid, false=valid
+  * @param (mixed) Date
+  * @param (string) Format
+  * @param (boolean) strict validation
+  * @return (boolean) true = invalid, false=valid
   */
   public function verifyDate($date, $format, $strict=true) {
     $dto = new DateTime();
@@ -521,9 +523,9 @@ class APJModel extends APJPDO
   /**
   * Update table<br>
   * Actualiza tabla
-  * @param (optional) (mixed) where condition as array o string
-  * @param (optional) (array) field values in associative array
-  * @return (mixed) number of affected records or false if any error
+  * @param (mixed) where condition as array o string (optional if primary key is defined)
+  * @param (array) columns values in associative array (optional if values are defined)
+  * @return (mixed) number of affected rows or false if any error
   */
   public function update($where='', $values='') {
     $this->_clearError();
@@ -544,9 +546,9 @@ class APJModel extends APJPDO
   /**
   * Insert into table<br>
   * Insertar en la tabla
-  * @param (array) (optional) Associative array of values
-  * @param (boolean) (optional) Ignore duplicate records
-  * @return (mixed) number of affected records or false if any error
+  * @param (array) Associative array of values (optional if values are set)
+  * @param (boolean) Ignore duplicate rows (default false)
+  * @return (mixed) number of affected rows or false if any error
   */
   public function insert($values='',$ignore=false) { 
     $this->_clearError();
@@ -570,7 +572,7 @@ class APJModel extends APJPDO
   /**
   * Replace into table<br>
   * Reemplaza en la tabla
-  * @return (mixed) number of affected records or false if any error
+  * @return (mixed) number of affected rows or false if any error
   */
   public function replace($values='') { 
     $this->_clearError();
@@ -591,10 +593,10 @@ class APJModel extends APJPDO
   }
 
   /**
-  * Deletes a record<br>
-  * Elimina un registro
-  * @param ($mixed) array or string where condition
-  * @return (mixed) number of affected records or false if any error
+  * Deletes a row<br>
+  * Elimina una fila
+  * @param (mixed) array/int or WHERE string condition (optional if primary key value is set)
+  * @return (mixed) number of affected rows or false if any error
   */
   public function delete($where='') {
     $this->_clearError();
@@ -607,10 +609,10 @@ class APJModel extends APJPDO
   }
 
   /**
-  * Find record
-  * Encuentra un registro
-  * @param (mixed) array or string where condition
-  * @return (array) row array
+  * Find a row and assigns values
+  * Encuentra una fila y asigna los valores
+  * @param (mixed) array or string where condition (optional if primary key value is set)
+  * @return (array) Associative row array, false if error
   */
   public function find($where='') {
     $this->_clearError();
@@ -622,9 +624,10 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Returns all table records by order
-  * Retorna todos los registros de la tabla según orden dado
-  * @param (optional) $order (string) order fields, comma separated
+  * Returns all table rows by given order
+  * Devuelve todas las filas de la tabla según orden dado
+  * @param (string) Comma separated order columns (optional)
+  * @return (mixed) Associative rows array or false if any error
   */
   public function all($order=''){
     $this->_clearError();
@@ -633,10 +636,11 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Returns all records as condition
-  * Retorna todos los registros según condición
-  * @param $condition (string) sql condition
-  * @param (optional) $order (string) order fields, comma separated
+  * Returns all rows for given condition
+  * Devuelve todas las filas para la condición dada
+  * @param (mixed) Array or string where condition (optional if values are set)
+  * @param (string) Comma separated order columns (optional)
+  * @return (mixed) Associative rows array or false if any error
   */
   public function select($condition, $order=''){
     $this->_clearError();
@@ -648,17 +652,18 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Clear field values
-  * Limpia los valores de los campos;
+  * Clear columns values
+  * Limpia los valores de las columnas;
   */
   public function clearValues() {
     $this->variables=array();  
   }
   
   /**
-  * Returns the minimum value of a field<br>
-  * Retorna el valor mínimo de un campo
-  * @param $field (string)
+  * Returns the minimum value of a column<br>
+  * Devuelve el valor mínimo de una columna
+  * @param (string) Column name
+  * @return (mixed) Min column value
   */
   public function min($field)  {
     $this->_clearError();
@@ -669,8 +674,9 @@ class APJModel extends APJPDO
   
   /**
   * Returns the maximum value of a field<br>
-  * Retorna el valor máximo de un campo
-  * @param $field (string)
+  * Devuelve el valor máximo de un campo
+  * @param (string) Column name
+  * @return (mixed) Max column value
   */
   public function max($field)  {
     $this->_clearError();
@@ -681,8 +687,9 @@ class APJModel extends APJPDO
   
   /**
   * Returns the average value of a field<br>
-  * Retorna el valor promedio de un campo
-  * @param $field (string)
+  * Devuelve el valor promedio de un campo
+  * @param (string) Column name
+  * @return (mixed) Average column value
   */
   public function avg($field)  {
     $this->_clearError();
@@ -693,8 +700,9 @@ class APJModel extends APJPDO
   
   /**
   * Returns the sum of a field<br>
-  * Retorna la suma de un campo
-  * @param $field (string)
+  * Devuelve la suma de un campo
+  * @param (string) Column name
+  * @return (mixed) Sum of the column values
   */
   public function sum($field)  {
     $this->_clearError();
@@ -705,8 +713,9 @@ class APJModel extends APJPDO
   
   /**
   * Returns the count of a field<br>
-  * Retorna la cuenta de un campo
-  * @param $field (string)
+  * Devuelve la cuenta de un campo
+  * @param (string) Column name
+  * @return (int) Count of column values
   */
   public function count($field)  {
     $this->_clearError();
@@ -717,10 +726,11 @@ class APJModel extends APJPDO
 
   /**
   * Returns an array of paged results<br>
-  * Retorna un array con resultado paginados
-  * @param array $data
-  * @param int $limit
-  * @param int $page
+  * Devuelve un array con resultado paginados
+  * @param (string) SQL query
+  * @param (int) Limit of returned rows (default 20)
+  * @param (int) Page to return (default 1)
+  * @return (mixed) Paged result array or false if any error
   */
   public function paging($query, $limit=20,$page=1) {
     if ($all=$this->query($query)) {
@@ -737,9 +747,10 @@ class APJModel extends APJPDO
   
   /**
   * Assign values to values array if in field structure
-  * Asigna valores al array values con campos coincidentes de la estructura
-  * @param array $values array of values
-  * @param boolean $incId include id
+  * Asigna valores al array values con columnas coincidentes de la estructura
+  * @param (array) Array of values (optional)
+  * @param (boolean) include id
+  * @return (boolean) True if values are assigned and false if values are missing
   */
   private function _values($values,$incId=false) {
     $this->values=array();
@@ -767,6 +778,12 @@ class APJModel extends APJPDO
     return false;
   }
   
+  /**
+  * Creates the WHERE condition<br>
+  * Crea la condición WHERE
+  * @param (mixed) Condicion
+  * @return (boolean) True if condition could be created
+  */
   private function _condition($condition) {
     $where='';
     if(empty($condition) and $this->variables) {
@@ -799,41 +816,56 @@ class APJModel extends APJPDO
     return false;
   }
   
+  /**
+  * Extracts the column type from structure<br>
+  * Extrae el tipo de columna de la estructura
+  * @param (string) Structure colunmn type
+  * @return (string) Colunmn type
+  */
   private function _type($type) {
     if (($len=strpos($type,"(",0))>0) {
       return substr($type,0,$len);
-    } else {
-      return $type;
     }
+    return $type;
   }
 
+  /**
+  * Extracts column size from structure<br>
+  * Extrae el tamaño de la columna de la estructura
+  * @param (string) Structure type
+  * @param (string) Simple type
+  * @return (array) Size (integers,decimals)
+  */
   private function _size($btype,$type) {
-    $size=$this->_get_string_between($type,'(',')',1);
-    if ($size) {
+    if ($size=$this->_get_string_between($type,'(',')',1)) {
       if (strpos($size,",")>0) {
-        $res=explode(",",$size);
+        $result=explode(",",$size);
       } else {
-        $res=array($size,NULL);
+        $result=array($size,NULL);
       }
     } else {
       switch ($btype) {
         case "date":
-          $res=array(10,NULL);
+          $result=array(10,NULL);
           break;
         case "datetime":
-          $res=array(19,NULL);
+          $result=array(19,NULL);
           break;
         case "time":
-          $res=array(8,NULL);
+          $result=array(8,NULL);
           break;
         default:
-          $res=array(NULL,NULL);
+          $result=array(NULL,NULL);
       }
       
     }
-    return $res;
+    return $result;
   }
 
+  /**
+  * Clear all error properties<br>
+  * Limpia todas las propiedades de errores
+  */
   private function _clearError() {
     $this->error=false;
     $this->errormsg=NULL;
@@ -841,6 +873,15 @@ class APJModel extends APJPDO
     $this->values = NULL;
   }  
 
+  /**
+  * Returns a string between two strings
+  * Devuelve una cadena entre dos cadenas
+  * @param (string) The string to search in
+  * @param (string) Start needle
+  * @param (string) End needle
+  * @param (int) Starting position
+  * @return (string) Substring found
+  */
   private function _get_string_between($string, $start, $end, $pos=0) {
     $string = " ".$string;
     $ini = strpos($string,$start,$pos);
@@ -850,10 +891,11 @@ class APJModel extends APJPDO
     return substr($string,$ini,$len);
   }
 
-    /**
+  /**
   * Returns current date and time according to format
-  * Retorna la fecha y hora actual según formato
-  * @param string $format
+  * Devuelve la fecha y hora actual según formato
+  * @param (string) Format (default 'Y-m-d H:i:s')
+  * @return (string) Formatted date 
   */
   public function currentDateTime($format='Y-m-d H:i:s')
   {

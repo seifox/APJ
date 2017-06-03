@@ -2,7 +2,7 @@
 /**
 * Static class that respons to jQuery from PHP<br>
 * Clase Estática que responde acciones jQuery desde PHP
-* Version: 1.17.0418
+* Version: 1.17.0602
 * Author: Ricardo Seiffert
 */
 class jQ
@@ -36,19 +36,13 @@ class jQ
     return true;
   }
 
-  /*
-  
-  $key: clave del valor
-  $value: valor
-  $callBack: funcion callback (opcional)
-  */
   /**
   * Adds data to te response<br>
   * Agrega un dato a la respuesta
-  * @param $key (mixed) Value Key
-  * @param $value (mixed) Key Value
-  * @param (optional) $callBack (string) callback function
-  * @return jQ (object) the jQ object
+  * @param (mixed) Value Key
+  * @param (mixed) Key Value
+  * @param (string) Callback function (optional)
+  * @return (object) jQ object
   */
   public static function setData($key, $value, $callBack = null) 
   {
@@ -66,8 +60,8 @@ class jQ
   /**
   * Adds a script to response<br>
   * Agrega un script a la respuesta
-  * @param mixed $script
-  * @return jQ (object) jQ object
+  * @param (mixed) Script
+  * @return (object) jQ object
   */
   public static function Script($script) 
   {
@@ -92,8 +86,8 @@ class jQ
   /**
   * Instance a new jQ selector<br>
   * Instancia un nuevo selector
-  * @param $selector (string) jQuery style selector
-  * @return jQSelector (object) instance of the selector
+  * @param (string) jQuery style selector
+  * @return (object) instance of the selector
   */
   public static function setQuery($selector) 
   {
@@ -102,9 +96,9 @@ class jQ
   }
 
   /**
-  * Adds a selector by reference to the queue<br>
-  * Agrega un selector por referencia a la cola
-  * @param jQSelector $jQSelector
+  * Adds a selector by reference to response queue<br>
+  * Agrega un selector por referencia a la cola de respuesta
+  * @param (object) jQSelector
   */
   public static function setSelector(jQSelector &$jQSelector) 
   {
@@ -115,8 +109,8 @@ class jQ
   /**
   * Adds a action by reference to the action queue<br>
   * Agrega una acción por referencia a la cola de acciones
-  * @param $name (string) Method name
-  * @param jQAction (object) action object
+  * @param (string) Method name
+  * @param (object) action object
   */
   public static function setAction($name, jQAction &$jQAction) 
   {
@@ -127,11 +121,11 @@ class jQ
   /**
   * Information alert window<br>
   * Ventana de alerta de información
-  * @param $msg (string) Message
-  * @param $title (string) Title
-  * @param $callBack (string) Callback method/function
-  * @param $params (array) Array of callback parameters
-  * @return jQ (object)
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Callback method/function (optional)
+  * @param (array) Array of callback parameters (optional)
+  * @return (object) jInfo
   */
   public static function jInfo($msg, $title = null, $callBack = null, $params = null) 
   {
@@ -154,11 +148,11 @@ class jQ
   /**
   * Warning alert window<br>
   * Ventana de alerta de advertencia
-  * @param $msg (string) Message
-  * @param $title (string) Title
-  * @param $callBack (string) Callback method/function
-  * @param $params (array) Array of callback parameters
-  * @return jQ (object)
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Callback method/function (optional)
+  * @param (array) Array of callback parameters (optional)
+  * @return (object) jWarning
   */
   public static function jWarning($msg, $title = null, $callBack = null, $params = null) 
   {
@@ -181,11 +175,11 @@ class jQ
   /**
   * Error alert window<br>
   * Ventana de alerta de error
-  * @param $msg (string) Message
-  * @param $title (string) Title
-  * @param (optional) $callBack (string) Callback method/function
-  * @param (optional) $params (array) Array of callback parameters
-  * @return jQ (object)
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Callback method/function (optional)
+  * @param (array) Array of callback parameters (optional)
+  * @return (object) jError
   */
   public static function jError($msg, $title = null, $callBack = null, $params = null) 
   {
@@ -208,11 +202,11 @@ class jQ
   /**
   * Confirmation window<br>
   * Ventana de confirmación
-  * @param $msg (string) Message
-  * @param $title (string) Title
-  * @param (optional) $callBack (string) Callback method/function
-  * @param (optional) $params (array) Array of callback parameters
-  * @return jQ (object)
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Callback method/function (optional)
+  * @param (array) Array of callback parameters (optional)
+  * @return (object) jConfirm
   */
   public static function jConfirm($msg, $title = null, $callBack = null, $params = null) 
   {
@@ -235,10 +229,10 @@ class jQ
   /**
   * Data prompt window<br>
   * Ventana de petición de datos
-  * @param $msg (string) Message
-  * @param $title (string) Title
-  * @param (optional) $callBack (string) Callback method/function
-  * @return jQ (object)
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Callback method/function (optional)
+  * @return (object) jPrompt
   */
   public static function jPrompt($msg, $title = null, $callBack = null) 
   {
@@ -258,10 +252,10 @@ class jQ
   /**
   * Process information window<br>
   * Ventana de información de proceso
-  * @param $msg (string) Message
-  * @param $title (string) Title
-  * @param (optional) $style (string) 'Blink' for blinking message
-  * @return jQ (object)
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) 'Blink' for blinking message (optional)
+  * @return (object) jProcess
   */
   public static function jProcess($msg, $title = null, $style = 'blink') 
   {

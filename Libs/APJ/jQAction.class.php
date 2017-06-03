@@ -2,7 +2,7 @@
 /**
 * Class that sets parameters for jQAction object<br>
 * Clase que define los parámetros del objeto jQAction
-* Version: 1.17.0418
+* Version: 1.17.0602
 * Author: Ricardo Seiffert
 */
 class jQAction
@@ -10,12 +10,11 @@ class jQAction
   /**
   * Sets parameters and value to jQAction object
   * Define los parametros y valores del objeto jQAction
-  * @param $param (string) Parameter name
-  * @param $value (mixed) Parameter value
-  * @return jQAction (object)
+  * @param (string) Action parameter name
+  * @param (mixed) Action parameter value
+  * @return (object) jQAction
   */
-  public function set($param, $value) 
-  {
+  public function set($param, $value) {
     $this->$param = $value;
     return $this;
   }

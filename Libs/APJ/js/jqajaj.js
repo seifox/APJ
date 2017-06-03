@@ -1,7 +1,7 @@
 /*
  Plugin jQuery PHP
  Plugin jAlert
- Version 1.17.0418 Beta
+ Version 1.17.0510 Beta
  require jQuery v1.5.x or grather
 */
 BlinkId=0;

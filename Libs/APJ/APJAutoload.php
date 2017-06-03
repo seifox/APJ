@@ -2,7 +2,7 @@
 /**
 * Class Autoloader
 * Autocargador de clases
-* Versión: 1.17.0418
+* Versión: 1.17.0602
 * Author: Ricardo Seiffert
 */
 function APJAutoload($classname) {
@@ -34,7 +34,7 @@ function APJAutoload($classname) {
     require_once $filename;
   } else {
     $bt=end(debug_backtrace());
-    die("El archivo {$filename} no está disponible desde ".$bt['file']." - Linea:".$bt['line']);
+    throw new Exception("El archivo {$filename} no está disponible desde ".$bt['file']." - Linea:".$bt['line']);
   }
 }
 

@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Versión: 1.17.0418
+* Versión: 1.17.0602
 * Author: Ricardo Seiffert
 */
 class APJController
@@ -59,7 +59,7 @@ class APJController
   
   /**
   * Constructor
-  * @param $page (string) Rendered view
+  * @param (string) Rendered view
   */
   public function __construct($page='') {
     $method = isset($_POST['action'])?$_POST['action']:null;
@@ -81,8 +81,8 @@ class APJController
   /**
   * Renders the view</br>
   * Renderiza la vista
-  * @param $page (string) View name
-  * @param $return (boolean) Returns the rendered view
+  * @param (string) View name
+  * @param (boolean) true=Returns the rendered view, false=displays the view (optional)
   */
   protected function render($page,$return=false) {
     if ($this->canRender) {
@@ -128,9 +128,9 @@ class APJController
   
   /**
   * Extracts into array the (optional) adicional parameters from APJSubmit
-  * Extrae los parametros adicionales (opcionales) que envía APJSubmit en un array
-  * @param $param (string) parameters submitted from APJSubmit
-  * @return array of parameters
+  * Extrae los parametros (opcionales) adicionales que envía APJSubmit en un array
+  * @param (string) Parameters submitted from APJSubmit
+  * @return (array) Parameters array
   */
   protected function getParameters($params) {
     $string = trim($params,'[');
@@ -146,7 +146,7 @@ class APJController
   * Crea un objeto Form con los campos del formulario enviado
   */
   protected function getForm() {
-    $this->Form = new stdClass;
+    $this->createForm();
     foreach ($_REQUEST as $name => $value) {
       if ($name != 'action' and $name != 'parameters') {
         $this->Form->$name = $value;
@@ -159,7 +159,7 @@ class APJController
   /**
   * Assign matching form fields to the Model<br>
   * Asigna los campos coincidentes del formulario al Modelo
-  * @param $model (string) Model name
+  * @param (string) Model name
   */
   protected function formToModel($model) {
     if (isset($_REQUEST['action'])) {
@@ -174,9 +174,10 @@ class APJController
   /**
   * Assign matching Form object fields to the Model<br>
   * Asigna los campos coincidentes del objeto Form al Modelo
-  * @param $model (string) Model name
+  * @param (string) Model name
   */
   protected function formObjectToModel($model) {
+    $this->createForm();
     foreach ($this->Form as $name => $value) {
       if (in_array($name, $model->fields)) {
         $model->$name = $value;
@@ -187,9 +188,10 @@ class APJController
   /**
   * Assigns Model values to Form object<br>
   * Asigna valores del Modelo al objeto Form
-  * @param $model (string) Model name
+  * @param (string) Model name
   */
   protected function modelToForm($model) {
+    $this->createForm();
     $fields=$model->fields;
     foreach ($fields as $name) {
       $this->Form->$name = $model->$name;
@@ -205,9 +207,19 @@ class APJController
   }
   
   /**
-  * Sets the form values from Form object or array
-  * Asigna los valores del formulario desde objeto Form o Array
-  * @param (mixed) (optional) array o object
+  * If not exist, create tehe Form object
+  * Si no exite, crea el objeto Form
+  */
+  protected function createForm() {
+    if (!isset($this->Form)) {
+      $this->Form = new stdClass;
+    }
+  }
+  
+  /**
+  * Sets the html form values from Form object or array
+  * Asigna los valores del formulario html desde objeto Form o Array
+  * @param (mixed) Array or object (optional)
   */
   protected function setFormValues($data='') {
     if (empty($data)) {
@@ -258,8 +270,8 @@ class APJController
   /**
   * Gets local file content<br>
   * Obtiene el contenido de un archivo local
-  * @param $url (string) file url
-  * @return file content (string)
+  * @param (string) File url
+  * @return (string) File content
   */
   protected function getLocalContent($url) {
     if (file_exists($url) and is_readable($url)) {
@@ -277,8 +289,8 @@ class APJController
   /**
   * Gets a file content<br>
   * Obtiene el contenido de un archivo
-  * @param $url (string) file url
-  * @return file content (string)
+  * @param (string) File url
+  * @return (string) File content
   */
   protected function getContent($url) {
     if (ini_get('allow_url_fopen')!=1) {
@@ -332,8 +344,8 @@ class APJController
   /**
   * Return formatted current Date and Time<br>
   * Retorna la Fecha y Hora actual con formato
-  * @param $format (string) datetime format
-  * @return formatted DateTime (string)
+  * @param (string) Datetime format
+  * @return (string) formatted Datetime
   */
   protected function currentDateTime($format='Y-m-d H:i:s') {
     return date($format);
@@ -342,10 +354,10 @@ class APJController
   /**
   * Formats a value dependign on data type
   * Formatea un valor dependiendo del tipo de dato
-  * @param string $type data type
-  * @param mixed $value the value
+  * @param (mixed) The value
+  * @param (string) Data type
   */
-  protected function format($type,$value) {
+  protected function format($value,$type) {
     $type=strtolower($type);
     $fmt = unserialize(FORMATS);
     switch ($type) {
@@ -401,8 +413,9 @@ class APJController
   /**
   * Converts Date and Time by format<br>
   * Convierte Fecha y Hora según formato
-  * @param $dateTime (DateTime)
-  * @param $format (string) format
+  * @param (string) Datetime
+  * @param (string) Format
+  * @return (string) Formated datetime
   */
   protected function convertDateTime($dateTime, $format='Y-m-d H:i:s') {
     $arraymonth=array();
@@ -451,9 +464,9 @@ class APJController
   /**
   * Searches array elements in a string<br>
   * Busca elementos de un array en un string
-  * @param $Array (array)
-  * @param $String (string) where to search
-  * @param $Delim (string) delimiter, default space
+  * @param (array) Array elements to be searched
+  * @param (string) Where to search
+  * @param (string) Delimiter (default ' ')
   */
   protected function arrayInString($Array,$String,$Delim=' ') {
     $StringAsArray = explode( $Delim , $String );
@@ -461,13 +474,13 @@ class APJController
   }
   
   /**
-  * Generates the option of a select from given array<br>
-  * Genera los option de un select según array dado
-  * @param $array (array) Array of elements
-  * @param $valueIndex (string) Value index name
-  * @param $textIndex (string) Item index name
-  * @param $selected (string) Selected item value
-  * @return string with html options
+  * Generates the <option> of a <select> from given array<br>
+  * Genera los <option> de un <select> según array dado
+  * @param (array) Array of elements
+  * @param (string) Value index name
+  * @param (string) Item index name
+  * @param (string) Default selected item value (optional)
+  * @return (string) <options>
   */
   protected function options($array, $valueIndex, $textIndex, $selected='') {
     $options='';
@@ -485,11 +498,11 @@ class APJController
   /**
   * Returns a substring delimited by 2 strings<br>
   * Retorna un substring delimitado por 2 strings
-  * @param $string (string) entire string
-  * @param $start (string) staring search string
-  * @param $end (string) ending search string
-  * @param $pos (int) starting position (optional)
-  * @return string with result
+  * @param (string) Entire string
+  * @param (string) Staring search string
+  * @param (string) Ending search string
+  * @param (int) Starting position (default 0)
+  * @return (string) Result
   */
   protected function getStringBetween($string, $start, $end, $pos=0) {
     $string = " ".$string;
@@ -505,7 +518,7 @@ class APJController
   /**
   * Return current filename to _self (used with url = "APJ:{self()}")<br>
   * Retorna el nombre del archivo actual a _self (para uso en url = "APJ:{self()}")
-  * @return (string) filename
+  * @return (string) Controller filename
   */
   protected function self() {
     $obj = new ReflectionClass($this);
@@ -525,9 +538,10 @@ class APJController
   /**
   * Returns an array with paged results from a data array<br>
   * Retorna un arreglo con resultado paginados de un arreglo de datos
-  * @param array $data
-  * @param int $limit
-  * @param int $page
+  * @param (array) Data array
+  * @param (int) Elements per page
+  * @param (int) Page number
+  * @return (array) Result array
   */
   protected function paging($data, $limit=20,$page=1) {
     if (is_array($data)) {
@@ -546,7 +560,7 @@ class APJController
   /**
   * Return the timeout parameter for the view<br>
   * Retorna el parametro timeout para la vista
-  * @return (int) timeout value
+  * @return (int) Timeout value
   */
   protected function timeout() {
     return $this->TimeOut;
@@ -563,27 +577,27 @@ class APJController
   /**
   * Creates a jQuery object selector
   * Crea un objeto selector jQuery
-  * @param $selector (string)
-  * @return jQSelector (object)
+  * @param (string) Selector
+  * @return (object) jQSelector
   */
   protected function jQ($selector) {
     return jQ::setQuery($selector);
   }
   
   /**
-  * Creates a jQuery script<br>
-  * Crea un script de jQuery
-  * @param $script (string) Script text
+  * Creates a jQuery/javascript script<br>
+  * Crea un script de jQuery/javascript
+  * @param (string) Script
   */
   protected function jScript($script) {
     jQ::Script($script);
   }
   
   /**
-  * Displays a search result to a showdown list
+  * Displays a showdown list with result elements
   * Despliega el resultado de una busqueda en una lista desplegable
-  * @param string element to locate
-  * @param string element to toggle
+  * @param (string) Element to locate the list under
+  * @param (string) Container element to display/toggle
   */
   protected function jShowDown($input,$container) {
     jQ::Script("jShowDown('{$input}','{$container}')");  
@@ -592,10 +606,11 @@ class APJController
   /**
   * Displays a information alert<br>
   * Despliega una alerta de información
-  * @param $message (string)
-  * @param (optional) title (string)
-  * @param (optional) callback (string) Callback function/method
-  * @param (optional) params (array) Callback parameters
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Callback function/method (optional)
+  * @param (string) Javasript array format of callback parameters (optional)
+  * @return (object) Jinfo
   */
   protected function jInfo($message,$title='',$callback='',$params='') {
     return jQ::jInfo($message,$title,$callback,$params);
@@ -604,10 +619,11 @@ class APJController
   /**
   * Displays a warning alert<br>
   * Despliega una alerta de advertencia
-  * @param $message (string)
-  * @param (optional) $title (string)
-  * @param (optional) $callback (string) Callback function/method
-  * @param (optional) $params (array) Callback parameters
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Callback function/method (optional)
+  * @param (string) Javasript array format of callback parameters (optional)
+  * @return (object) JWarning
   */
   protected function jWarning($message,$title='',$callback='',$params='') {
     return jQ::jWarning($message,$title,$callback,$params);
@@ -616,10 +632,11 @@ class APJController
   /**
   * Displays a error alert<br>
   * Despliega una alerta de error
-  * @param $message (string)
-  * @param (optional) $title (string)
-  * @param (optional) $callback (string) Callback function/method
-  * @param (optional) $params (array) Callback parameters
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Callback function/method (optional)
+  * @param (string) Javasript array format of callback parameters (optional)
+  * @return (object) JError
   */
   protected function jError($message,$title='',$callback='',$params='') {
     return jQ::jError($message,$title,$callback,$params);
@@ -628,10 +645,11 @@ class APJController
   /**
   * Displays a Confirmation<br>
   * Despliega una confirmación
-  * @param $message (string)
-  * @param (optional) $title (string)
-  * @param $callback (string) Callback function/method
-  * @param (optional) $params (array) Callback parameters
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Callback function/method (optional)
+  * @param (string) Javasript array format of callback parameters (optional)
+  * @return (object) JConfirm
   */
   protected function jConfirm($message,$title='',$callback='',$params='') {
     return jQ::jConfirm($message,$title,$callback,$params);
@@ -640,10 +658,11 @@ class APJController
   /**
   * Displays a value prompt<br>
   * Despliega una captura de valor
-  * @param $message (string)
-  * @param (optional) $title (string)
-  * @param (optional) $callback (string) Callback function/method
-  * @param (optional) $params (array) Callback parameters
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Callback function/method (optional)
+  * @param (string) Javasript array format of callback parameters (optional)
+  * @return (object) Jprompt
   */
   protected function jPrompt($message,$title='',$callback='',$params='') {
     return jQ::jPrompt($message,$title,$callback,$params);
@@ -652,9 +671,10 @@ class APJController
   /**
   * Displays a processing alert<br>
   * Despliega una alerta de procesamiento
-  * @param $message (string)
-  * @param (optional) $title (string)
-  * @param (optional) $style (can by 'blink')
+  * @param (string) Message
+  * @param (string) Title (optional)
+  * @param (string) Style, can be 'blink' (default none)
+  * @return (object) Jprocess
   */
   protected function jProcess($message,$title='',$style='') {
     return jQ::jProcess($message,$title,$style);
@@ -663,6 +683,7 @@ class APJController
   /**
   * Closes any alert window<br>
   * Cierra cualquier ventana de alerta
+  * @return (object) JClose
   */
   protected function jClose() {
     return jQ::jClose();
@@ -671,9 +692,9 @@ class APJController
   /**
   * Displays an array of Errors, Warnings or Information<br>
   * Despliega un array de Errores, Advertencias o Información
-  * @param $messages (array) Arrays with messages
-  * @param $title (string) Title of message
-  * @param $type (string) can by 'Error', 'Warning' or 'Info'
+  * @param (array) Arrays with messages
+  * @param (string) Title of message
+  * @param (string) Can be 'Error', 'Warning' or 'Info'
   */
   protected function showMessages($messages,$title,$type) {
     $func=array("Error"=>"jError","Info"=>"jInfo","Warning"=>"jWarning");
@@ -687,8 +708,9 @@ class APJController
   /**
   * Displays an array of errors in a Error alert (jError)<br>
   * Despliega un array de errores en una alerta de Error (jError)
-  * @param $errors (array) Errors array
-  * @param $title (string) jError Title
+  * @param (array) Errors messages
+  * @param (string) Title
+  * @param (array) Fields alias (optional)
   */
   protected function showErrors($errors,$title,$alias) {
     $msg="";
@@ -704,8 +726,9 @@ class APJController
   /**
   * Displays array of warnings in a Warning alert (jWarning)<br>
   * Despliega un array de advertencias de un modelo en una alerta de Advertencia (jWarning)
-  * @param $warnings (array) Warnigs array
-  * @param $title (string) jWarning Title
+  * @param (array) Warning messages
+  * @param (string) Title
+  * @param (array) Fields alias (optional)
   */
   protected function showWarnings($warnings,$title,$alias) {
     $msg="";
@@ -721,8 +744,8 @@ class APJController
   /**
   * Returns a object from an array
   * Devuelve un objeto a partir de una matriz
-  * @param array
-  * @return stdClass
+  * @param (array) Elements to be converted
+  * @return (object) stdClass object
   */
   protected function arrayToObject($array) {
     $object = new stdClass();
@@ -739,10 +762,10 @@ class APJController
   }
   
   /**
-  * Redirects to other controller
+  * Redirects to other controller<br>
   * Redirige a otro controlador
-  * @param $url (string) controller url
-  * @param $parent (boolean) from parent location
+  * @param (string) controller url
+  * @param (boolean) From parent location (default false)
   */
   protected function redirect($url,$parent=false) {
     if (isset($_REQUEST['action'])) {
@@ -763,58 +786,10 @@ class APJController
   }
   
   /**
-  * Formats value according to type defined in init.php file<br>
-  * Formatea el valor según el tipos de datos definido en el archivo init.php
-  * @param value (mixed) the value
-  * @param type (mixed) the data type
-  * @return (mixed) formatted value
+  * Returns current unix date<br>
+  * Retorna la fecha unix actual
+  * @return (timestamp) Unix date format
   */
-  protected function setFormat($value,$type) {
-    $fmt = unserialize(FORMATS);
-    switch ($type) {
-      case "float":
-      case "real":
-      case "double":
-      case "decimal":
-      case "numeric":
-        if (is_numeric($value)) {
-          $fvalue = number_format($value,$fmt['decimal'][0],$fmt['decimal'][1],$fmt['int'][2]);
-        } else {
-          $fvalue = $value;
-        }
-        break;
-      case "date":
-        $dateTime=new DateTime($value);
-        $fvalue = ($value=='0000-00-00' or $value==NULL)?NULL:$dateTime->format($fmt['date']);
-        break;
-      case "datetime":
-        $dateTime=new DateTime($value);
-        $fvalue = ($value=='0000-00-00 00:00:00' or $value==NULL)?NULL:$dateTime->format($fmt['datetime']);
-        break;
-      case "time":
-        $dateTime=new DateTime($value);
-        $fvalue = ($value=='00:00:00' or $value==NULL)?NULL:$dateTime->format($fmt['time']);
-        break;
-      case "timestamp":
-        $dateTime=new DateTime($value);
-        $fvalue = ($value==0 or $value==NULL)?NULL:$dateTime->format($fmt['timestamp']);
-        break;
-      case "smallint":
-      case "mediumint":
-      case "int":
-      case "bigint": 
-        if (is_numeric($value)) {
-          $fvalue = number_format($value,$fmt['int'][0],$fmt['int'][1],$fmt['int'][2]);
-        } else {
-          $fvalue = $value;
-        }
-        break;
-      default:
-        $fvalue = $value;
-    }
-    return $fvalue;
-  }
- 
   protected function timeStamp() {
     return time();
   }

@@ -1,4 +1,4 @@
-﻿Carpeta APJ
+Carpeta APJ
 
 Contiene todo el Framework de APJ
 
@@ -9,11 +9,11 @@ js: contiene jqajaj.js y jqalert.js
 
 APJAutoload.php:          Módulo de que permite la autocarga de clases instanciadas del framework
 APJController.class.php:  Controlador heredable del framework MVC
-APJLog.class.php:         Objeto que guarda los logs de errores de APJPDO (base de datos)
+APJLog.class.php:         Objeto que guarda los logs de errores de APJPDO y los modelos
 APJModel.class.php:       Modelo heredable del framework MVC
 APJPDO.class.php:         Administrador de base de datos
 APJPDO.ini.php:           Archivo de configuración de acceso de base de datos
 APJSession.class.php:     Control de sesiones de usuarios
 jQ.class.php:             Clase Estática que inyecta acciones jQuery desde PHP
-jQAction.class.php:       Define los parametros del objeto jQAction
+jQAction.class.php:       Define los parametros de acciones jQuery para jQ
 jQSelector.class.php:     Define el selector jQuery para jQ
