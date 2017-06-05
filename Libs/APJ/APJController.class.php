@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Versión: 1.17.0602
+* Versión: 1.17.0604
 * Author: Ricardo Seiffert
 */
 class APJController
@@ -331,10 +331,8 @@ class APJController
           $paramArray=array($func);
         }
         $replace=$this->_APJCall($paramArray);
-        if ($replace) {
-          $html=str_replace($allNeedle,$replace,$html);
-          $len=strlen($replace);
-        }
+        $html=str_replace($allNeedle,$replace,$html);
+        $len=strlen($replace);
       }
       $startPos+=$len;
     }
