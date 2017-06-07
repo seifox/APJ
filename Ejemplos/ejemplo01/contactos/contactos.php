@@ -2,7 +2,6 @@
 require_once("init.php");
 class Contactos extends APJController
 {
-  private $timeOut = 10000;
   private $modeloPaises;
   private $modeloCiudades;
   private $modeloContactos;
@@ -17,7 +16,7 @@ class Contactos extends APJController
     $this->modeloPaises = new Models_Paises();
     $this->modeloCiudades = new Models_Ciudades();
     $this->modeloContactos = new Models_Contactos();
-    //$this->modeloContactos->showModel(true);
+    //$this->modeloContactos->showModel(false);
   }
   
   public function optPaises() {
@@ -68,11 +67,11 @@ class Contactos extends APJController
   
   public function guardar() {
     $this->formObjectToModel($this->modeloContactos);
-    if ($this->modeloContactos->guardar($this->Form)===false) {
-      $this->muestraErrores();
-    } else {
+    if ($this->modeloContactos->guardar($this->Form)) {
       $this->refrescaGrilla($this->modeloContactos->pais);
       $this->jQ("#reset")->click();
+    } else {
+      $this->muestraErrores();
     }
   }
 
@@ -133,5 +132,13 @@ class Contactos extends APJController
     $out.='</tr>';
     return $out;
   }
+  
+  public function ciudades() {
+    $_POST['noInstance']=true;
+    $app=new Ciudades('');
+    $view=$app->render('ciudades.html',true);
+    $this->jQ("#ventana")->html($view);
+  }
+  
 }
 $app = new Contactos('contactos.html');

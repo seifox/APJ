@@ -2,10 +2,10 @@
 require_once("init.php");
 class Consulta extends APJController
 {
-  private $timeOut = 10000;
   private $modeloContactos;
   
   public function __construct($page) {
+    $this->TimeOut = 20000;
     $this->sessionControl();
     $this->instanciaModelos();
     parent::__construct($page);
@@ -36,6 +36,7 @@ class Consulta extends APJController
     $cuerpo=" ";
     if (!$rows) {
         $this->jWarning("No hay resultados de la busqueda");
+        $this->jProcess('Actualizando datos en linea...','Procesando');
         return false;
     }
     $cuerpo=$this->preparaTabla($rows);
@@ -50,6 +51,7 @@ class Consulta extends APJController
     foreach ($rows as $row) {
       // Usando Clase añadida (Helper) para calcular la edad
       $edad=Classes_FuncionesFecha::edad($row['fecha_nacimiento']);
+      $rowf=$this->modeloContactos->setFormat($row);
       $out.=<<<FILA
         <tr class="modo1">
           <td>{$row['pais']}</td>
@@ -61,7 +63,7 @@ class Consulta extends APJController
           <td>{$row['direccion']}</td>
           <td>{$row['fono']}</td>
           <td>{$row['email']}</td>
-          <td>{$row['fecha_nacimiento']}</td>
+          <td>{$rowf['fecha_nacimiento']}</td>
           <td>{$edad}</td>
         </tr>
 FILA;

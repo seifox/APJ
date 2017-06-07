@@ -42,6 +42,7 @@
               <th class="derecha">Nombres:</th>
               <td>
                 <input type="text" name="nombres" id="nombres" maxlength="50" size="50">
+                <button class="smallButton" onclick="APJCall('buscarContacto',$('#nombres').val())">v</button>
               </td>
             </tr>
             <tr>
@@ -120,7 +121,7 @@
         </tbody>
       </table>
     </section>
-    <script>
+    <script type="text/javascript">
       $(document).ready(function() {
         $("#reset").click(function() {
           $("#edad").text("Edad: 0");

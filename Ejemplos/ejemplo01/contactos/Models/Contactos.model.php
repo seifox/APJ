@@ -35,10 +35,12 @@ class Models_Contactos extends APJModel
     }
     if ($this->id) {
       // Actualiza y retorna las filas afectadas o FALSE si hay algún problema
-      return $this->update();      
+      $this->update();      
+    } else {
+      // Insert  y retorna las filas afectadas o FALSE si hay algún problema
+      $this->insert();
     }
-    // Insert  y retorna las filas afectadas o FALSE si hay algún problema
-    return $this->insert();
+    return !$this->error;
   }
   
   public function consulta($pais) {

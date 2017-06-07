@@ -76,14 +76,14 @@ class APJModel extends APJPDO
   public $charset = 'utf-8';
 
   /**
-  * Associative array of columns to be stored in lowercase<br>
+  * Array of columns to be stored in lowercase<br>
   * Array asociativo de columnas que deben guardarse en minúsculas
   * @var array
   */
   public $toLower = array();
 
   /**
-  * Associative array of columns to be stored in uppercase<br>
+  * Array of columns to be stored in uppercase<br>
   * Array asociativo de columnas que deben guardarse en mayúsculas
   * @var array
   */
@@ -137,10 +137,9 @@ class APJModel extends APJPDO
   * Extracts and define the model structure
   * Extrae y define la estructura del modelo
   */
-  public function defineModel() {
+  private function defineModel() {
     $sql="SHOW FULL COLUMNS FROM ".$this->table;
-    $struc=$this->rows($sql);
-    if ($struc) {
+    if ($struc=$this->rows($sql)) {
       foreach ($struc as $str) {
         $type=$this->_type($str['Type']);
         $size=$this->_size($type,$str['Type']);
@@ -446,6 +445,9 @@ class APJModel extends APJPDO
       case "float":
       case "real":
       case "double":
+      case "double precision":
+      case "fixed":
+      case "dec":
       case "decimal":
         if (is_numeric($value)) {
           $fvalue = number_format($value,$fmt['decimal'][0],$fmt['decimal'][1],$fmt['int'][2]);
@@ -469,8 +471,10 @@ class APJModel extends APJPDO
         break;
       case "smallint":
       case "mediumint":
+      case "integer":
       case "int":
       case "bigint": 
+      case "bit":
         if (is_numeric($value)) {
           $fvalue = number_format($value,$fmt['int'][0],$fmt['int'][1],$fmt['int'][2]);
           break;

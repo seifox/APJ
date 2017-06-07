@@ -2,8 +2,6 @@
 require_once("init.php");
 class Index extends APJController
 {
-  private $timeOut = 10000;
-  
   public function __construct($page) {
     $this->sessionControl();
     parent::__construct($page);

@@ -10,7 +10,6 @@ class Login extends APJController
   const INTENTOS = 3;
   
   public function __construct($page) {
-    $this->TimeOut = 10000;
     $this->instanciaModelos();
     if (!isset($_POST['action'])) {
       $this->verificaCookies();

@@ -2,14 +2,14 @@
 require_once("init.php");
 class Ciudades extends APJController
 {
-  // Propiedad utilizada por la vista, que define el tiempo de espera en milisegundos
-  private $timeOut = 10000;
   // Los modelos
   private $modeloPaises;
   private $modeloCiudades;
   
   // Construcor (primer metodo ejecutado)
   public function __construct($page) {
+    // Propiedad utilizada por la vista, que define el tiempo de espera en milisegundos
+    $this->TimeOut = 10000;
     // Controla la sesión del usuario
     $this->sessionControl();
     // Instancia los modelos
@@ -21,9 +21,10 @@ class Ciudades extends APJController
   private function instanciaModelos() {
     $this->modeloPaises = new Models_Paises();
     $this->modeloCiudades = new Models_Ciudades();
-    // showModel(corto) permite documentar el modelo mostrando la estrcutura básica de los campos
+    // showModel(true) permite documentar el modelo, mostrando la estrcutura básica de la tabla
     // showStructure() crea el código necesario para crear la estructura fija en el modelo
-    //$this->modeloCiudades->showModel(true);
+    //$this->modeloCiudades->showModel(true); true=documentación corta, false=completa
+    //$this->modeloCiudades->showStructure();
   }
   
   // Llamado desde la vista con APJ:{optPaises()}
@@ -60,12 +61,11 @@ class Ciudades extends APJController
     // Pasa los datos de Form al modelo
     $this->formObjectToModel($this->modeloCiudades);
     // Llama al metodo guardar del modelo Ciudades, si hay errores que los muestre
-    if ($this->modeloCiudades->guardar($this->Form)===false) {
-      $this->muestraErrores();
-    } else {
-      // Si no, cambia la grilla con el pais seleccionado y limpia el formulario
+    if ($this->modeloCiudades->guardar($this->Form)) {
       $this->cambiaGrilla($this->Form->codigo_pais);
       $this->jQ("#reset")->click();
+    } else {
+      $this->muestraErrores();
     }
   }
 
@@ -122,5 +122,8 @@ class Ciudades extends APJController
     return $out;
   }
 }
-// Instancia el controlador y le pasa por parámetro la vista que debe abrir
-$app = new Ciudades('ciudades.html');
+// Verifica si debe instanciar el controlador
+if (!$_POST['noInstance']) {
+  // Instancia el controlador y le pasa por parámetro la vista que debe abrir
+  $app = new Ciudades('ciudades.html');
+}

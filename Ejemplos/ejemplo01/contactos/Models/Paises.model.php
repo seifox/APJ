@@ -13,15 +13,15 @@ class Models_Paises extends APJModel
   public function __construct() {
     parent::__construct();
     $this->setTable('paises');
+    $this->toUpper = array('codigo','pais');
   }
   
   public function guardar() {
     if ($this->basicValidation()) {
       return false;
     }
-    $this->codigo=strtoupper($this->codigo);
-    $this->pais=strtoupper($this->pais);
-    return $this->replace();
+    $this->replace();
+    return !$this->error;
   }
   
 }

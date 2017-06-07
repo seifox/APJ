@@ -132,7 +132,7 @@ class APJController
   * @param (string) Parameters submitted from APJSubmit
   * @return (array) Parameters array
   */
-  protected function getParameters($params) {
+  private function getParameters($params) {
     $string = trim($params,'[');
     $string = trim($string,']');
     $string = str_replace('"', "", $string);
@@ -145,7 +145,7 @@ class APJController
   * Create a Form objet from submitted form
   * Crea un objeto Form con los campos del formulario enviado
   */
-  protected function getForm() {
+  private function getForm() {
     $this->createForm();
     foreach ($_REQUEST as $name => $value) {
       if ($name != 'action' and $name != 'parameters') {
@@ -210,7 +210,7 @@ class APJController
   * If not exist, create tehe Form object
   * Si no exite, crea el objeto Form
   */
-  protected function createForm() {
+  private function createForm() {
     if (!isset($this->Form)) {
       $this->Form = new stdClass;
     }
@@ -362,6 +362,9 @@ class APJController
       case "float":
       case "real":
       case "double":
+      case "double precision":
+      case "fixed":
+      case "dec":
       case "decimal":
         if (is_numeric($value)) {
           $fvalue = number_format($value,$fmt['decimal'][0],$fmt['decimal'][1],$fmt['int'][2]);
@@ -385,8 +388,10 @@ class APJController
         break;
       case "smallint":
       case "mediumint":
+      case "integer":
       case "int":
       case "bigint": 
+      case "bit":
         if (is_numeric($value)) {
           $fvalue = number_format($value,$fmt['int'][0],$fmt['int'][1],$fmt['int'][2]);
           break;
@@ -465,10 +470,11 @@ class APJController
   * @param (array) Array elements to be searched
   * @param (string) Where to search
   * @param (string) Delimiter (default ' ')
+  * @return (boolean) True or False
   */
-  protected function arrayInString($Array,$String,$Delim=' ') {
-    $StringAsArray = explode( $Delim , $String );
-    return ( count( array_intersect( $Array , $StringAsArray ) )>0 );
+  protected function arrayInString($array,$string,$delim=' ') {
+    $stringAsArray = explode( $delim , $string );
+    return ( count( array_intersect( $array , $stringAsArray ) )>0 );
   }
   
   /**

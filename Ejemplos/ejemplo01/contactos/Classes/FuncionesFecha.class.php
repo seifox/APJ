@@ -13,11 +13,11 @@ class Classes_FuncionesFecha
   private static $formato;
   
   // Reemplaza / por - en Fechas
-  public static function reemplazaDiagonales($fecha) {
+  static public function reemplazaDiagonales($fecha) {
     return str_replace('/','-',$fecha);
   }
   
-  public static function esFinDeSemana($fecha) {
+  static public function esFinDeSemana($fecha) {
     $dw=date("w",strtotime($fecha));
     if ($dw>5 or $dw==0) {
       return true;
@@ -25,7 +25,7 @@ class Classes_FuncionesFecha
     return false;
   }
   
-  public static function convierteFecha($fecha, $format) {
+  static public function convierteFecha($fecha, $format) {
     $arraymeses=array();
     $meses[0]=array('ninguno','enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre');
     $meses[1]=array('ninguno','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic');
@@ -67,7 +67,7 @@ class Classes_FuncionesFecha
     return date($format, strtotime($fecha));
   }
   
-  public static function fechaLargaES($fecha) {
+  static public function fechaLargaES($fecha) {
     $fechaES="";
     if ($fecha) {
       setlocale(LC_TIME, LOCALTIMESYMBOL);
@@ -76,12 +76,12 @@ class Classes_FuncionesFecha
     return $fechaES;
   }
   
-  public static function masmenosDias($fecha,$dias) {
+  static public function masmenosDias($fecha,$dias) {
     $unixtime=strtotime($fecha.$dias.' day');
     return date('Y-m-d',$unixtime);
   }
   
-  public static function serieDeFechas($desde,$hasta) {
+  static public function serieDeFechas($desde,$hasta) {
     $serie=array($desde);
     while ($desde<$hasta) {
       $desde=self::masmenosDias($desde,1);

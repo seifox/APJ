@@ -2,7 +2,6 @@
 require_once("init.php");
 class Paises extends APJController
 {
-  private $timeOut = 10000;
   private $modeloPaises;
   
   public function __construct($page) {
@@ -31,10 +30,10 @@ class Paises extends APJController
   
   public function guardar() {
     $this->formObjectToModel($this->modeloPaises);
-    if (!$this->modeloPaises->guardar()) {
-      $this->muestraErrores();
-    } else {
+    if ($this->modeloPaises->guardar()) {
       $this->jQ("#reset")->click();
+    } else {
+      $this->muestraErrores();
     }
   }
 
