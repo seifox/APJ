@@ -34,6 +34,9 @@ y los permisos.
 
 El controlador “login.php” fue modificado para dar acceso a los módulos presentes. Normalmente ello se controla desde alguna 
 tabla con los permisos que tiene cada usuario.
+Acceso:
+USUARIO: admin
+CONTRASEÑA: A12346
 
 La aplicación trae un módulo de acceso, mantenedores de Países, Ciudades y Contactos. Una consulta y la página de bienvenida (home)
 

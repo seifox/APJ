@@ -36,7 +36,6 @@ class Consulta extends APJController
     $cuerpo=" ";
     if (!$rows) {
         $this->jWarning("No hay resultados de la busqueda");
-        $this->jProcess('Actualizando datos en linea...','Procesando');
         return false;
     }
     $cuerpo=$this->preparaTabla($rows);

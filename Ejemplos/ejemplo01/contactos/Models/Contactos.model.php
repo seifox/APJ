@@ -24,7 +24,7 @@ class Models_Contactos extends APJModel
     parent::__construct();
     // Define la tabla del modelo (lee la estructura en forma dinámica)
     $this->setTable('contactos');
-    // Trunca los espacios en blanco de los campos
+    // Trunca los espacios en blanco de los datos antes de guardarlos
     $this->trim=true;
   }
   
@@ -41,6 +41,21 @@ class Models_Contactos extends APJModel
       $this->insert();
     }
     return !$this->error;
+  }
+  
+  // Busca un nombre en nombres y apellidos
+  public function buscarNombre($nombre) {
+    $sql="SELECT
+        id,
+        CONCAT_WS(' ',nombres, apellido_paterno, apellido_materno) AS nombre
+      FROM 
+        {$this->table}
+      WHERE 
+        nombres LIKE CONCAT('%',:nombre1,'%') OR 
+        apellido_paterno LIKE CONCAT('%',:nombre2,'%') OR
+        apellido_materno LIKE CONCAT('%',:nombre3,'%')";
+    $params=array('nombre1'=>$nombre, 'nombre2'=>$nombre, 'nombre3'=>$nombre);
+    return $this->rows($sql,$params);
   }
   
   public function consulta($pais) {
@@ -139,4 +154,5 @@ class Models_Contactos extends APJModel
     }
     return $condicion;    
   }
+
 }

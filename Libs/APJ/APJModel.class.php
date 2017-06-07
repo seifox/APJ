@@ -99,6 +99,8 @@ class APJModel extends APJPDO
   public $previousPage = 0;
   public $nextPage = 0;
   
+  // Common methods Trait
+  use APJCommon;
   
   /**
   * Constructor (connects to database)<br>
@@ -432,99 +434,6 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Formats a value dependign on data type
-  * Formatea un valor dependiendo del tipo de dato
-  * @param (mixed) Formatted value
-  * @param (string) Data type
-  * @return (mixed) Formatted value
-  */
-  protected function format($value,$type) {
-    $type=strtolower($type);
-    $fmt = unserialize(FORMATS);
-    switch ($type) {
-      case "float":
-      case "real":
-      case "double":
-      case "double precision":
-      case "fixed":
-      case "dec":
-      case "decimal":
-        if (is_numeric($value)) {
-          $fvalue = number_format($value,$fmt['decimal'][0],$fmt['decimal'][1],$fmt['int'][2]);
-          break;
-        }
-      case "date":
-        $dateTime=new DateTime($value);
-        $fvalue = ($value=='0000-00-00' or $value==NULL)?NULL:$dateTime->format($fmt['date']);
-        break;
-      case "datetime":
-        $dateTime=new DateTime($value);
-        $fvalue = ($value=='0000-00-00 00:00:00' or $value==NULL)?NULL:$dateTime->format($fmt['datetime']);
-        break;
-      case "time":
-        $dateTime=new DateTime($value);
-        $fvalue = ($value=='00:00:00' or $value==NULL)?NULL:$dateTime->format($fmt['time']);
-        break;
-      case "timestamp":
-        $dateTime=new DateTime($value);
-        $fvalue = ($value==0 or $value==NULL)?NULL:$dateTime->format($fmt['timestamp']);
-        break;
-      case "smallint":
-      case "mediumint":
-      case "integer":
-      case "int":
-      case "bigint": 
-      case "bit":
-        if (is_numeric($value)) {
-          $fvalue = number_format($value,$fmt['int'][0],$fmt['int'][1],$fmt['int'][2]);
-          break;
-        }
-      case "boolean":
-      case "bool":
-      case "tinyint":
-        if (is_numeric($value)) {
-          if ($value) {
-            $fvalue=$fmt['booleanTrue'];
-          } else {
-            $fvalue=$fmt['booleanFalse'];
-          }
-          break;
-        }
-      default:
-        $fvalue = $value;
-    }
-    return $fvalue;    
-  }
-  
-  /**
-  * Validate dates by format<br>
-  * Valida fechas segun fromato
-  * @param (mixed) Date
-  * @param (string) Format
-  * @param (boolean) strict validation
-  * @return (boolean) true = invalid, false=valid
-  */
-  public function verifyDate($date, $format, $strict=true) {
-    $dto = new DateTime();
-    if ($format=='timestamp') {
-      $dateTime=$dto->setTimestamp($date);
-    } else {
-      $dateTime=$dto->createFromFormat($format, $date);
-      if ($dateTime and $strict) {
-        $dateComp=$dateTime->format($format);
-        if ($dateTime==false or $date!=$dateComp) {
-          return true;
-        }
-        $errors = DateTime::getLastErrors();
-        if (!empty($errors['warning_count'])) {
-          return false;
-        }
-      }
-    }
-    return ($dateTime == false);
-  }
-
-  /**
   * Update table<br>
   * Actualiza tabla
   * @param (mixed) where condition as array o string (optional if primary key is defined)
@@ -841,7 +750,7 @@ class APJModel extends APJPDO
   * @return (array) Size (integers,decimals)
   */
   private function _size($btype,$type) {
-    if ($size=$this->_get_string_between($type,'(',')',1)) {
+    if ($size=$this->getStringBetween($type,'(',')',1)) {
       if (strpos($size,",")>0) {
         $result=explode(",",$size);
       } else {
@@ -876,34 +785,5 @@ class APJModel extends APJPDO
     $this->errors = array();
     $this->values = NULL;
   }  
-
-  /**
-  * Returns a string between two strings
-  * Devuelve una cadena entre dos cadenas
-  * @param (string) The string to search in
-  * @param (string) Start needle
-  * @param (string) End needle
-  * @param (int) Starting position
-  * @return (string) Substring found
-  */
-  private function _get_string_between($string, $start, $end, $pos=0) {
-    $string = " ".$string;
-    $ini = strpos($string,$start,$pos);
-    if ($ini == 0) return "";
-    $ini += strlen($start);
-    $len = strpos($string,$end,$ini) - $ini;
-    return substr($string,$ini,$len);
-  }
-
-  /**
-  * Returns current date and time according to format
-  * Devuelve la fecha y hora actual según formato
-  * @param (string) Format (default 'Y-m-d H:i:s')
-  * @return (string) Formatted date 
-  */
-  public function currentDateTime($format='Y-m-d H:i:s')
-  {
-    return date($format);
-  }
 
 }

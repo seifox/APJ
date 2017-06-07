@@ -55,6 +55,37 @@ class Contactos extends APJController
     }
   }
   
+  public function buscarDNI($params) {
+    list($pais,$dni)=$params;
+    if ($pais and $dni) {
+      if ($this->modeloContactos->find(array('pais'=>$pais,'dni'=>$dni))) {
+        $this->editaContacto(array($this->modeloContactos->id));
+      }
+    }
+  }
+  
+  public function buscarNombres($params) {
+    if (strlen($params[0])) {
+      $rows=$this->modeloContactos->buscarNombre($params[0]);
+    } else {
+      $this->jWarning('Debe especificar que quiere buscar');
+      return false;
+    }
+    if ($rows) {
+      $columnas=array('id','nombre');
+      $out=$this->creaTablaResultados($rows,$columnas,'seleccionaContacto');
+      //$this->jQ('#listadodiv')->html($out);
+      $this->jShowDown('nombres','listadodiv',$out);
+    } else {
+      $this->jInfo('No se han encontrado coincidencias');
+    }
+  }
+  
+  public function seleccionaContacto($params) {
+    $this->jQ("#listadodiv")->hide();
+    $this->editaContacto($params);
+  }
+  
   public function calculaEdad($params) {
     if (!empty($params)) {
       if ($edad=Classes_FuncionesFecha::edad($params[0])) {
@@ -139,6 +170,26 @@ class Contactos extends APJController
     $view=$app->render('ciudades.html',true);
     $this->jQ("#ventana")->html($view);
   }
+
+  private function creaTablaResultados($rows,$columnas,$metodo) {
+    $out='<table class="tabla">';
+    foreach($rows as $row) {
+      $out.=<<<FILA
+      <tr class="modo1 pointer" onclick="APJCall('{$metodo}',{$row[$columnas[0]]})">
+FILA;
+      foreach ($columnas as $k=>$col) {
+        if ($k>0) {
+          $out.=<<<COLUMNA
+          <td>{$row[$col]}</td>
+COLUMNA;
+        }
+      }
+      $out.='</tr>';
+    }
+    $out.='</table>';
+    return $out;
+  }
+  
   
 }
 $app = new Contactos('contactos.html');

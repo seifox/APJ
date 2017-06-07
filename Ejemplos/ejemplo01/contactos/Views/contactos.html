@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="css/comun.css">
   </head>
   <body>
+    <div id="listadodiv" class="showDown"></div>
     <section>
       <h2>Mantención de Contactos</h2>
       <form id="form" name="form">
@@ -35,14 +36,14 @@
             <tr>
               <th class="derecha">DNI:</th>
               <td>
-                <input type="text" name="dni" id="dni" maxlength="25" size="25">
+                <input type="text" name="dni" id="dni" maxlength="25" size="25" onchange="APJCall('buscarDNI',$('#pais').val(),this.value)">
               </td>
             </tr>
             <tr>
               <th class="derecha">Nombres:</th>
               <td>
                 <input type="text" name="nombres" id="nombres" maxlength="50" size="50">
-                <button class="smallButton" onclick="APJCall('buscarContacto',$('#nombres').val())">v</button>
+                <button type="button" class="smallButton" onclick="APJCall('buscarNombres',$('#nombres').val())" title="Buscar por nombre o apellidos">v</button>
               </td>
             </tr>
             <tr>
