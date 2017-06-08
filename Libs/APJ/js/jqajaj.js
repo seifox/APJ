@@ -1,7 +1,7 @@
 /*
  Plugin jQuery PHP
  Plugin jAlert
- Version 1.17.0510 Beta
+ Version 1.17.0607 Beta
  require jQuery v1.5.x or grather
 */
 BlinkId=0;
@@ -709,13 +709,13 @@ jAlertClosed=true;
       var actfound = false;
       // Verifica si action está definido
       for (var i=0; i < params.length; i++) {
-        if (params[i].name === 'action') {
+        if (params[i].name === 'APJaction') {
           actfound = true;
         }
       }
       // define el objeto action y lo agrega al array
       if (!actfound) {
-        var obj = {name:"action",value:action};
+        var obj = {name:"APJaction",value:action};
         params.push(obj);
       }
       // Si tiene más de 2 agumentos los agrega como un array al parametro 'parameters'

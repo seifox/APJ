@@ -65,7 +65,7 @@ class APJController
   * @param (string) Rendered view
   */
   public function __construct($page='') {
-    $method = isset($_POST['action'])?$_POST['action']:null;
+    $method = isset($_POST['APJaction'])?$_POST['APJaction']:null;
     $data = isset($_POST['data'])?$_POST['data']:$_POST;
     $this->_unsetAction();
     if (method_exists($this,$method)) {

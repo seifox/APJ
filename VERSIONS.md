@@ -93,3 +93,21 @@
 - Mejoras en APJModel
   - Se agregaron las propiedades toLower (array), toUpper (array) a APJModel, que permite definir que       columnas deben guardarse como mayúsculas o minúsculas de forma automática.
 - Mejoras menores en comentario de métodos y propiedades
+## APJ 1.17.06
+- Mejoras en la documentación de los métodos
+- Mejoras en APJAutolad.php
+- Cambios en APJController
+  - Se eliminó el método setFormat(), es equivalente a format()
+  - Se cambio el orden de los parámetros de format()
+  - Mejoras en el renderizador de las vistas
+  - Cambios de visibilidad en algunos métodos
+  - Se eliminaron métodos comunes
+  - Se modificó el método jShowDown(), ahora tiene un tercer parámetro con el contenido a mostrar
+- Se modifico el proyecto ejemplo "Contactos"
+  - Se utiliza el nuevo método jShowDown()
+- Cambios en APJModel
+  - Se cambió la visibilidad de algunos métodos y propiedades
+  - Se eliminaron métodos comunes
+- Se agregó la clase (trait) APJCommon.class
+  - Contiene los metodos que mantentenían en común el controlador y el modelo
+- Cambios menores en jqajaj.js
