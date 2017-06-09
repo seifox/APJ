@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Versión: 1.17.0607
+* Versión: 1.17.0609
 * Author: Ricardo Seiffert
 */
 class APJController
@@ -65,7 +65,7 @@ class APJController
   * @param (string) Rendered view
   */
   public function __construct($page='') {
-    $method = isset($_POST['APJaction'])?$_POST['APJaction']:null;
+    $method = isset($_POST['action'])?$_POST['action']:null;
     $data = isset($_POST['data'])?$_POST['data']:$_POST;
     $this->_unsetAction();
     if (method_exists($this,$method)) {
@@ -198,6 +198,13 @@ class APJController
     $fields=$model->fields;
     foreach ($fields as $name) {
       $this->Form->$name = $model->$name;
+    }
+  }
+  
+  protected function arrayToForm($array) {
+    $this->createForm();
+    foreach ($array as $name=>$value) {
+      $this->Form->$name = $array[$name];
     }
   }
   

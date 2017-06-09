@@ -709,13 +709,13 @@ jAlertClosed=true;
       var actfound = false;
       // Verifica si action está definido
       for (var i=0; i < params.length; i++) {
-        if (params[i].name === 'APJaction') {
+        if (params[i].name === 'action') {
           actfound = true;
         }
       }
       // define el objeto action y lo agrega al array
       if (!actfound) {
-        var obj = {name:"APJaction",value:action};
+        var obj = {name:"action",value:action};
         params.push(obj);
       }
       // Si tiene más de 2 agumentos los agrega como un array al parametro 'parameters'
