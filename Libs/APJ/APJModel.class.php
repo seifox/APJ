@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.17.0602
+* Versión: 1.17.0612
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -60,20 +60,20 @@ class APJModel extends APJPDO
   * Array asociativo de valores para update, insert y otros
   * @var array
   */
-  public $values = NULL;
+  private $values = NULL;
   /**
   * Conditions for update, delete and find (associative array or literal condition)
   * Condicione para update, delete y find
   * @var mixed array or string
   */
-  public $where = NULL;
+  private $where = NULL;
 
   /**
   * Define charset to use<br>
   * Define el juego de caractéres a usar
   * @var string
   */
-  public $charset = 'utf-8';
+  private $charset = 'utf-8';
 
   /**
   * Array of columns to be stored in lowercase<br>
@@ -463,7 +463,7 @@ class APJModel extends APJPDO
   * @param (boolean) Ignore duplicate rows (default false)
   * @return (mixed) number of affected rows or false if any error
   */
-  public function insert($values='',$ignore=false) { 
+  public function insert($ignore=false,$values=NULL) { 
     $this->_clearError();
     if($this->_values($values)) {
       $fields='';
@@ -786,4 +786,12 @@ class APJModel extends APJPDO
     $this->values = NULL;
   }  
 
+  /**
+  * Set the Charset
+  * 
+  * @param mixed $charset
+  */
+  public function setCharset($charset="utf-8") {
+    $this->charset = $charset;
+  }
 }

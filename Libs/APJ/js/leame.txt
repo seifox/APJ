@@ -1,4 +1,4 @@
-Carpeta "APJ\js"
+﻿Carpeta "APJ\js"
 
-Contiene los módulos Ajax de jqajaj.js jqajaj.min.js (minificación) y jqaler.js (módulo de alerta solo)
+Contiene los módulos Ajax de jqajaj.js jqajaj.min.js (minificación)
 Son los módulos de javascript que permiten la comunicación ajax con el controlador de PHP por medio de objetos json. (jQuery Ajax and Json)

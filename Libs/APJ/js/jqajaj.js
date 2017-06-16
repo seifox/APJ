@@ -1,7 +1,7 @@
 /*
  Plugin jQuery PHP
  Plugin jAlert
- Version 1.17.0607 Beta
+ Version 1.17.0612 Beta
  require jQuery v1.5.x or grather
 */
 BlinkId=0;
@@ -240,7 +240,7 @@ jAlertClosed=true;
 
   };
 
-// jAlert 
+// jAlert
   $.alerts = {
     info: function (mensaje,titulo,callback,params) {
       if (titulo==null) titulo="Información";
@@ -685,6 +685,9 @@ jAlertClosed=true;
   jShowDown = function(input,container) {
     var contElem = $("#"+container);
     var inputElem = $("#"+input);
+    if (contElem.width() < inputElem.width()) {
+      contElem.width(inputElem.width());
+    }
     var offset = inputElem.offset();
     var top = offset.top;
     var left = offset.left;

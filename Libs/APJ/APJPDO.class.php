@@ -2,7 +2,7 @@
 /**
 * APJPDO Class for MySQL PDO managment<br>
 * Clase para la gestión de PDO de MySQL
-* Versión: 1.17.0529
+* Versión: 1.17.0614
 * Author: Ricardo Seiffert
 */
 class APJPDO 
@@ -57,11 +57,15 @@ class APJPDO
       $this->_Settings["password"]=$password;
     }
 		try {
-		  $this->_Pdo = new PDO($dsn, $this->_Settings["user"], $this->_Settings["password"],array(PDO::ATTR_PERSISTENT => true));
-      $this->_Pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND,'SET NAMES '.$this->_Settings['charset']);
-		  $this->_Pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		  $this->_Pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-		  $this->_Connected = true;
+      if (class_exists('PDO')) {
+		    $this->_Pdo = new PDO($dsn, $this->_Settings["user"], $this->_Settings["password"],array(PDO::ATTR_PERSISTENT => true));
+        $this->_Pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND,'SET NAMES '.$this->_Settings['charset']);
+		    $this->_Pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		    $this->_Pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		    $this->_Connected = true;
+      } else {
+        die($this->_errorLog("The PDO object is not available."));
+      }
 		} catch (PDOException $e) {
 			die($this->_errorLog($e->getMessage()));
 		}

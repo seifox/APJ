@@ -103,6 +103,10 @@
   - Cambios de visibilidad en algunos métodos
   - Se eliminaron métodos comunes
   - Se modificó el método jShowDown(), ahora tiene un tercer parámetro con el contenido a mostrar
+  - Se agregó el método arrayToForm($array) que permite pasar un array al objeto Form
+- Mejoras en APJPDO
+  - Se agregó el chequeo de la disponibilidad de PDO
+  - Se arrojar una excepción de error en caso de fallo en la conexión
 - Se modifico el proyecto ejemplo "Contactos"
   - Se utiliza el nuevo método jShowDown()
 - Cambios en APJModel
@@ -111,3 +115,7 @@
 - Se agregó la clase (trait) APJCommon.class
   - Contiene los metodos que mantentenían en común el controlador y el modelo
 - Cambios menores en jqajaj.js
+- Cambios en init.php
+  - Se agregaron constantes y la autocarga de Vendor
+- Cambios en APJSession
+  - La duración de la sesión es configurable por la constante SESSION_LIMIT

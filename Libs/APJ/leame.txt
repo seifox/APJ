@@ -8,6 +8,7 @@ images: imagenes usadas en la funciones de alertas de jqalert y jqajaj
 js: contiene jqajaj.js y jqalert.js
 
 APJAutoload.php:          Módulo de que permite la autocarga de clases instanciadas del framework
+APJCommon.class.php       Funcionalidades comunes para APJController y APJModel
 APJController.class.php:  Controlador heredable del framework MVC
 APJLog.class.php:         Objeto que guarda los logs de errores de APJPDO y los modelos
 APJModel.class.php:       Modelo heredable del framework MVC

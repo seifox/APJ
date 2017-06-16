@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Versión: 1.17.0609
+* Versión: 1.17.0612
 * Author: Ricardo Seiffert
 */
 class APJController
@@ -118,7 +118,7 @@ class APJController
     if (!APJSession::active(APPNAME)) {
       $this->redirect(LOGIN,true);
     }
-    APJSession::start(APPNAME,3600);
+    APJSession::start(APPNAME,SESSION_LIMIT);
     if (!isset($_SESSION['id']) or !isset($_SESSION['IPaddress']) or !isset($_SESSION['userAgent'])) {
       $this->redirect(LOGIN,true);
     }
@@ -201,6 +201,11 @@ class APJController
     }
   }
   
+  /**
+  * Assigns the array values to the Form object<br>
+  * Asigna los valores de un arreglo al objeto Form
+  * @param (array) Associative array
+  */
   protected function arrayToForm($array) {
     $this->createForm();
     foreach ($array as $name=>$value) {
@@ -217,10 +222,10 @@ class APJController
   }
   
   /**
-  * If not exist, create tehe Form object
-  * Si no exite, crea el objeto Form
+  * Create the Form object
+  * Crea el objeto Form
   */
-  private function createForm() {
+  public function createForm() {
     if (!isset($this->Form)) {
       $this->Form = new stdClass;
     }
