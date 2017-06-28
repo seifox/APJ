@@ -1,6 +1,6 @@
 # APJ (Asynchronous PHP and JQuery MVC Framework)
 ## APJ: Framework MVC para PHP y JQuery de forma asíncrona
-### Versión: 1.17.06 Beta
+### Versión: 1.7.1706 Beta
 ### ¿Que es?
 - Es un Framework simple para PHP basado en el patrón MVC (Modelo-Vista-Controlador) que utiliza JQuery, enfocado en el intercambio de datos de forma asíncrona con formato JSON, entre el controlador y la vista en el navegador.
 - Permite la inyección de instrucciones JQuery (javascript) desde el mismo controlador en PHP.
@@ -24,7 +24,7 @@
 1. Editar el archivo init.php
 	1. Modificar la constante DEVELOPMENT para definir si se encuentra en modo de desarrollo o producción
     1. Modificar la constante APPNAME por el nombre de su aplicación
-    1. Modificar la constante ROOTURL para definir la carpeta de su aplicación. Déjelo como “/” si se encuentra en la raíz.
+    1. Modificar la variable $rootUrl para definir la carpeta de su aplicación. Déjelo como “/” si se encuentra en la raíz.
     1. Modificar la variable $domain con el nombre del dominio que utilizara en producción. Deje _localhost_ como está, es para desarrollo.
     1. Modificar la constante LOGIN para definir el controlador de acceso a su aplicación
     1. Modificar la contante TIMEZONE para definir la zona horaria, si es que lo requiere
