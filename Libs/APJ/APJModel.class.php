@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.17.0612
+* Versión: 1.7.170612
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -26,43 +26,43 @@ class APJModel extends APJPDO
   */
   public $variables = array();
   /**
-  * Model structure
+  * Model structure<br>
   * Estructura del modelo
   * @var array
   */
   public $structure = array();
   /**
-  * Model columns
+  * Model columns<br>
   * columnas del modelo
   * @var array
   */
   public $fields = array();
   /**
-  * Defines if columns must by trimmed
+  * Defines if columns must by trimmed<br>
   * Define si se recortan los valores de las columnas
   * @var boolean
   */
   public $trim = false;
   /**
-  * Errors array
+  * Errors array<br>
   * Array de errores 
   * @var array
   */
   public $errors = array();
   /**
-  * columns Alias/Comment
+  * Columns Alias/Comment<br>
   * Alias/Comentario de las columnas
   * @var array
   */
   public $alias = array();
   /**
-  * Values in associative array for update, insert and others
+  * Values in associative array for update, insert and others<br>
   * Array asociativo de valores para update, insert y otros
   * @var array
   */
   private $values = NULL;
   /**
-  * Conditions for update, delete and find (associative array or literal condition)
+  * Conditions for update, delete and find (associative array or literal condition)<br>
   * Condicione para update, delete y find
   * @var mixed array or string
   */
@@ -112,7 +112,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Defines the table name and reads model
+  * Defines the table name and reads model<br>
   * Define el nombre de la tabla y lee el modelo
   * @param (string) Table name
   */
@@ -123,7 +123,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Set the columns Alias
+  * Set the columns Alias<br>
   * Define los Alias de las columnas
   * @param (array) Array of alias names ('name'=>'Alias'...)
   */
@@ -136,7 +136,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Extracts and define the model structure
+  * Extracts and define the model structure<br>
   * Extrae y define la estructura del modelo
   */
   private function defineModel() {
@@ -163,7 +163,7 @@ class APJModel extends APJPDO
   }
 
   /**
-  * Show table structure 
+  * Show table structure<br>
   * Muestra la estructura de la tabla
   */
   public function showStructure() {
@@ -324,7 +324,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Get model columns values (overloading)
+  * Get model columns values (overloading)<br>
   * Obitene los valores de las columnas del modelo (sobrecarga)
   * @param (string) Name
   * @return (mixed) Value
@@ -522,7 +522,7 @@ class APJModel extends APJPDO
   }
 
   /**
-  * Find a row and assigns values
+  * Find a row and assigns values<br>
   * Encuentra una fila y asigna los valores
   * @param (mixed) array or string where condition (optional if primary key value is set)
   * @return (array) Associative row array, false if error
@@ -537,7 +537,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Returns all table rows by given order
+  * Returns all table rows by given order<br>
   * Devuelve todas las filas de la tabla según orden dado
   * @param (string) Comma separated order columns (optional)
   * @return (mixed) Associative rows array or false if any error
@@ -549,7 +549,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Returns all rows for given condition
+  * Returns all rows for given condition<br>
   * Devuelve todas las filas para la condición dada
   * @param (mixed) Array or string where condition (optional if values are set)
   * @param (string) Comma separated order columns (optional)
@@ -565,7 +565,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Clear columns values
+  * Clear columns values<br>
   * Limpia los valores de las columnas;
   */
   public function clearValues() {
@@ -659,7 +659,7 @@ class APJModel extends APJPDO
   }
   
   /**
-  * Assign values to values array if in field structure
+  * Assign values to values array if in field structure<br>
   * Asigna valores al array values con columnas coincidentes de la estructura
   * @param (array) Array of values (optional)
   * @param (boolean) include id
@@ -787,8 +787,8 @@ class APJModel extends APJPDO
   }  
 
   /**
-  * Set the Charset
-  * 
+  * Set the Charset<br>
+  * Define el charset
   * @param mixed $charset
   */
   public function setCharset($charset="utf-8") {

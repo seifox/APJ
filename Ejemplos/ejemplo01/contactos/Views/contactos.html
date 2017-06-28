@@ -27,10 +27,9 @@
               <th class="derecha">País:</th>
               <td>
                 <input type="hidden" name="id" id="id" value="">
-                <select name="pais" id="pais" onchange="APJCall('cambiaCiudades',this.value)">
-                  <option value="">-Seleccione el País-</option>
-                  APJ:{optPaises()}
-                </select>
+                <input type="hidden" name="pais" id="pais" value="">
+                <input type="text" name="paisTxt" id="paisTxt" maxlength="50">
+                <button type="button" class="smallButton" onclick="APJCall('buscarPais',$('#paisTxt').val())" title="Buscar país por código o nombre">v</button>
               </td>
             </tr>
             <tr>
@@ -125,7 +124,10 @@
     <script type="text/javascript">
       $(document).ready(function() {
         $("#reset").click(function() {
+          $("#eliminar").empty();
           $("#edad").text("Edad: 0");
+          $("#id").val("");
+          $("#pais").val("");
           $("#pais").focus();
         });
       })

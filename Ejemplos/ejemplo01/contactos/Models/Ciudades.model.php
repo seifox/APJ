@@ -10,7 +10,7 @@ Table structure of [ciudades]
 | codigo_pais | char    |    2 |          | NO   | MUL |         |
 +-------------+---------+------+----------+------+-----+---------+
 */
-class Models_Ciudades extends APJModel
+class Model_Ciudades extends APJModel
 {
   public function __construct() {
     parent::__construct();

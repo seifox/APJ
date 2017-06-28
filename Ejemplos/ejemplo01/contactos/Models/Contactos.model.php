@@ -18,7 +18,7 @@ Table structure of [contactos]
 | activo           | tinyint |    1 |          | NO   |     |       0 |
 +------------------+---------+------+----------+------+-----+---------+
 */
-class Models_Contactos extends APJModel
+class Model_Contactos extends APJModel
 {
   public function __construct() {
     parent::__construct();

@@ -2,7 +2,7 @@
 /**
 * Controls the user session<br>
 * Controla la sesión de usuarios
-* Versión: 1.17.0614
+* Versión: 1.7.170614
 * Author: Ricardo Seiffert
 */
 class APJSession

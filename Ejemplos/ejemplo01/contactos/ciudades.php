@@ -5,6 +5,7 @@ class Ciudades extends APJController
   // Los modelos
   private $modeloPaises;
   private $modeloCiudades;
+  private $gen;
   
   // Construcor (primer metodo ejecutado)
   public function __construct($page) {
@@ -14,13 +15,14 @@ class Ciudades extends APJController
     $this->sessionControl();
     // Instancia los modelos
     $this->instanciaModelos();
+    $this->gen = new APJHtmlGen();
     // Muestra la vista desde el contructor de APJController si es que es necesario
     parent::__construct($page);
   }
   
   private function instanciaModelos() {
-    $this->modeloPaises = new Models_Paises();
-    $this->modeloCiudades = new Models_Ciudades();
+    $this->modeloPaises = new Model_Paises();
+    $this->modeloCiudades = new Model_Ciudades();
     // showModel(true) permite documentar el modelo, mostrando la estrcutura básica de la tabla
     // showStructure() crea el código necesario para crear la estructura fija en el modelo
     //$this->modeloCiudades->showModel(true); true=documentación corta, false=completa
@@ -44,7 +46,8 @@ class Ciudades extends APJController
       $this->modelToForm($this->modeloCiudades);
       // Rellena el formulario de la vista con los valores del objeto Form
       $this->setFormValues();
-      $menos="<button class=\"smallButton\" type=\"button\" onclick=\"jConfirm('Esta seguro de eliminar esta Ciudad?','Confirme',APJCall,['eliminar','{$this->Form->id}']);return false;\" title=\"Eliminar\">-</button>";
+      //Crea un boton con APJHtmlGen
+      $menos=$this->gen->create('button')->clas('smallButton')->type('button')->onclick("jConfirm('Esta seguro de eliminar esta Ciudad?','Confirme',APJCall,['eliminar','{$this->Form->id}']);return false;")->title("Eliminar")->text("-")->end();
       // Asigna el botón eliminar al <div> #menos
       $this->jQ("#menos")->html($menos);
       // Hace que el formulario suba al tope y centre el foco en el campo Ciudad
@@ -114,12 +117,13 @@ class Ciudades extends APJController
     }
     // select($condiciones,$orden) devuelve un array de filas con los criterios dados
     $rows=$this->modeloCiudades->select(array('codigo_pais'=>$pais),'ciudad');
-    $out=" ";
+    $this->gen->start();
     foreach ($rows as $row) {
-      $out.='<tr class="modo1" onclick="APJCall(\'buscaCiudad\','.$row['id'].')">';
-      $out.='<td>'.$row['codigo_pais'].'</td><td>'.$row['ciudad'].'</td></tr>';
+      $this->gen->add('tr')->clas('modo1')->onclick("APJCall('buscaCiudad',{$row['id']})")->
+      add('td')->text($row['codigo_pais'])->close()->
+      add('td')->text($row['ciudad'])->close()->close();
     }
-    return $out;
+    return $this->gen->end();
   }
 }
 // Verifica si debe instanciar el controlador

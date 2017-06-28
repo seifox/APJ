@@ -1,5 +1,5 @@
 <?php
-class Classes_FuncionesFecha
+class Helper_FuncionesFecha
 {
   public static $dia;
   public static $mes;

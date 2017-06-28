@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Versión: 1.17.0612
+* Versión: 1.7.170619
 * Author: Ricardo Seiffert
 */
 class APJController
@@ -27,21 +27,21 @@ class APJController
   public $Form;
   
   /**
-  * Ajax default timeout
+  * Ajax default timeout<br>
   * Timeout por defecto de Ajax
   * @var int
   */
   protected $TimeOut = 10000;
   
   /**
-  * User Id in session
+  * User Id in session<br>
   * Id del usuario en la sesión
   * @var int
   */
   protected $userId = NULL;
   
   /**
-  * Array of form fields types, used in setFormValues
+  * Array of form fields types, used in setFormValues<br>
   * Arreglo de tipo de campos del formulario, usado en seFormValues
   * @var array
   */
@@ -111,7 +111,7 @@ class APJController
   }
 
   /**
-  * Controls de session
+  * Controls de session<br>
   * Control de sesión
   */
   protected function sessionControl() {
@@ -130,7 +130,7 @@ class APJController
   }
   
   /**
-  * Extracts into array the (optional) adicional parameters from APJSubmit
+  * Extracts into array the (optional) adicional parameters from APJSubmit<br>
   * Extrae los parametros (opcionales) adicionales que envía APJSubmit en un array
   * @param (string) Parameters submitted from APJSubmit
   * @return (array) Parameters array
@@ -145,7 +145,7 @@ class APJController
   }
   
   /**
-  * Create a Form objet from submitted form
+  * Create a Form objet from submitted form<br>
   * Crea un objeto Form con los campos del formulario enviado
   */
   private function getForm() {
@@ -214,7 +214,7 @@ class APJController
   }
   
   /**
-  * Clear Form Object
+  * Clear Form Object<br>
   * Limpia el objeto Form
   */
   protected function clearForm() {
@@ -222,7 +222,7 @@ class APJController
   }
   
   /**
-  * Create the Form object
+  * Create the Form object<br>
   * Crea el objeto Form
   */
   public function createForm() {
@@ -232,12 +232,13 @@ class APJController
   }
   
   /**
-  * Sets the html form values from Form object or array
+  * Sets the html form values from Form object or array<br>
   * Asigna los valores del formulario html desde objeto Form o Array
   * @param (mixed) Array or object (optional)
   */
   protected function setFormValues($data='') {
-    if (empty($data)) {
+    $this->createForm();
+    if (empty($data) and !empty($this->Form)) {
       $data=$this->Form;
     }
     foreach ($data as $field=>$value) {
@@ -435,7 +436,7 @@ class APJController
   }
   
   /**
-  * Creates a jQuery object selector
+  * Creates a jQuery object selector<br>
   * Crea un objeto selector jQuery
   * @param (string) Selector
   * @return (object) jQSelector
@@ -454,7 +455,7 @@ class APJController
   }
   
   /**
-  * Displays a showdown list with result elements
+  * Displays a showdown list with result elements<br>
   * Despliega el resultado de una busqueda en una lista desplegable
   * @param (string) Element to locate the list under
   * @param (string) Container element to display/toggle

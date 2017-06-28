@@ -2,9 +2,9 @@
 ADMINISTRADOR DE CONTACTOS CON APJ
 
 REQUERIMIENTOS:
-1.- Apache con PHP 5.3 o mayor (XAMPP, LAMP, Appserv u otro)
+1.- Apache con PHP 5.4 o mayor (XAMPP, LAMP, Appserv u otro)
 2.- MySQL o MariaDB que tenga PDO e INNODB habilitado
-3.- El framework APJ versión 1.17.03 o mayor
+3.- El framework APJ versión 1.7.1706 o mayor
 4.- Un navegador actualizado compatible con HTML5 (Chrome, Edge, Safari o Firefox)
 *Por ahora de los nombrados, Firefox es el menos compatible con HTML5, por los tipos de <input> que soporta
 

@@ -1,7 +1,7 @@
 # Versiones
-## APJ 1.15.11
-  - Primera versión 1.15.11 Beta
-## APJ 1.16.07
+## APJ 1.0.1511
+  - Primera versión 1.0.1511 Beta
+## APJ 1.3.1607
 - Se cambio el nombre de el objeto PDO de MyPDO.class a APJPDO.class
 - Se cambio el nombre del archivo MyLog.class a APJLog.class
 - Mejoras en jqajaj.js 
@@ -58,7 +58,7 @@
 		all()
 		min(), avg(), sum(), count()
 
-## APJ 1.17.03
+## APJ 1.4.1703
 - Mejoras en APJController
 	- Se agregaron propiedades de paginación de arreglos
 	- La propiedad $where se cambio a privada
@@ -84,7 +84,7 @@
 		execute()
 		getValue()
 
-## APJ 1.17.04
+## APJ 1.5.1704
 - Mejoras en APJController
   - Se agregó el método showDown(input, container) a APJController  y su función javascript jShowDown
     input, container) a jqajaj, que permite hacer listas desplegables de búsqueda bajo un elemento como <input>.
@@ -93,7 +93,7 @@
 - Mejoras en APJModel
   - Se agregaron las propiedades toLower (array), toUpper (array) a APJModel, que permite definir que       columnas deben guardarse como mayúsculas o minúsculas de forma automática.
 - Mejoras menores en comentario de métodos y propiedades
-## APJ 1.17.06
+## APJ 1.6.1706
 - Mejoras en la documentación de los métodos
 - Mejoras en APJAutolad.php
 - Cambios en APJController
@@ -119,3 +119,9 @@
   - Se agregaron constantes y la autocarga de Vendor
 - Cambios en APJSession
   - La duración de la sesión es configurable por la constante SESSION_LIMIT
+## APJ 1.7.1706
+- Se creó APJHtmlGen: Generador de HTML para un código más limpio en en el controlador
+- Cambios en APJPDO
+  - Se agregó un instanciador singleton del objeto PDO
+- Se cambió la numeración de versiones.
+- Se modificó el proyecto de ejemplo

@@ -2,7 +2,7 @@
 /**
 * Logs PDO errors<br>
 * Registros de errores de PDO
-* Versión: 1.17.0530
+* Versión: 1.1.170530
 * Author: Ricardo Seiffert
 */
 class APJLog 

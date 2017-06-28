@@ -2,7 +2,7 @@
 /**
 * Common methods Trait<br>
 * Rasgo de métodos comunes
-* Versión: 1.17.0607
+* Versión: 1.0.170607
 * Author: Ricardo Seiffert
 */
 trait APJCommon
@@ -194,7 +194,7 @@ trait APJCommon
   }
 
   /**
-  * Returns a object from an array
+  * Returns a object from an array<br>
   * Devuelve un objeto a partir de una matriz
   * @param (array) Elements to be converted
   * @return (object) stdClass object

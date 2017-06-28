@@ -25,7 +25,7 @@ Table structure of [usuarios]
 +---------------------+----------+------+----------+------+-----+---------+----------------+
 */
 
-class Models_Usuarios extends APJModel
+class Model_Usuarios extends APJModel
 {
   public function __construct() {
     parent::__construct();

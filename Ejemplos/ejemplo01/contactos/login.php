@@ -6,10 +6,12 @@ class Login extends APJController
   private $modeloUser = NULL;
   private $modeloAcceso = NULL;
   private $modeloLog = NULL;
+  private $gen;
   
-  const INTENTOS = 3;
+  const INTENTOS = LOGIN_ATTEMPTS;
   
   public function __construct($page) {
+    $this->gen = new APJHtmlGen();
     $this->instanciaModelos();
     if (!isset($_POST['action'])) {
       $this->verificaCookies();
@@ -18,9 +20,9 @@ class Login extends APJController
   }
   
   private function instanciaModelos() {
-    $this->modeloUser = new Models_Usuarios();
-    //$this->modeloAcceso = new Models_Accesos();
-    //$this->modeloLog = new Models_Log();
+    $this->modeloUser = new Model_Usuarios();
+    //$this->modeloAcceso = new Model_Accesos();
+    //$this->modeloLog = new Model_Log();
   }
 
   private function verificaCookies() {
@@ -67,7 +69,7 @@ class Login extends APJController
   }
   
   private function cargaSession($id) {
-    APJSession::start(APPNAME,3600);
+    APJSession::start(APPNAME,SESSION_LIMIT);
     if (session_status()==PHP_SESSION_ACTIVE) {
       $_SESSION['id']=$id;
       return $this->defineAccesos($id);
@@ -75,9 +77,7 @@ class Login extends APJController
   }
   
   private function showRecupera() {
-    $out=<<<out
-     <button type="button" name="olvido" id="olvido" onclick="APJSubmit('loginForm','recupera')">Recuperar contraseña</button>
-out;
+    $out=$this->gen->create("button")->name("olvido")->id("olvido")->onclick("APJSubmit('loginForm','recupera')")->text("Recuperar contraseña")->close();
     $this->jQ("#recuperadiv")->html($out);
   }
   

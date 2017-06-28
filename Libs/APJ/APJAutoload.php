@@ -2,7 +2,7 @@
 /**
 * Class Autoloader
 * Autocargador de clases
-* Versión: 1.17.0614
+* Versión: 1.3.170614
 * Author: Ricardo Seiffert
 */
 function APJAutoload($classname) {

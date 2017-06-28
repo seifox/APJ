@@ -3,16 +3,18 @@ require_once("init.php");
 class Consulta extends APJController
 {
   private $modeloContactos;
+  private $gen;
   
   public function __construct($page) {
     $this->TimeOut = 20000;
     $this->sessionControl();
     $this->instanciaModelos();
+    $this->gen = new APJHtmlGen();
     parent::__construct($page);
   }
   
   private function instanciaModelos() {
-    $this->modeloContactos = new Models_Contactos();
+    $this->modeloContactos = new Model_Contactos();
   }
 
   public function consulta() {
@@ -46,57 +48,51 @@ class Consulta extends APJController
   }
 
   private function preparaTabla($rows) {
-    $out=" ";
+    $out="";
     foreach ($rows as $row) {
       // Usando Clase añadida (Helper) para calcular la edad
-      $edad=Classes_FuncionesFecha::edad($row['fecha_nacimiento']);
+      $edad=Helper_FuncionesFecha::edad($row['fecha_nacimiento']);
       $rowf=$this->modeloContactos->setFormat($row);
-      $out.=<<<FILA
-        <tr class="modo1">
-          <td>{$row['pais']}</td>
-          <td>{$row['dni']}</td>
-          <td>{$row['nombres']}</td>
-          <td>{$row['apellido_paterno']}</td>
-          <td>{$row['apellido_materno']}</td>
-          <td>{$row['ciudad']}</td>
-          <td>{$row['direccion']}</td>
-          <td>{$row['fono']}</td>
-          <td>{$row['email']}</td>
-          <td>{$rowf['fecha_nacimiento']}</td>
-          <td>{$edad}</td>
-        </tr>
-FILA;
+      $out.=$this->gen->create("tr")->clas("modo1")->
+      add("td")->text($row['pais'])->close()->
+      add("td")->text($row['dni'])->close()->
+      add("td")->text($row['nombres'])->close()->
+      add("td")->text($row['apellido_paterno'])->close()->
+      add("td")->text($row['apellido_materno'])->close()->
+      add("td")->text($row['ciudad'])->close()->
+      add("td")->text($row['direccion'])->close()->
+      add("td")->text($row['fono'])->close()->
+      add("td")->text($row['email'])->close()->
+      add("td")->text($rowf['fecha_nacimiento'])->close()->
+      add("td")->text($edad)->end();
     }
     return $out;
   }
   
   public function paginacion($params) {
     $page=(is_array($params))?$params[0]:$params;
-    $out='<table class="tabla">
-      <tr class="modo2">';
+    $this->gen->create("table")->clas("tabla")->add("tr")->clas("modo2");
     if ($page>1) {
-      $out.=<<<PRIMERO
-        <td>
-          <img src="images/first.gif" class="manito" alt="Primero" width="18" height="13" title="Primera página" onclick="APJSubmit('form','consulta',[1])">
-        </td>
-        <td>
-          <img src="images/previous.gif" class="manito" alt="anterior" width="14" height="13" title="Página anterior" onclick="APJSubmit('form','consulta',[{$this->modeloContactos->previousPage}])">
-        </td>
-PRIMERO;
-    }        
-    $out.='<td>'.$page.'/'.$this->modeloContactos->lastPage.'</td>';
-    if ($page<$this->modeloContactos->lastPage) {
-      $out.=<<<SIGUIENTE
-        <td>
-          <img src="images/next.gif" class="manito" alt="siguiernte" width="14" height="13" title="Siguiente página" onclick="APJSubmit('form','consulta',[{$this->modeloContactos->nextPage}])">
-        </td>
-        <td>
-          <img src="images/last.gif" class="manito" alt="ultimo" width="18" height="13" title="Última página" onclick="APJSubmit('form','consulta',[{$this->modeloContactos->lastPage}])">
-        </td>
-SIGUIENTE;
+      $this->gen->add("td")->
+      add("img")->clas("manito")->attr("src","images/first.gif")->attr("alt","Primero")->attr("witdh","18")->
+      attr("heiht","13")->title("Primera página")->onclick("APJSubmit('form','consulta',[1])")->close()->close()->
+      add("td")->add("img")->clas("manito")->attr("src","images/previous.gif")->attr("alt","Anterior")->attr("witdh","18")->
+      attr("heiht","13")->title("Página anterior")->onclick("APJSubmit('form','consulta',[{$this->modeloContactos->previousPage}])")->close()->close();
+    } else {
+      $this->gen->add("td")->text("&nbsp;")->close()->add("td")->text("&nbsp")->close();
     }
-    $out.='</tr></table>';
-    return $out;
+    $this->gen->add("td")->text($page.'/'.$this->modeloContactos->lastPage)->close();
+    if ($page<$this->modeloContactos->lastPage) {
+      $this->gen->add("td")->
+      add("img")->clas("manito")->attr("src","images/next.gif")->attr("alt","Siguiente")->attr("witdh","18")->
+      attr("heiht","13")->title("Siguiente página")->onclick("APJSubmit('form','consulta',[{$this->modeloContactos->nextPage}])")->close()->close()->
+      add("td")->add("img")->clas("manito")->attr("src","images/last.gif")->attr("alt","Anterior")->attr("witdh","18")->
+      attr("heiht","13")->title("Última página")->
+      onclick("APJSubmit('form','consulta',[{$this->modeloContactos->lastPage}])");
+    } else {
+      $this->gen->add("td")->text("&nbsp;")->close()->add("td")->text("&nbsp")->close();
+    }
+    return $this->gen->end();
   }
 }
 $app = new Consulta('consulta.html');

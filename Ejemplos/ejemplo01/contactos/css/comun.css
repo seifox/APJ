@@ -448,3 +448,10 @@ button{
 .centro {
   text-align: center;
 }
+.showDown {
+  background-color: #808080;
+  max-height: 100px;
+}
+.manito {
+ cursor: pointer; 
+}

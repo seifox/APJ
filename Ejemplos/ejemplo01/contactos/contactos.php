@@ -5,17 +5,19 @@ class Contactos extends APJController
   private $modeloPaises;
   private $modeloCiudades;
   private $modeloContactos;
+  private $gen;
   
   public function __construct($page) {
     $this->sessionControl();
     $this->instanciaModelos();
+    $this->gen = new APJHtmlGen();
     parent::__construct($page);
   }
   
   private function instanciaModelos() {
-    $this->modeloPaises = new Models_Paises();
-    $this->modeloCiudades = new Models_Ciudades();
-    $this->modeloContactos = new Models_Contactos();
+    $this->modeloPaises = new Model_Paises();
+    $this->modeloCiudades = new Model_Ciudades();
+    $this->modeloContactos = new Model_Contactos();
     //$this->modeloContactos->showModel(false);
   }
   
@@ -32,11 +34,35 @@ class Contactos extends APJController
     return $this->options($ciudades,'id','ciudad');
   }
 
-  public function cambiaCiudades($params) {
-    $pais=$params[0];
-    $ciudades='<select name="ciudad" id="ciudad"><option value="" selected>-Seleccione la Ciudad-</option>';
-    $ciudades.=$this->optCiudades($pais);
-    $ciudades.="</select>";
+  public function buscarPais($params) {
+    if (strlen($params[0])) {
+      $rows=$this->modeloPaises->buscarPais($params[0]);
+    } else {
+      $this->jWarning('Debe especificar que quiere buscar');
+      return false;
+    }
+    if ($rows) {
+      $columnas=array('codigo','pais');
+      $out=$this->creaTablaResultados($rows,$columnas,'seleccionaPais');
+      $this->jShowDown('paisTxt','listadodiv',$out);
+    } else {
+      $this->jInfo('No se han encontrado coincidencias');
+    }
+    
+  }
+  
+  public function seleccionaPais($param) {
+    $this->jQ("#listadodiv")->hide();
+    $pais=$param[0];
+    $this->jQ("#pais")->val($pais);
+    $this->modeloPaises->find(array('codigo'=>$pais));
+    $this->jQ("#paisTxt")->val($this->modeloPaises->pais);
+    $this->cambiaCiudades($pais);
+  }
+  
+  public function cambiaCiudades($pais) {
+    $ciudades=$this->gen->create("select")->name("ciudad")->id("ciudad")->add("option")->value("")->attr("selected","selected")->text("-Seleccione la Ciudad-")->close()->
+    literal($this->optCiudades($pais))->end();
     $this->jQ("#CiudadTd")->html($ciudades);
     $this->refrescaGrilla($pais);
   }
@@ -45,10 +71,11 @@ class Contactos extends APJController
     $id=$params[0];
     if ($this->modeloContactos->find($id)) {
       $this->modelToForm($this->modeloContactos);
+      $this->seleccionaPais(array($this->Form->pais));
       $this->fieldTypes['activo']="checkbox";
       $this->setFormValues($this->Form);
       $this->calculaEdad(array($this->Form->fecha_nacimiento));
-      $eliminar="<button type=\"button\" onclick=\"jConfirm('Esta seguro de eliminar este Contacto?','Confirme',APJCall,['eliminar','{$this->Form->id}']);return false;\" title=\"Eliminar\">ELIMINAR</button>";
+      $eliminar=$this->gen->create("button")->type("button")->onclick("jConfirm('Esta seguro de eliminar este Contacto?','Confirme',APJCall,['eliminar',{$this->Form->id}]);return false;")->title("Eliminar")->text("ELIMINAR")->end();
       $this->jQ("#eliminar")->html($eliminar);
       $this->jQ("#form")->scrollTop(0);
       $this->jQ("#dni")->focus();
@@ -74,7 +101,6 @@ class Contactos extends APJController
     if ($rows) {
       $columnas=array('id','nombre');
       $out=$this->creaTablaResultados($rows,$columnas,'seleccionaContacto');
-      //$this->jQ('#listadodiv')->html($out);
       $this->jShowDown('nombres','listadodiv',$out);
     } else {
       $this->jInfo('No se han encontrado coincidencias');
@@ -88,7 +114,7 @@ class Contactos extends APJController
   
   public function calculaEdad($params) {
     if (!empty($params)) {
-      if ($edad=Classes_FuncionesFecha::edad($params[0])) {
+      if ($edad=Helper_FuncionesFecha::edad($params[0])) {
         $this->jQ("#edad")->text(" Edad:{$edad} años");
       } else {
         $this->jQ("#edad")->text(" Edad:0");
@@ -138,56 +164,43 @@ class Contactos extends APJController
     if (empty($pais)) {
       $pais='CL';
     }
-    $out=" ";
+    $this->gen->start();
     if ($rows=$this->modeloContactos->consulta($pais)) {
       foreach ($rows as $row) {
         // setFormat() devuelve la fila formateda según los tipos de datos del modelo
         $rowf=$this->modeloContactos->setFormat($row);
-        $out.='<tr class="modo1" onclick="APJCall(\'editaContacto\','.$row['id'].')">';
+        $this->gen->add("tr")->clas("modo1")->onclick("APJCall('editaContacto',{$row['id']})");
         // Se crea cada columna de acuerdo a los campos del modelo
         foreach ($this->modeloContactos->fields as $campo) {
-          $out.="<td>".$rowf[$campo]."</td>";
+          $this->gen->add("td")->text($rowf[$campo])->close();
         }
-        $out.="</tr>";
+        $this->gen->close();
       }
     }
-    return $out;
+    return $this->gen->end();
   }
   
   // Crea el encabezado de la grilla dependiendo del alias/comentario definido en el modelo   
   public function creaEncabezado() {
-    $out='<tr>';
+    $this->gen->create("tr");
     foreach ($this->modeloContactos->alias as $desc) {
-      $out.='<th>'.$desc.'</th>';
+      $this->gen->add("th")->text($desc)->close();
     }
-    $out.='</tr>';
-    return $out;
+    return $this->gen->end();
   }
   
-  public function ciudades() {
-    $_POST['noInstance']=true;
-    $app=new Ciudades('');
-    $view=$app->render('ciudades.html',true);
-    $this->jQ("#ventana")->html($view);
-  }
-
   private function creaTablaResultados($rows,$columnas,$metodo) {
-    $out='<table class="tabla">';
+    $this->gen->create("table")->clas("tabla");
     foreach($rows as $row) {
-      $out.=<<<FILA
-      <tr class="modo1 pointer" onclick="APJCall('{$metodo}',{$row[$columnas[0]]})">
-FILA;
+      $this->gen->add("tr")->clas("modo1")->onclick("APJCall('{$metodo}','{$row[$columnas[0]]}')");
       foreach ($columnas as $k=>$col) {
         if ($k>0) {
-          $out.=<<<COLUMNA
-          <td>{$row[$col]}</td>
-COLUMNA;
+          $this->gen->add("td")->text($row[$col])->close();
         }
       }
-      $out.='</tr>';
+      $this->gen->close();
     }
-    $out.='</table>';
-    return $out;
+    return $this->gen->end();
   }
   
   

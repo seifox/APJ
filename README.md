@@ -13,14 +13,14 @@
 >En resumen un framework simple pero potente que cubriera mis necesidades en el desarrollo de aplicaciones web con PHP.
 
 ### Requerimientos:
-1. Apache con PHP 5.3 o mayor (XAMPP, LAMP, Appserv u otro)
+1. Apache con PHP 5.4 o mayor (XAMPP, LAMP, Appserv u otro)
 1. MySQL o MariaDB que tenga PDO e INNODB habilitado (también es posible hacer conexiones con otros tipos de bases de datos con DSN)
 1. Un navegador actualizado compatible con HTML5 (Chrome, Edge, Safari o Firefox)
 
 ### Instalación:
 >Por ahora la instalación es manual, luego implementare la instalación por medio de “Composer”
 1. Bajar el framework y copiar el contenido de APJ en la carpeta para su proyecto.
-1. Deben estar las carpetas Libs, Models, Views, Classes (opcional) y el archivo init.php
+1. Deben estar las carpetas Libs, Models, Views, Helpers, Vendor (opcional) y el archivo init.php
 1. Editar el archivo init.php
 	1. Modificar la constante DEVELOPMENT para definir si se encuentra en modo de desarrollo o producción
     1. Modificar la constante APPNAME por el nombre de su aplicación

@@ -8,7 +8,7 @@ Table structure of [paises]
 | pais   | varchar |   50 |          | NO   |     |         |
 +--------+---------+------+----------+------+-----+---------+
 */
-class Models_Paises extends APJModel
+class Model_Paises extends APJModel
 {
   public function __construct() {
     parent::__construct();
@@ -24,4 +24,7 @@ class Models_Paises extends APJModel
     return !$this->error;
   }
   
+  public function buscarPais($param) {
+    return $this->select("codigo='{$param}' OR pais LIKE '{$param}%'",'pais');
+  }
 }

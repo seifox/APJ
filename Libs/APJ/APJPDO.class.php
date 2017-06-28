@@ -1,8 +1,8 @@
 <?php
 /**
-* APJPDO Class for MySQL PDO managment<br>
-* Clase para la gestión de PDO de MySQL
-* Versión: 1.17.0614
+* APJPDO Class for PDO managment<br>
+* Clase para la gestión de PDO
+* Versión: 1.7.170627
 * Author: Ricardo Seiffert
 */
 class APJPDO 
@@ -58,10 +58,7 @@ class APJPDO
     }
 		try {
       if (class_exists('PDO')) {
-		    $this->_Pdo = new PDO($dsn, $this->_Settings["user"], $this->_Settings["password"],array(PDO::ATTR_PERSISTENT => true));
-        $this->_Pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND,'SET NAMES '.$this->_Settings['charset']);
-		    $this->_Pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		    $this->_Pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		    $this->_Pdo = APJPDOConnection::instance($dsn, $this->_Settings);
 		    $this->_Connected = true;
       } else {
         die($this->_errorLog("The PDO object is not available."));
@@ -146,7 +143,7 @@ class APJPDO
 	}
   
   /**
-  * Clears data binding
+  * Clears data binding<br>
   * Limpia los enlaces de datos
   */
   public function clearBinding() {
@@ -380,7 +377,7 @@ class APJPDO
   }
   
   /**
-  * Error logging
+  * Error logging<br>
   * Registro de Errores
   * @param (string) Message
   * @param (string) Query string (optional)
@@ -398,12 +395,78 @@ class APJPDO
 	}			
   
   /**
-  * Returns the database server information
+  * Returns the database server information<br>
   * Devuelve la información del servidor de base de datos
   * @return (string) Database server info
   */
   public function server_info() {
     return $this->_Pdo->getAttribute(PDO::ATTR_SERVER_INFO);
+  }
+  
+}
+
+/**
+* APJPDOConnection is a singleton implementation for returning a PDO instance<br>
+* APJPDOConnection es una implementación sigleton para devolver una instancia de PDO
+* Usage: $db = APJPDOConnection::instance('dsn', 'username', 'password');
+* If you assign diferent arguments, it will return a new connection.
+* Review: 170627
+*/
+class APJPDOConnection
+{
+  private static $_instance = NULL;
+  private static $_dsn = NULL;
+  private static $_settings = array();
+  
+  public function __construct() {}
+  
+  private function __destruct(){}
+  
+  public function __clone() {
+    return false;
+  }
+  
+  public function __wakeup() {
+    return false;
+  }  
+  
+  public static function instance($dsn,$settings) {
+    if (self::sameConnection($dsn,$settings)) {
+      return self::$_instance;
+    } else {
+      if (empty(self::$_instance)) {
+        self::$_instance = self::getConnection($dsn,$settings);
+        self::$_dsn = $dsn;
+        self::$_settings = $settings;
+        return self::$_instance;
+      } else {
+        return self::getConnection($dsn,$settings);
+      }
+    }
+  }
+  
+  private static function getConnection($dsn, $settings) {
+    $conn = NULL;
+    try {
+      $conn = new PDO($dsn,$settings["user"], $settings["password"],array(PDO::ATTR_PERSISTENT => true));
+      $conn->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND,'SET NAMES '.$settings['charset']);
+      $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+      return $conn;
+    }  catch (PDOException $e) {
+      throw $e;
+      die($e);
+    } catch(Exception $e) {
+      throw $e;
+      die($e);
+    }
+  }
+  
+  private static function sameConnection($dsn,$settings) {
+    if (isset(self::$_instance) and self::$_dsn==$dsn and self::$_settings==$settings) {
+      return true;
+    }
+    return false;
   }
   
 }

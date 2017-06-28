@@ -2,7 +2,7 @@
 /**
 * Static class that respons to jQuery from PHP<br>
 * Clase Estática que responde acciones jQuery desde PHP
-* Version: 1.17.0602
+* Version: 1.3.170612
 * Author: Ricardo Seiffert
 */
 class jQ

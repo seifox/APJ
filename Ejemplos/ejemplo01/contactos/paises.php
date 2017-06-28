@@ -3,15 +3,17 @@ require_once("init.php");
 class Paises extends APJController
 {
   private $modeloPaises;
+  private $gen;
   
   public function __construct($page) {
     $this->sessionControl();
+    $this->gen = new APJHtmlGen();
     $this->instanciaModelos();
     parent::__construct($page);
   }
   
   private function instanciaModelos() {
-    $this->modeloPaises = new Models_Paises();
+    $this->modeloPaises = new Model_Paises();
     //$this->modeloPaises->showModel(true);
   }
   
@@ -19,7 +21,7 @@ class Paises extends APJController
     if ($this->modeloPaises->find(array('codigo'=>$params[0]))) {
       $this->modelToForm($this->modeloPaises);
       $this->setFormValues();
-      $menos="<button class=\"smallButton\" type=\"button\" onclick=\"jConfirm('Esta seguro de eliminar este País?','Confirme',APJCall,['eliminar','{$this->Form->codigo}']);return false;\" title=\"Eliminar\">-</button>";
+      $menos=$this->gen->create("button")->type("button")->clas("smallButton")->onclick("jConfirm('Esta seguro de eliminar este País?','Confirme',APJCall,['eliminar','{$this->Form->codigo}']);return false;")->text("-")->end();
       $this->jQ("#menos")->html($menos);
       $this->jQ("form")->scrollTop(0);
       $this->jQ("#pais")->focus();
@@ -60,10 +62,9 @@ class Paises extends APJController
   
   public function grillaPaises() {
     $rows=$this->modeloPaises->all('pais');
-    $out=" ";
     foreach ($rows as $row) {
-      $out.='<tr class="modo1" onclick="APJCall(\'buscaPais\',\''.$row['codigo'].'\')">';
-      $out.='<td>'.$row['codigo'].'</td><td>'.$row['pais'].'</td></tr>';
+      $out.=$this->gen->create("tr")->clas("modo1")->onclick("APJCall('buscaPais','{$row['codigo']}')")->
+      add("td")->text($row['codigo'])->close()->add("td")->text($row['pais'])->end();
     }
     return $out;
   }
