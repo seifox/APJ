@@ -148,7 +148,7 @@ class APJController
   * Create a Form objet from submitted form<br>
   * Crea un objeto Form con los campos del formulario enviado
   */
-  private function getForm() {
+  public function getForm() {
     $this->createForm();
     foreach ($_REQUEST as $name => $value) {
       if ($name != 'action' and $name != 'parameters') {

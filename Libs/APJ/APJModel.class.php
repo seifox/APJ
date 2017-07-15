@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.7.170612
+* Versión: 1.7.170710
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -424,11 +424,12 @@ class APJModel extends APJPDO
   */
   public function setFormat($row) {
     $rowf=array();
-    foreach ($row as $fld=>$value) {
-      // Asigna valor a campo del modelo
-      $this->$fld = $value;
-      $type=$this->structure[$fld]['Type'];
-      $rowf[$fld] = $this->format($value,$type);
+    if (is_array($row) and isset($row)) {
+      foreach ($row as $fld=>$value) {
+        $this->$fld = $value;
+        $type=$this->structure[$fld]['Type'];
+        $rowf[$fld] = $this->format($value,$type);
+      }
     }
     return $rowf;
   }
@@ -534,6 +535,20 @@ class APJModel extends APJPDO
       return $this->variables = $this->row($sql,$this->values);
     }
     return false;
+  }
+  
+  /**
+  * Returns all rows that meet the condition in LIKE<br>
+  * Devuelve todas las fila que cumplen la condición LIKE
+  * @param (string) Column
+  * @param (string) Search condition
+  * @return (array) Result array
+  */
+  public function like($field, $search) {
+    $this->_clearError();
+    if (in_array($field,$this->fields) and $search) {
+      return $this->rows("SELECT * FROM {$this->table} WHERE {$field} LIKE '{$search}'");
+    }
   }
   
   /**

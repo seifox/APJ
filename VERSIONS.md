@@ -1,4 +1,8 @@
 # Versiones
+## APJ 1.7.1707
+- Mejoras en APJHtmlGen y APJController
+- Se agregó el método like($field, $search) al modelo
+- Se incorporo el manual de referencia en PDF
 ## APJ 1.7.1706
 - Se creó APJHtmlGen: Generador de HTML para un código más limpio en en el controlador
 - Cambios en APJPDO
