@@ -1,7 +1,7 @@
 /*
  Plugin jQuery PHP
  Plugin jAlert
- Version 1.7.170612 Beta
+ Version 1.7.170718
  require jQuery v1.5.x or grather
 */
 BlinkId=0;
@@ -162,7 +162,7 @@ jAlertClosed=true;
         default:
           statusDesc = "Error desconocido.<br>"+errorThrown+"<br>"+textStatus;
       }
-      var title="AJAX Error "+StatusCode;
+      var title="Error "+StatusCode;
       jError(statusDesc,title);
       return false;
     },
