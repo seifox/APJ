@@ -33,6 +33,7 @@ define("DOMAIN", $domain); // Dominio de la aplicación
 define("LOGIN", "login.php"); // Controlador de Login **DEBE MODIFICARSE**
 define("LOGIN_ATTEMPTS", 3); // Intentos de inicio de sesión para el bloqueo
 define("SESSION_LIMIT", 1800); // Segundo que duran las sesiones
+define("PERSISTENT_CONNECTION",FALSE); // Define si la conexión a base de datos es persistente
 // Array de Formatos predefinidos a mostrar segun tipo de dato 
 define ("FORMATS", serialize (array ("int"=>array(0,',','.'), "decimal"=>array(2,',','.'), "date"=>'d-m-Y','datetime'=>'d-m-Y H:i:s','time'=>'H:i','timestamp'=>'d-m-Y H:i:s','booleanTrue'=>'Si','booleanFalse'=>'No')));
 //Zona Horaria (Solo necesaria si no esta definida en php.ini o si es diferente alque desea)

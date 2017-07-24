@@ -2,7 +2,7 @@
 /**
 * Html Generator class<br>
 * Clase Generadora de Html
-* Versión: 1.1.170714
+* Versión: 1.1.170720
 */
 class APJHtmlGen
 {
@@ -249,6 +249,6 @@ class APJHtmlGen
   }
   
   private function setSpecialClose() {
-    $this->specialClose = array('a','abr','address','article','aside','audio','b','bdi','blockquote','body','button','canvas','caption','cite','code','colgroup','datalist','dd','del','detail','dfn','dialog','div','dl','dt','em','fieldset','figcaption','figure','footer','form','h1','h2','h3'.'h4','h5','h6','head','html','i','iframe','ins','kbd','label','legend','li','main','map','mark','menu','menuitem','meter','nav','noscript','object','ol','optgroup','option','output','p','picture','pre'.'progress','q','rp','rt','ruby','s','samp','script','section','select','small','span','strong','style','sub','summary','sup','table','tbody','td','textarea','tfoot','th','thead','time','title','tr','u','ul','var','video');
+    $this->specialClose = array('a','abr','address','article','aside','audio','b','bdi','blockquote','body','button','canvas','caption','cite','code','colgroup','datalist','dd','del','detail','dfn','dialog','div','dl','dt','em','embed','fieldset','figcaption','figure','footer','form','h1','h2','h3'.'h4','h5','h6','head','html','i','iframe','ins','kbd','label','legend','li','main','map','mark','menu','menuitem','meter','nav','noscript','object','ol','optgroup','option','output','p','picture','pre'.'progress','q','rp','rt','ruby','s','samp','script','section','select','small','span','strong','style','sub','summary','sup','table','tbody','td','textarea','tfoot','th','thead','time','title','tr','u','ul','var','video');
   }
 }

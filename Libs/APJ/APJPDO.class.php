@@ -2,7 +2,7 @@
 /**
 * APJPDO Class for PDO managment<br>
 * Clase para la gestión de PDO
-* Versión: 1.7.170627
+* Versión: 1.7.170721
 * Author: Ricardo Seiffert
 */
 class APJPDO 
@@ -448,7 +448,7 @@ class APJPDOConnection
   private static function getConnection($dsn, $settings) {
     $conn = NULL;
     try {
-      $conn = new PDO($dsn,$settings["user"], $settings["password"],array(PDO::ATTR_PERSISTENT => true));
+      $conn = new PDO($dsn,$settings["user"], $settings["password"],array(PDO::ATTR_PERSISTENT => PERSISTENT_CONNECTION));
       $conn->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND,'SET NAMES '.$settings['charset']);
       $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
