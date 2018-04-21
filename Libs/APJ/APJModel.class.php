@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.7.170710
+* Versión: 1.7.180420
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -361,10 +361,9 @@ class APJModel extends APJPDO
         $default = $this->structure[$fld]['Default'];
         $extra = $this->structure[$fld]['Extra'];
         $comment = $this->structure[$fld]['Comment'];
-        $vartype=strtolower(gettype($var));
         switch (true) {
           case (in_array($fld,$this->pk) and $extra != 'auto_increment' and (is_null($var) or strlen($var)==0)):
-          case (in_array($fld,$this->pk)==FALSE and $null == 'NO' and is_null($var) and $default != 'NULL'):
+          case (in_array($fld,$this->pk)==FALSE and $null === 'NO' and strlen($var)==0):
             $this->errors[$fld] = "no puede estar vacío";
             break;
           case ($size and strlen($var)>$size):
@@ -374,10 +373,11 @@ class APJModel extends APJPDO
         if (in_array($fld,$this->pk)==FALSE and $extra != 'auto_increment' and !is_null($var)) {
           switch ($type) {
             case 'int':
+            case 'bigint':
             case 'tinyint':
             case 'smallint':
             case 'boolean':
-              if($vartype!='integer')  {
+              if (!is_numeric($var)) {
                 $this->errors[$fld] = "no es un número entero.";
               }
               break;

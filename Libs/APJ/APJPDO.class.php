@@ -2,7 +2,7 @@
 /**
 * APJPDO Class for PDO managment<br>
 * Clase para la gestión de PDO
-* Versión: 1.7.170721
+* Versión: 1.7.170810
 * Author: Ricardo Seiffert
 */
 class APJPDO 
@@ -402,7 +402,16 @@ class APJPDO
   public function server_info() {
     return $this->_Pdo->getAttribute(PDO::ATTR_SERVER_INFO);
   }
-  
+
+  /**
+  * Returns the database server version<br>
+  * Devuelve la version del servidor de base de datos
+  * @return (string) Database server version
+  */
+  public function server_version() {
+    $row=$this->row('SELECT version()');
+    return $row['version()'];
+  }
 }
 
 /**

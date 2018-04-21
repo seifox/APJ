@@ -2,7 +2,7 @@
 /**
 * Html Generator class<br>
 * Clase Generadora de Html
-* Versión: 1.1.170720
+* Versión: 1.2.180420
 */
 class APJHtmlGen
 {
@@ -55,7 +55,10 @@ class APJHtmlGen
   * @param (string) value
   */
   public function attr($attr,$value) {
-    $this->content.=' '.$attr.'="'.$value.'"';
+    $this->content.=' '.$attr;
+    if (strlen($value)) {
+      $this->content.='="'.$value.'"'; 
+    }
     return $this;
   }
   

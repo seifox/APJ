@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Versión: 1.7.170619
+* Versión: 1.7.180420
 * Author: Ricardo Seiffert
 */
 class APJController
@@ -57,6 +57,13 @@ class APJController
   protected $previousPage = 0;
   protected $nextPage = 0;
 
+  /**
+  * Defines whether APJCall passes the parameters as an array or as independent arguments<br> 
+  * Define si APJCall pasa los parámetros como un arreglo o como argumentos independientes
+  * @var boolean
+  */
+  protected $useParametersAsArray = true;
+  
   // Common methods Trait
   use APJCommon;  
   
@@ -270,7 +277,11 @@ class APJController
         $data=array_slice($params,1);
       }
       if (method_exists($this,$func)) {
-        return $this->{$func}($data);  
+        if (!$this->useParametersAsArray and is_array($data)) {
+          return call_user_func_array(array($this,$func),$data);
+        } else {
+          return $this->{$func}($data);
+        }
       }
     }
   }
@@ -366,12 +377,14 @@ class APJController
   */
   protected function options($array, $valueIndex, $textIndex, $selected='') {
     $options='';
-    foreach ($array as $row) {
-      $sel="";
-      if ($row[$valueIndex]==$selected) {
-        $sel="selected";
+    if (is_array($array) and $valueIndex and $textIndex) {
+      foreach ($array as $row) {
+        $sel="";
+        if ($row[$valueIndex]==$selected) {
+          $sel="selected";
+        }
+        $options.='<option value="'.$row[$valueIndex].'" '.$sel.'>'.$row[$textIndex].'</option>';
       }
-      $options.='<option value="'.$row[$valueIndex].'" '.$sel.'>'.$row[$textIndex].'</option>';
     }
     return $options;
   }

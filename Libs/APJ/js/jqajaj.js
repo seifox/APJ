@@ -1,7 +1,7 @@
 /*
  Plugin jQuery PHP
  Plugin jAlert
- Version 1.7.170718
+ Version 1.8.170727
  require jQuery v1.5.x or grather
 */
 BlinkId=0;
@@ -245,27 +245,33 @@ jAlertClosed=true;
     info: function (mensaje,titulo,callback,params) {
       if (titulo==null) titulo="Información";
       $.alerts._render('info',mensaje,titulo,function(result) {
-        if( typeof(callback)=='function' && result ) {
-          callback.apply(null, params);
+        if((func = $.alerts._toFunction(callback)) && result ) {
+          func.apply(null, params);
         }
       });
     },
     warning: function (mensaje,titulo,callback,params) {
       if (titulo==null) titulo="Advertencia";
       $.alerts._render('warning',mensaje,titulo,function(result) {
-        if( typeof(callback)=='function' && result ) callback.apply(null, params);
+        if((func = $.alerts._toFunction(callback)) && result ) {
+          func.apply(null, params);
+        }
       });
     },
     error: function (mensaje,titulo,callback,callback,params) {
       if (titulo==null) titulo="Error";
       $.alerts._render('error',mensaje,titulo,function(result) {
-        if( typeof(callback)=='function' && result ) callback.apply(null, params);
+        if((func = $.alerts._toFunction(callback)) && result ) {
+          func.apply(null, params);
+        }
       });
     },
     confirm: function (mensaje,titulo,callback,params) {
       if (titulo==null) titulo="Confirmar";
       $.alerts._render('confirm',mensaje,titulo,function(result) {
-        if( typeof(callback)=='function' && result ) callback.apply(null, params);
+        if((func = $.alerts._toFunction(callback)) && result ) {
+          func.apply(null, params);
+        }
       });
     },
     process: function (mensaje,titulo,style) {
@@ -275,9 +281,9 @@ jAlertClosed=true;
     prompt: function (mensaje,titulo,callback,params) {
       if (titulo==null) titulo="Introdusca un valor";
       $.alerts._render('prompt',mensaje,titulo,function(result) {
-        if( typeof(callback)=='function' && result ) {
+        if((func = $.alerts._toFunction(callback)) && result ) {
           if(params.length) params.push(result); else params=[result];
-          callback.apply(null, params);;
+          func.apply(null, params);
         }
       });
     },
@@ -438,6 +444,17 @@ jAlertClosed=true;
     // Efecto Blink
     _blinker: function() {
       $('#dialogboxtext').stop().fadeOut(500).fadeIn(500);
+    },
+    // Retorna la función
+    _toFunction: function(func) {
+      switch (typeof(func)) {
+        case 'string':
+          return window[func];
+        case 'function':
+          return func;
+        default:
+          return false;
+      }
     }
   }
   /*

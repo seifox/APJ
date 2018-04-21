@@ -1,4 +1,9 @@
-# Versiones
+﻿# Versiones
+## APJ 1.7.1804
+- Mejoras en APJController
+  - Se agregró la propiedad useParametersAsArray para definir como se comportan los parámetros en las llamadas a métodos por APJCall
+- Corrección en basicValidation de APJModel
+- Mejora en método attr de APJHtmlGen
 ## APJ 1.7.1707
 - Mejoras en APJHtmlGen y APJController
 - Se agregó el método like($field, $search) al modelo
@@ -72,7 +77,7 @@
 ## APJ 1.3.1607
 - Se cambio el nombre de el objeto PDO de MyPDO.class a APJPDO.class
 - Se cambio el nombre del archivo MyLog.class a APJLog.class
-- Mejoras en jqajaj.js 
+- Mejoras en jqajaj.js
   - Estilos reemplazados por clases
   - Se agregaron funcionex ajax
   - Se quitaron los mensajes a la consola
@@ -81,14 +86,14 @@
 - Mejoras en APJController
   - Propiead $canRender: define si se puede mostrar la vista
   - Asignación automática del formulario al objeto $Form
-  - Mejoras en los metodos: 
+  - Mejoras en los metodos:
     Render()
     Session()
     getForm()
     modelToFrom()
     convertDateTime()
     options()
-  - Se agregaron los siguiente metodos: 
+  - Se agregaron los siguiente metodos:
     getParameters(): Permite el paso de parametros adicionales al metodo APJSubmit()
     formObjectToModel(): Asigna las propiedades coincidentes del objeto Form al Modelo
     setFormValues(): Asigna los valores del formulario segun objeto Form o Array
