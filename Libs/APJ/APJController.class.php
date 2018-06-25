@@ -243,23 +243,39 @@ class APJController
   * Asigna los valores del formulario html desde objeto Form o Array
   * @param (mixed) Array or object (optional)
   */
-  protected function setFormValues($data='') {
+  protected function setFormValues($data='',$form=NULL) {
     $this->createForm();
     if (empty($data) and !empty($this->Form)) {
       $data=$this->Form;
     }
     foreach ($data as $field=>$value) {
       $this->Form->$field = $value;
+      $selector=$this->selector($field,$form);
       if ($this->fieldTypes[$field]=="checkbox" or $this->fieldTypes[$field]=="radio") {
         if ($value) {
-          $this->jQ("#{$field}")->prop('checked', true);
+          $this->jQ($selector)->prop('checked', true);
         } else {
-          $this->jQ("#{$field}")->prop('checked', false);
+          $this->jQ($selector)->prop('checked', false);
         }
       } else {
-        $this->jQ("#{$field}")->val($value);
+        $this->jQ($selector)->val($value);
       }
     }
+  }
+  
+  /**
+  * Returns a jQ selector by ID or Form :input name
+  * Retorna un selector de jQ por ID o por Formulario :input
+  * @param string input ID or name
+  * @param string form ID (optional)
+  */
+  protected function selector($field,$form=NULL) {
+    if ($form) {
+      $sel="#{$form} :input[name={$field}]";
+    } else {
+      $sel="#{$field}";
+    }
+    return $sel;
   }
   
   private function _isJson($json) {

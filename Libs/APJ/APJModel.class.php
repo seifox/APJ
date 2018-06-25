@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.7.180420
+* Versión: 1.7.180529
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -363,21 +363,21 @@ class APJModel extends APJPDO
         $comment = $this->structure[$fld]['Comment'];
         switch (true) {
           case (in_array($fld,$this->pk) and $extra != 'auto_increment' and (is_null($var) or strlen($var)==0)):
-          case (in_array($fld,$this->pk)==FALSE and $null === 'NO' and strlen($var)==0):
+          case (in_array($fld,$this->pk)==FALSE and $null === 'NO' and strlen($var)==0 and strlen($default)==0):
             $this->errors[$fld] = "no puede estar vacío";
             break;
-          case ($size and strlen($var)>$size):
+          case ($size and iconv_strlen($var)>$size):
             $this->errors[$fld] = "excede el tamaño definido ({$size}).";
             break;
         }
-        if (in_array($fld,$this->pk)==FALSE and $extra != 'auto_increment' and !is_null($var)) {
+        if (in_array($fld,$this->pk)==FALSE and strlen($var)>0) {
           switch ($type) {
             case 'int':
             case 'bigint':
             case 'tinyint':
             case 'smallint':
             case 'boolean':
-              if (!is_numeric($var)) {
+              if(!is_numeric($var))  {
                 $this->errors[$fld] = "no es un número entero.";
               }
               break;
@@ -414,6 +414,21 @@ class APJModel extends APJPDO
       $this->error=true;
     }
     return (count($this->errors)>0);
+  }
+  
+  /**
+  * Assigns object/array values to model matching columns<br>
+  * Asigna los valores de un objeto/arreglo a las columnas del modelo
+  * @param mixed $object
+  */
+  protected function objectToModel($object) {
+    if (is_array($object) or is_object($object)) {
+      foreach ($object as $name => $value) {
+        if (in_array($name, $this->fields)) {
+          $this->$name = $value;
+        }
+      }
+    }
   }
   
   /**
@@ -591,65 +606,110 @@ class APJModel extends APJPDO
   * Returns the minimum value of a column<br>
   * Devuelve el valor mínimo de una columna
   * @param (string) Column name
+  * @param (mixed) Array or string where condition (optional if values are set)
   * @return (mixed) Min column value
   */
-  public function min($field)  {
+  public function min($field,$condition=NULL)  {
     $this->_clearError();
-    if($field)
-    $row = $this->row("SELECT min(" . $field . ")" . " FROM " . $this->table,'',PDO::FETCH_NUM);
-    return $row[0];
+    $where="";
+    $params="";
+    if ($condition and $this->_condition($condition)) {
+      $where=" WHERE {$this->where}";
+      $params=$this->values;
+    }
+    if(in_array($field,$this->fields)) {
+      $row = $this->row("SELECT MIN({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM);
+      return $row[0];
+    }
+    return false;
   }
   
   /**
   * Returns the maximum value of a field<br>
   * Devuelve el valor máximo de un campo
   * @param (string) Column name
+  * @param (mixed) Array or string where condition (optional if values are set)
   * @return (mixed) Max column value
   */
-  public function max($field)  {
+  public function max($field,$condition=NULL)  {
     $this->_clearError();
-    if($field)
-    $row = $this->row("SELECT max(" . $field . ")" . " FROM " . $this->table,'',PDO::FETCH_NUM);
-    return $row[0];
+    $where="";
+    $params="";
+    if ($condition and $this->_condition($condition)) {
+      $where=" WHERE {$this->where}";
+      $params=$this->values;
+    }
+    if(in_array($field,$this->fields)) {
+      $row = $this->row("SELECT MAX({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM);
+      return $row[0];
+    }
+    return false;
   }
   
   /**
   * Returns the average value of a field<br>
   * Devuelve el valor promedio de un campo
   * @param (string) Column name
+  * @param (mixed) Array or string where condition (optional if values are set)
   * @return (mixed) Average column value
   */
-  public function avg($field)  {
+  public function avg($field,$condition=NULL)  {
     $this->_clearError();
-    if($field)
-    $row = $this->row("SELECT avg(" . $field . ")" . " FROM " . $this->table,'',PDO::FETCH_NUM);
-    return $row[0];
+    $where="";
+    $params="";
+    if ($condition and $this->_condition($condition)) {
+      $where=" WHERE {$this->where}";
+      $params=$this->values;
+    }
+    if(in_array($field,$this->fields)) {
+      $row = $this->row("SELECT AVG({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM);
+      return $row[0];
+    }
+    return false;
   }
   
   /**
   * Returns the sum of a field<br>
   * Devuelve la suma de un campo
   * @param (string) Column name
+  * @param (mixed) Array or string where condition (optional if values are set)
   * @return (mixed) Sum of the column values
   */
-  public function sum($field)  {
+  public function sum($field,$condition=NULL)  {
     $this->_clearError();
-    if($field)
-    $row = $this->row("SELECT sum(" . $field . ")" . " FROM " . $this->table,'',PDO::FETCH_NUM);
-    return $row[0];
+    $where="";
+    $params="";
+    if ($condition and $this->_condition($condition)) {
+      $where=" WHERE {$this->where}";
+      $params=$this->values;
+    }
+    if(in_array($field,$this->fields)) {
+      $row = $this->row("SELECT SUM({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM);
+      return $row[0];
+    }
+    return false;
   }
   
   /**
   * Returns the count of a field<br>
   * Devuelve la cuenta de un campo
   * @param (string) Column name
+  * @param (mixed) Array or string where condition (optional if values are set)
   * @return (int) Count of column values
   */
-  public function count($field)  {
+  public function count($field,$condition=NULL)  {
     $this->_clearError();
-    if($field)
-    $row = $this->row("SELECT count(" . $field . ")" . " FROM " . $this->table,'',PDO::FETCH_NUM);
-    return $row[0];
+    $where="";
+    $params="";
+    if ($condition and $this->_condition($condition)) {
+      $where=" WHERE {$this->where}";
+      $params=$this->values;
+    }
+    if(in_array($field,$this->fields)) {
+      $row = $this->row("SELECT COUNT({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM);
+      return $row[0];
+    }
+    return false;
   }  
 
   /**

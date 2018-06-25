@@ -1,4 +1,12 @@
-﻿# Versiones
+# Versiones
+## APJ 1.8.0529
+- Mejoras en APJcontroller
+  - Se mejoró el método setFormValues(), permitiendo definir un formulario y asignar valores por nombre
+  - Se agregó el método selector(), que define un selector por id o por formulario y nombre
+- Mejoras en APJModel
+  - Se agregó el método objectTomodel()
+  - Mejoras y Correcciones en el método basicValidacion()
+  - Se mejoraron los métodos min(),max(),avg(),sum(),count() xon opción de aplicar condición.
 ## APJ 1.7.1804
 - Mejoras en APJController
   - Se agregró la propiedad useParametersAsArray para definir como se comportan los parámetros en las llamadas a métodos por APJCall
