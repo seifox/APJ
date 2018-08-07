@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.7.180529
+* Versión: 1.7.180807
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -361,6 +361,10 @@ class APJModel extends APJPDO
         $default = $this->structure[$fld]['Default'];
         $extra = $this->structure[$fld]['Extra'];
         $comment = $this->structure[$fld]['Comment'];
+        if (in_array($fld,$this->pk)==FALSE and $null === 'NO' and strlen($var)==0 and strlen($default)>0) {
+          $var=$default;
+          $this->variables[$fld]=$default;
+        }
         switch (true) {
           case (in_array($fld,$this->pk) and $extra != 'auto_increment' and (is_null($var) or strlen($var)==0)):
           case (in_array($fld,$this->pk)==FALSE and $null === 'NO' and strlen($var)==0 and strlen($default)==0):
@@ -639,8 +643,7 @@ class APJModel extends APJPDO
       $where=" WHERE {$this->where}";
       $params=$this->values;
     }
-    if(in_array($field,$this->fields)) {
-      $row = $this->row("SELECT MAX({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM);
+    if ($row = $this->row("SELECT MAX({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -661,8 +664,7 @@ class APJModel extends APJPDO
       $where=" WHERE {$this->where}";
       $params=$this->values;
     }
-    if(in_array($field,$this->fields)) {
-      $row = $this->row("SELECT AVG({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM);
+    if ($row = $this->row("SELECT AVG({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -683,8 +685,7 @@ class APJModel extends APJPDO
       $where=" WHERE {$this->where}";
       $params=$this->values;
     }
-    if(in_array($field,$this->fields)) {
-      $row = $this->row("SELECT SUM({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM);
+    if ($row = $this->row("SELECT SUM({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -705,8 +706,7 @@ class APJModel extends APJPDO
       $where=" WHERE {$this->where}";
       $params=$this->values;
     }
-    if(in_array($field,$this->fields)) {
-      $row = $this->row("SELECT COUNT({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM);
+    if ($row = $this->row("SELECT COUNT({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;

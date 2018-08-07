@@ -2,7 +2,7 @@
 /**
 * Html Generator class<br>
 * Clase Generadora de Html
-* Versión: 1.2.180420
+* Versión: 1.7.180807
 */
 class APJHtmlGen
 {
@@ -28,6 +28,7 @@ class APJHtmlGen
   * Initializes properties and creates a new HTML Tag<br>
   * Inicializa las porpiedades y crea una nueva Etiqueta HTML
   * @param (tring) tag
+  * @return APJHtmlGen
   */
   public function create($tag) {
     $this->initialize();
@@ -40,6 +41,7 @@ class APJHtmlGen
   * Closes previous Tag and adds a new one
   * Cierra la Etiqueta anterior y añade una nueva
   * @param (string) tag
+  * @return APJHtmlGen
   */
   public function add($tag) {
     $this->closeLast();
@@ -53,6 +55,7 @@ class APJHtmlGen
   * Agrega un nuevo atributo
   * @param (string) attribute
   * @param (string) value
+  * @return APJHtmlGen
   */
   public function attr($attr,$value) {
     $this->content.=' '.$attr;
@@ -63,9 +66,21 @@ class APJHtmlGen
   }
   
   /**
+  * Adds a style attribute<br>
+  * Agrega un atributo style
+  * @param string $style
+  * @return APJHtmlGen
+  */
+  public function style($style) {
+    $this->content.=' style="'.$style.'"';
+    return $this;
+  }  
+  
+  /**
   * Adds a id attribute<br>
   * Agrega un atributo id
   * @param (string) value
+  * @return APJHtmlGen
   */
   public function id($value) {
     $this->content.=' id="'.$value.'"';
@@ -76,6 +91,7 @@ class APJHtmlGen
   * Adds a class attribute<br>
   * Agrega un atributo class
   * @param (string) value
+  * @return APJHtmlGen
   */
   public function clas($value) {
     $this->content.=' class="'.$value.'"';
@@ -86,6 +102,7 @@ class APJHtmlGen
   * Adds a value attribute
   * Agrega un attributo value
   * @param (string) value
+  * @return APJHtmlGen
   */
   public function value($value) {
     $this->content.=' value="'.$value.'"';
@@ -96,6 +113,7 @@ class APJHtmlGen
   * Adds a title attribute
   * Agrega un attributo title
   * @param (string) value
+  * @return APJHtmlGen
   */
   public function title($value) {
     $this->content.=' title="'.$value.'"';
@@ -106,6 +124,7 @@ class APJHtmlGen
   * Adds a text attribute
   * Agrega un attributo text
   * @param (string) value
+  * @return APJHtmlGen
   */
   public function text($value) {
     $close="";
@@ -120,6 +139,7 @@ class APJHtmlGen
   * Adds a text attribute
   * Agrega un attributo text
   * @param (string) value
+  * @return APJHtmlGen
   */
   public function name($value) {
     $this->content.=' name="'.$value.'"';
@@ -130,6 +150,7 @@ class APJHtmlGen
   * Adds a type attribute
   * Agrega un attributo type
   * @param (string) value
+  * @return APJHtmlGen
   */
   public function type($value) {
     $this->content.=' type="'.$value.'"';
@@ -140,6 +161,7 @@ class APJHtmlGen
   * Adds a onclick event
   * Agrega un evento onclick
   * @param (string) value
+  * @return APJHtmlGen
   */
   public function onclick($value) {
     $this->content.=' onclick="'.$value.'"';
@@ -150,6 +172,7 @@ class APJHtmlGen
   * Adds a onchange event
   * Agrega un evento onchange
   * @param (string) value
+  * @return APJHtmlGen
   */
   public function onchange($value) {
     $this->content.=' onchange="'.$value.'"';
@@ -160,6 +183,7 @@ class APJHtmlGen
   * Adds a literal
   * Agrega un literal
   * @param (string) literal
+  * @return APJHtmlGen
   */
   public function literal($value) {
     $this->content.=$value;
@@ -169,6 +193,7 @@ class APJHtmlGen
   /**
   * Close with ><br>
   * Cierra con >
+  * @return APJHtmlGen
   */
   public function preClose() {
     $this->content.=">";
@@ -178,6 +203,7 @@ class APJHtmlGen
   /**
   * Close last open Tag<br>
   * Cierra la última Etiqueta
+  * @return APJHtmlGen
   */
   public function close() {
     $this->closeSingle();

@@ -1,6 +1,15 @@
 # Versiones
-## APJ 1.8.0529
-- Mejoras en APJcontroller
+## APJ 1.7.1808
+- Mejoras en APJController
+  - Se agregó el metodo setFieldType para asignar los valores de la propiedad fieldTypes[]
+- Mejoras en APJModel
+  - en el método basicValidation se agregó la asignación de los valores Default cuando los valores no están definidos, antes de validar
+  - Se corrigieron los métodos min, max, sum y count, para permitir el uso de columnas no definidas en la estructura
+- Nueva versión de APJHtmlGen
+  - Mejoras en documentación de métodos
+  - Se agregó el método style()
+## APJ 1.7.0529
+- Mejoras en APJController
   - Se mejoró el método setFormValues(), permitiendo definir un formulario y asignar valores por nombre
   - Se agregó el método selector(), que define un selector por id o por formulario y nombre
 - Mejoras en APJModel

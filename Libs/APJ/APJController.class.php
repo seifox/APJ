@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Versión: 1.7.180420
+* Versión: 1.7.180718
 * Author: Ricardo Seiffert
 */
 class APJController
@@ -260,6 +260,18 @@ class APJController
       } else {
         $this->jQ($selector)->val($value);
       }
+    }
+  }
+  
+  /**
+  * Sets form special input types like checkbox or radio<br>
+  * Define los campos del formulario de tipo especial como checkbox o radio
+  * @param string input field id/name
+  * @param string type (checkbox or radio)
+  */
+  protected function setFieldType($field,$type='checkbox') {
+    if ($type=="checkbox" or $type=="radio") {
+      $this->fieldTypes[$field]=$type;
     }
   }
   
