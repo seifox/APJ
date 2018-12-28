@@ -2,7 +2,7 @@
 /**
 * Common methods Trait<br>
 * Rasgo de métodos comunes
-* Versión: 1.0.170607
+* Versión: 1.0.181203
 * Author: Ricardo Seiffert
 */
 trait APJCommon
@@ -137,6 +137,7 @@ trait APJCommon
       $mm='';
       $yy='';
       foreach ($fa as $part) {
+        $part = str_replace(',', '', $part);
         if (is_numeric($part)) {
           if (strlen($part)<=2) {
             $dd=$part;

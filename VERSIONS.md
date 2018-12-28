@@ -1,4 +1,7 @@
 # Versiones
+## APJ 1.7.1812
+- Meloras en APJCommon
+  - Mejora en convertDateTime
 ## APJ 1.7.1808
 - Mejoras en APJController
   - Se agregó el metodo setFieldType para asignar los valores de la propiedad fieldTypes[]

@@ -1,6 +1,6 @@
 # APJ (Asynchronous PHP and JQuery MVC Framework)
 ## APJ: Framework MVC para PHP y JQuery de forma asíncrona
-### Versión: 1.8.1808
+### Versión: 1.8.1812
 ### ¿Que es?
 - Es un Framework simple para PHP basado en el patrón MVC (Modelo-Vista-Controlador) que utiliza JQuery, enfocado en el intercambio de datos de forma asíncrona con formato JSON, entre el controlador y la vista en el navegador.
 - Permite la inyección de instrucciones JQuery (javascript) desde el mismo controlador en PHP.
@@ -9,7 +9,7 @@
 - Especialmente diseñado para el desarrollo de aplicaciones web.
 
 ### Motivación:
->Después de aprender y probar muchos frameworks para PHP, ninguno me satisfacía por completo, en especial cuando se trataba del intercambio asíncrono de datos, comunicación con javascript desde PHP para modificación del DOM de las vistas. Así que me decidí hacer mi propio framework, el cual satisficiera mis necesidades y cuya curva de aprendizaje sea baja. 
+>Después de aprender y probar muchos frameworks para PHP, ninguno me satisfacía por completo, en especial cuando se trataba del intercambio asíncrono de datos, comunicación con javascript desde PHP para modificación del DOM de las vistas. Así que me decidí hacer mi propio framework, el cual satisficiera mis necesidades y cuya curva de aprendizaje sea baja.
 >En resumen un framework simple pero potente que cubriera mis necesidades en el desarrollo de aplicaciones web con PHP.
 
 ### Requerimientos:
@@ -38,7 +38,7 @@
 1. Editar el archivo Libs/APJ/APJPDO.ini (archivo de configuración para el acceso a la base de datos)
 	1. Cambie el valor de user, por la de un usuario válido, que tenga acceso a mostrar la estructura de las tablas (SHOW FULL COLUMNS FROM), No es obligatorio, pero en desarrollo es muy útil.
     1. Cambie el valor de password por una contraseña válida. Si la contraseña tiene símbolos como $, agregue comillas simples a la contraseña.
-    1. Cambie el valor de dbname por en nombre de su base de datos. 
+    1. Cambie el valor de dbname por en nombre de su base de datos.
     1. Opcionalmente cambie charset
 >Eso es todo lo que necesita para comenzar.
 
