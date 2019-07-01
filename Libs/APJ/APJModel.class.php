@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.7.180807
+* Versión: 1.8.190701
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -541,6 +541,18 @@ class APJModel extends APJPDO
     return $this->execute($sql,$this->values);
   }
 
+  /**
+  * Truncate a table<br>
+  * Trunca una tabla
+  * @param (string) $table
+  * @return (mixed)
+  */
+  public function truncate($table) {
+    $this->_clearError();
+    $table=($table)?$table:$this->table;
+    return $this->query("TRUNCATE TABLE {$table}");
+  }  
+  
   /**
   * Find a row and assigns values<br>
   * Encuentra una fila y asigna los valores

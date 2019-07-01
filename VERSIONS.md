@@ -1,7 +1,7 @@
 # Versiones
-## APJ 1.7.1812
-- Meloras en APJCommon
-  - Mejora en convertDateTime
+## APJ 1.8.1907
+- Mejoras en APJModel
+  - Se agregó el método truncate que permite truncar tablas
 ## APJ 1.7.1808
 - Mejoras en APJController
   - Se agregó el metodo setFieldType para asignar los valores de la propiedad fieldTypes[]
@@ -11,7 +11,7 @@
 - Nueva versión de APJHtmlGen
   - Mejoras en documentación de métodos
   - Se agregó el método style()
-## APJ 1.7.0529
+## APJ 1.7.1805
 - Mejoras en APJController
   - Se mejoró el método setFormValues(), permitiendo definir un formulario y asignar valores por nombre
   - Se agregó el método selector(), que define un selector por id o por formulario y nombre
