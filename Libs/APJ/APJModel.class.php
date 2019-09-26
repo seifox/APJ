@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.8.190701
+* Versión: 1.8.190926
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -552,6 +552,20 @@ class APJModel extends APJPDO
     $table=($table)?$table:$this->table;
     return $this->query("TRUNCATE TABLE {$table}");
   }  
+  
+  /**
+  * Drop a table<br>
+  * Elimina una tabla
+  * @param (boolean) is a temporary table (optional)
+  * @param (string) name of the table, if not specified it will be the current table (optional) 
+  * @return (mixed)
+  */
+  public function drop($temporary=false,$table) {
+    $this->_clearError();
+    $table=($table)?$table:$this->table;
+    $temp=($temporary)?'TEMPORARY':'';
+    return $this->query("DROP {$temp} TABLE {$table}");
+  }
   
   /**
   * Find a row and assigns values<br>
