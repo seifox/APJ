@@ -85,8 +85,8 @@ class APJHtmlGen
   * @param (string) value
   * @return APJHtmlGen
   */
-  public function src($style) {
-    $this->content.=' src="'.$style.'"';
+  public function src($src) {
+    $this->content.=' src="'.$src.'"';
     return $this;
   }  
   

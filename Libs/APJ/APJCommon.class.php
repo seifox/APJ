@@ -2,7 +2,7 @@
 /**
 * Common methods Trait<br>
 * Rasgo de métodos comunes
-* Versión: 1.0.200408
+* Versión: 1.8.200420
 * Author: Ricardo Seiffert
 */
 trait APJCommon
@@ -216,7 +216,7 @@ trait APJCommon
   * @param object $object
   * @return array
   */
-  protected function objectToarray($object) {
+  protected function objectToArray($object) {
     return (array) $object;
   }
   
