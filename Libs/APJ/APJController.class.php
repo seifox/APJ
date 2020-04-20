@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Versión: 1.7.180718
+* Versión: 1.7.200420
 * Author: Ricardo Seiffert
 */
 class APJController
@@ -257,7 +257,7 @@ class APJController
         } else {
           $this->jQ($selector)->prop('checked', false);
         }
-      } else {
+      } elseif ($this->fieldTypes[$field]!='file') {
         $this->jQ($selector)->val($value);
       }
     }
@@ -270,9 +270,7 @@ class APJController
   * @param string type (checkbox or radio)
   */
   protected function setFieldType($field,$type='checkbox') {
-    if ($type=="checkbox" or $type=="radio") {
-      $this->fieldTypes[$field]=$type;
-    }
+    $this->fieldTypes[$field]=$type;
   }
   
   /**
@@ -405,7 +403,7 @@ class APJController
   */
   protected function options($array, $valueIndex, $textIndex, $selected='') {
     $options='';
-    if (is_array($array) and $valueIndex and $textIndex) {
+    if (is_array($array) and strlen($valueIndex)>0 and strlen($textIndex)>0) {
       foreach ($array as $row) {
         $sel="";
         if ($row[$valueIndex]==$selected) {
@@ -635,7 +633,7 @@ class APJController
   * @param (string) Title
   * @param (array) Fields alias (optional)
   */
-  protected function showWarnings($warnings,$title,$alias) {
+  protected function showWarnings($warnings,$title,$alias=NULL) {
     $msg="";
     foreach ($warnings as $fld=>$wrn) {
       $fld=$this->_getAlias($fld,$alias);

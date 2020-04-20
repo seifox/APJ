@@ -2,7 +2,7 @@
 /**
 * Html Generator class<br>
 * Clase Generadora de Html
-* Versión: 1.7.180807
+* Versión: 1.7.181009
 */
 class APJHtmlGen
 {
@@ -41,10 +41,13 @@ class APJHtmlGen
   * Closes previous Tag and adds a new one
   * Cierra la Etiqueta anterior y añade una nueva
   * @param (string) tag
+  * @param (boolean) close last tag
   * @return APJHtmlGen
   */
-  public function add($tag) {
-    $this->closeLast();
+  public function add($tag,$closeLast=true) {
+    if ($closeLast) {
+      $this->closeLast();
+    }
     $this->content.= '<'.$tag;
     $this->tags[] = $tag;
     return $this;
@@ -73,6 +76,17 @@ class APJHtmlGen
   */
   public function style($style) {
     $this->content.=' style="'.$style.'"';
+    return $this;
+  }  
+  
+  /**
+  * Adds a src attribute<br>
+  * Agrega un atributo src
+  * @param (string) value
+  * @return APJHtmlGen
+  */
+  public function src($style) {
+    $this->content.=' src="'.$style.'"';
     return $this;
   }  
   

@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.8.190926
+* Versión: 1.8.200420
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -495,7 +495,7 @@ class APJModel extends APJPDO
       $fields = substr($fields , 0, -1);
       $fieldsvals = substr($fieldsvals , 1);
       $ignsql=($ignore)?" IGNORE ":" ";
-      $sql = "INSERT{$ignsql}INTO {$this->table} ({$fields}) VALUES ({$fieldsvals})";
+      $sql = "INSERT{$ignsql}INTO `{$this->table}` ({$fields}) VALUES ({$fieldsvals})";
       return $this->execute($sql,$this->values);
     } else {
       return false;
@@ -518,7 +518,7 @@ class APJModel extends APJPDO
       }
       $fields = substr($fields , 0, -1);
       $fieldsvals = substr($fieldsvals , 1);
-      $sql = "REPLACE INTO {$this->table} ({$fields}) VALUES ({$fieldsvals})";
+      $sql = "REPLACE INTO `{$this->table}` ({$fields}) VALUES ({$fieldsvals})";
       return $this->execute($sql,$this->values);
     } else {
       return false;
@@ -534,7 +534,7 @@ class APJModel extends APJPDO
   public function delete($where='') {
     $this->_clearError();
     if ($this->_condition($where)) {
-      $sql = "DELETE FROM {$this->table} WHERE ".$this->where;
+      $sql = "DELETE FROM `{$this->table}` WHERE ".$this->where;
     } else {
       return false;
     }
@@ -550,7 +550,7 @@ class APJModel extends APJPDO
   public function truncate($table) {
     $this->_clearError();
     $table=($table)?$table:$this->table;
-    return $this->query("TRUNCATE TABLE {$table}");
+    return $this->query("TRUNCATE TABLE `{$table}`");
   }  
   
   /**
@@ -564,7 +564,7 @@ class APJModel extends APJPDO
     $this->_clearError();
     $table=($table)?$table:$this->table;
     $temp=($temporary)?'TEMPORARY':'';
-    return $this->query("DROP {$temp} TABLE {$table}");
+    return $this->query("DROP {$temp} TABLE IF EXISTS `{$table}`");
   }
   
   /**
@@ -576,7 +576,7 @@ class APJModel extends APJPDO
   public function find($where='') {
     $this->_clearError();
     if ($this->_condition($where)) {
-      $sql="SELECT * FROM {$this->table} WHERE ".$this->where;
+      $sql="SELECT * FROM `{$this->table}` WHERE ".$this->where;
       return $this->variables = $this->row($sql,$this->values);
     }
     return false;
@@ -592,7 +592,7 @@ class APJModel extends APJPDO
   public function like($field, $search) {
     $this->_clearError();
     if (in_array($field,$this->fields) and $search) {
-      return $this->rows("SELECT * FROM {$this->table} WHERE {$field} LIKE '{$search}'");
+      return $this->rows("SELECT * FROM `{$this->table}` WHERE {$field} LIKE '{$search}'");
     }
   }
   
@@ -605,7 +605,7 @@ class APJModel extends APJPDO
   public function all($order=''){
     $this->_clearError();
     $order=($order)?"ORDER BY {$order}":'';
-    return $this->rows("SELECT * FROM {$this->table} {$order}");
+    return $this->rows("SELECT * FROM `{$this->table}` {$order}");
   }
   
   /**
@@ -619,7 +619,7 @@ class APJModel extends APJPDO
     $this->_clearError();
     $order=($order)?"ORDER BY {$order}":'';
     if ($this->_condition($condition)) {
-      return $this->rows("SELECT * FROM {$this->table} WHERE {$this->where} {$order}",$this->values);
+      return $this->rows("SELECT * FROM `{$this->table}` WHERE {$this->where} {$order}",$this->values);
     }
     return false;
   }
@@ -648,7 +648,7 @@ class APJModel extends APJPDO
       $params=$this->values;
     }
     if(in_array($field,$this->fields)) {
-      $row = $this->row("SELECT MIN({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM);
+      $row = $this->row("SELECT MIN({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM);
       return $row[0];
     }
     return false;
@@ -669,7 +669,7 @@ class APJModel extends APJPDO
       $where=" WHERE {$this->where}";
       $params=$this->values;
     }
-    if ($row = $this->row("SELECT MAX({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM)) {
+    if ($row = $this->row("SELECT MAX({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -690,7 +690,7 @@ class APJModel extends APJPDO
       $where=" WHERE {$this->where}";
       $params=$this->values;
     }
-    if ($row = $this->row("SELECT AVG({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM)) {
+    if ($row = $this->row("SELECT AVG({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -711,7 +711,7 @@ class APJModel extends APJPDO
       $where=" WHERE {$this->where}";
       $params=$this->values;
     }
-    if ($row = $this->row("SELECT SUM({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM)) {
+    if ($row = $this->row("SELECT SUM({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -732,7 +732,7 @@ class APJModel extends APJPDO
       $where=" WHERE {$this->where}";
       $params=$this->values;
     }
-    if ($row = $this->row("SELECT COUNT({$field}) FROM {$this->table}{$where}",$params,PDO::FETCH_NUM)) {
+    if ($row = $this->row("SELECT COUNT({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -747,6 +747,9 @@ class APJModel extends APJPDO
   * @return (mixed) Paged result array or false if any error
   */
   public function paging($query, $limit=20,$page=1) {
+    if (empty($query)) {
+      $query="SELECT * FROM `{$this->table}`"; 
+    }
     if ($all=$this->query($query)) {
       $this->lastPage = ceil($all / $limit);
       $this->currentPage = $page;
@@ -818,10 +821,10 @@ class APJModel extends APJPDO
       }
       $this->where=(strlen($where)>5)?substr($where,0,-5):$where;
       return true;
-    } elseif ($condition and is_numeric($condition)) {
-      $this->where = "{$this->pk[0]}='{$condition}'";      
+    } elseif (strlen($condition)>0 and is_numeric($condition)) {
+      $this->where = "{$this->pk[0]}={$condition}";      
       return true;
-    } elseif ($condition) {
+    } elseif (strlen($condition)>0) {
       $this->where = $condition;
       return true;
     }

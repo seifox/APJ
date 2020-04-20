@@ -2,7 +2,7 @@
 /**
 * Common methods Trait<br>
 * Rasgo de métodos comunes
-* Versión: 1.0.181203
+* Versión: 1.0.200408
 * Author: Ricardo Seiffert
 */
 trait APJCommon
@@ -210,6 +210,16 @@ trait APJCommon
     return $object;
   }
 
+  /**
+  * Returns an associative array of an object
+  * Devuelve un arreglo asociativo de un objeto
+  * @param object $object
+  * @return array
+  */
+  protected function objectToarray($object) {
+    return (array) $object;
+  }
+  
   /**
   * Returns current unix date<br>
   * Retorna la fecha unix actual
