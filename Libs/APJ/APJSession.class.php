@@ -2,13 +2,11 @@
 /**
 * Controls the user session<br>
 * Controla la sesión de usuarios
-* Versión: 1.7.170614
+* Versión: 1.8.200422
 * Author: Ricardo Seiffert
 */
 class APJSession
 {
-  const SESSION_TIMEOUT = (SESSION_LIMIT)?SESSION_LIMIT:1800;
-  
   /**
   * Verifies that the session is still active<br>
   * Verifica que la sesion está aún activa
@@ -36,7 +34,8 @@ class APJSession
       if (!empty($path)) {
         session_set_cookie_params($limit, $path, $domain, $https, true);
       }
-      ini_set('session.gc_maxlifetime',SESSION_TIMEOUT);
+      $timeOut = (SESSION_LIMIT)?SESSION_LIMIT:1800;
+      ini_set('session.gc_maxlifetime',$timeOut);
       session_start();
       if(self::validate()) {
         if(!self::same()) {

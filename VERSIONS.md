@@ -1,5 +1,6 @@
 # Versiones
-## APJ 1.8.2004
+- Mejoras en APJSession
+  - Mejoras en constantes de la duración de la sessión
 - Mejoras en APJCommon
   - Se agregó el método objectToArray permite crear un arreglo a partir de un objeto
 - Mejoras en APJController
