@@ -647,8 +647,7 @@ class APJModel extends APJPDO
       $where=" WHERE {$this->where}";
       $params=$this->values;
     }
-    if(in_array($field,$this->fields)) {
-      $row = $this->row("SELECT MIN({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM);
+    if ($row = $this->row("SELECT MIN({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;

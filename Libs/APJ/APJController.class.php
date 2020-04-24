@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Versión: 1.7.200420
+* Versión: 1.8.200420
 * Author: Ricardo Seiffert
 */
 class APJController

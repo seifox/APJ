@@ -2,7 +2,7 @@
 /**
 * APJPDO Class for PDO managment<br>
 * Clase para la gestión de PDO
-* Versión: 1.8.180905
+* Versión: 1.8.200424
 * Author: Ricardo Seiffert
 */
 class APJPDO 
@@ -92,7 +92,7 @@ class APJPDO
 			$this->bindArray($parameters);
 			if(!empty($this->_Parameters)) {
 				foreach($this->_Parameters as $param) {
-          $param['value']=($param['value']==="")?NULL:$param['value'];
+          $param['value']=(strlen($param['value'])==0)?NULL:$param['value'];
 					$this->_Qry->bindParam($param['param'],$param['value']);
 				}
 			}
@@ -390,25 +390,25 @@ class APJPDO
       case "decimal":
       case "enum":
       case "set":
-        $newValue = ($newValue !== "") ? $newValue : NULL;
+        $newValue = (strlen($newValue)>0) ? $newValue : NULL;
         break;
       case "float":
       case "double":
       case "real":
-        $newValue = ($newValue !== "") ? floatval($newValue) : NULL;
+        $newValue = (strlen($newValue)>0) ? floatval($newValue) : NULL;
         break;
       case "date":
         $dateTime=new DateTime($newValue);
-        $newValue = ($newValue !== "") ? $dateTime->format('Y-m-d') : NULL;
+        $newValue = (strlen($newValue)>0) ? $dateTime->format('Y-m-d') : NULL;
         break;
       case "timestamp":
       case "datetime":
         $dateTime=new DateTime($newValue);
-        $newValue = ($newValue !== "") ? $dateTime->format('Y-m-d H:i:s') : NULL;
+        $newValue = (strlen($newValue)>0) ? $dateTime->format('Y-m-d H:i:s') : NULL;
         break;
       case "time":
         $dateTime=new DateTime($newValue);
-        $newValue = ($newValue !== "") ? $dateTime->format('H:i:s') : NULL;
+        $newValue = (strlen($newValue)>0) ? $dateTime->format('H:i:s') : NULL;
         break;
       case "bit":
       case "tinyint":
@@ -416,10 +416,10 @@ class APJPDO
       case "mediumint":
       case "int":
       case "year":
-        $newValue = ($newValue !== "") ? intval($newValue) : NULL;
+        $newValue = (strlen($newValue)>0) ? intval($newValue) : NULL;
         break;
       defautl:
-        $newValue = ($newValue !== "") ? $newValue : NULL;
+        $newValue = (strlen($newValue)>0) ? $newValue : NULL;
     }
     return $newValue;
   }

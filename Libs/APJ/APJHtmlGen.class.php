@@ -2,7 +2,7 @@
 /**
 * Html Generator class<br>
 * Clase Generadora de Html
-* Versión: 1.7.181009
+* Versión: 1.8.200420
 */
 class APJHtmlGen
 {
