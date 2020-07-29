@@ -2,7 +2,7 @@
 /**
 * APJPDO Class for PDO managment<br>
 * Clase para la gestión de PDO
-* Versión: 1.8.200424
+* Version: 1.9.200513
 * Author: Ricardo Seiffert
 */
 class APJPDO 
@@ -472,6 +472,16 @@ class APJPDO
     $row=$this->row('SELECT version()');
     return $row['version()'];
   }
+  
+  /**
+  * Returns the database name<br>
+  * Retorna el nombre de la base de datos
+  * @return (string) Database name
+  */
+  public function getDataBaseName() {
+    return $this->_Settings['dbname'];
+  }  
+  
 }
 
 /**
@@ -499,6 +509,13 @@ class APJPDOConnection
     return false;
   }  
   
+  /**
+  * Returns a instance of the database connection<br>
+  * Devuelve una instancia de la conexión de la base de datos.
+  * @param mixed $dsn
+  * @param mixed $settings
+  * @return PDO
+  */
   public static function instance($dsn,$settings) {
     if (self::sameConnection($dsn,$settings)) {
       return self::$_instance;

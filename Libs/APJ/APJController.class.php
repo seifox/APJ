@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Versión: 1.8.200420
+* Version: 1.9.200714
 * Author: Ricardo Seiffert
 */
 class APJController
@@ -62,7 +62,7 @@ class APJController
   * Define si APJCall pasa los parámetros como un arreglo o como argumentos independientes
   * @var boolean
   */
-  protected $useParametersAsArray = true;
+  protected $useParametersAsArray = false;
   
   // Common methods Trait
   use APJCommon;  
@@ -81,7 +81,7 @@ class APJController
       $this->{$method}($data);
       $this->getResponse();
     } elseif ($method) {
-      $this->jError("El metodo {$method} no existe!");
+      $this->jError("El método {$method} no existe!");
       $this->getResponse();
     } elseif ($page) {
       $this->render($page,false);
@@ -257,6 +257,9 @@ class APJController
         } else {
           $this->jQ($selector)->prop('checked', false);
         }
+      } elseif ($this->fieldTypes[$field]=='datetime-local') {
+        $value=date('Y-m-d\TH:i:s',strtotime($value));
+        $this->jQ($selector)->val($value);
       } elseif ($this->fieldTypes[$field]!='file') {
         $this->jQ($selector)->val($value);
       }
@@ -406,7 +409,11 @@ class APJController
     if (is_array($array) and strlen($valueIndex)>0 and strlen($textIndex)>0) {
       foreach ($array as $row) {
         $sel="";
-        if ($row[$valueIndex]==$selected) {
+        if (is_array($selected)) {
+          if (in_array($row[$valueIndex],$selected)) {
+            $sel="selected";
+          }
+        } elseif ($row[$valueIndex]==$selected) {
           $sel="selected";
         }
         $options.='<option value="'.$row[$valueIndex].'" '.$sel.'>'.$row[$textIndex].'</option>';

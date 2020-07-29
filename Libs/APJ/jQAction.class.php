@@ -2,7 +2,7 @@
 /**
 * Class that sets parameters for jQAction object<br>
 * Clase que define los parámetros del objeto jQAction
-* Version: 1.3.170612
+* Version: 1.9.200512
 * Author: Ricardo Seiffert
 */
 class jQAction

@@ -2,7 +2,7 @@
 /**
 * Class that defines the jQuery selector for jQ
 * Clase que define el selector jQuery para jQ
-* Versión: 1.3.170612
+* Version: 1.9.200512
 * Author: Ricardo Seiffert
 */
 class jQSelector

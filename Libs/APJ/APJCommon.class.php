@@ -2,7 +2,7 @@
 /**
 * Common methods Trait<br>
 * Rasgo de métodos comunes
-* Versión: 1.8.200420
+* Version: 1.9.200512
 * Author: Ricardo Seiffert
 */
 trait APJCommon

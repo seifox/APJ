@@ -2,7 +2,7 @@
 /**
 * Controls the user session<br>
 * Controla la sesión de usuarios
-* Versión: 1.8.200424
+* Version: 1.9.200512
 * Author: Ricardo Seiffert
 */
 class APJSession
@@ -58,8 +58,10 @@ class APJSession
   * @param (string) Starting session name
   */
   private static function setName($name) {
-    $hashname = md5($name . '_Session');
-    session_name($hashname);
+    if (session_status()!=PHP_SESSION_ACTIVE) {
+      $hashname = md5($name . '_Session');
+      session_name($hashname);
+    }
   }
   
   /**

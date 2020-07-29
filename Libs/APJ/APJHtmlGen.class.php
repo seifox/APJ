@@ -2,7 +2,8 @@
 /**
 * Html Generator class<br>
 * Clase Generadora de Html
-* Versión: 1.8.200420
+* Version: 1.9.200512
+* Author: Ricardo Seiffert
 */
 class APJHtmlGen
 {

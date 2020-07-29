@@ -2,7 +2,7 @@
 /**
 * Static class that respons to jQuery from PHP<br>
 * Clase Estática que responde acciones jQuery desde PHP
-* Version: 1.3.170612
+* Version: 1.9.200512
 * Author: Ricardo Seiffert
 */
 class jQ
@@ -129,20 +129,7 @@ class jQ
   */
   public static function jInfo($msg, $title = null, $callBack = null, $params = null) 
   {
-    jQ::init();
-    $jQAction = new jQAction();        
-    $jQAction->set("msg", $msg);
-    if ($title) {
-      $jQAction->set("title", $title);
-    }
-    if ($callBack) {
-      $jQAction->set("callback", $callBack);
-    }
-    if ($params) {
-      $jQAction->set("params",  $params);
-    }
-    jQ::setAction(__FUNCTION__, $jQAction);
-    return jQ::$jQ;
+    return jQ::_jAlert(__FUNCTION__,$msg,$title,$callBack,$params,null);
   }
 
   /**
@@ -156,20 +143,7 @@ class jQ
   */
   public static function jWarning($msg, $title = null, $callBack = null, $params = null) 
   {
-    jQ::init();
-    $jQAction = new jQAction();        
-    $jQAction->set("msg", $msg);
-    if ($title) {
-      $jQAction->set("title", $title);
-    }
-    if ($callBack) {
-      $jQAction->set("callback", $callBack);
-    }
-    if ($params) {
-      $jQAction->set("params",  $params);
-    }
-    jQ::setAction(__FUNCTION__, $jQAction);
-    return jQ::$jQ;
+    return jQ::_jAlert(__FUNCTION__,$msg,$title,$callBack,$params,null);
   }
 
   /**
@@ -183,20 +157,7 @@ class jQ
   */
   public static function jError($msg, $title = null, $callBack = null, $params = null) 
   {
-    jQ::init();
-    $jQAction = new jQAction();        
-    $jQAction->set("msg", $msg);
-    if ($title) {
-      $jQAction->set("title", $title);
-    }
-    if ($callBack) {
-      $jQAction->set("callback", $callBack);
-    }
-    if ($params) {
-      $jQAction->set("params", $params);
-    }
-    jQ::setAction(__FUNCTION__, $jQAction);
-    return jQ::$jQ;
+    return jQ::_jAlert(__FUNCTION__,$msg,$title,$callBack,$params,null);
   }
 
   /**
@@ -210,20 +171,7 @@ class jQ
   */
   public static function jConfirm($msg, $title = null, $callBack = null, $params = null) 
   {
-    jQ::init();
-    $jQAction = new jQAction();        
-    $jQAction->set("msg", $msg);
-    if ($title) {
-      $jQAction->set("title", $title);
-    }
-    if ($callBack) {
-      $jQAction->set("callback", $callBack);
-    }
-    if ($params) {
-      $jQAction->set("params",  $params);
-    }
-    jQ::setAction(__FUNCTION__, $jQAction);
-    return jQ::$jQ;
+    return jQ::_jAlert(__FUNCTION__,$msg,$title,$callBack,$params,null);
   }
 
   /**
@@ -236,17 +184,7 @@ class jQ
   */
   public static function jPrompt($msg, $title = null, $callBack = null) 
   {
-    jQ::init();
-    $jQAction = new jQAction();        
-    $jQAction->set("msg", $msg);
-    if ($title) {
-      $jQAction->set("title", $title);
-    }
-    if ($callBack) {
-      $jQAction->set("callback", $callBack);
-    }
-    jQ::setAction(__FUNCTION__, $jQAction);
-    return jQ::$jQ;
+    return jQ::_jAlert(__FUNCTION__,$msg,$title,$callBack,null,null);
   }
 
   /**
@@ -259,19 +197,30 @@ class jQ
   */
   public static function jProcess($msg, $title = null, $style = 'blink') 
   {
+    return jQ::_jAlert(__FUNCTION__,$msg,$title,null,null,$style);
+  }
+
+  private static function _jAlert($function, $msg, $title = null, $callBack = null, $params = null, $style = null) 
+  {
     jQ::init();
     $jQAction = new jQAction();        
     $jQAction->set("msg", $msg);
     if ($title) {
       $jQAction->set("title", $title);
     }
+    if ($callBack) {
+      $jQAction->set("callback", $callBack);
+    }
+    if ($params) {
+      $jQAction->set("params", $params);
+    }
     if ($style) {
       $jQAction->set("style", $style);
     }
-    jQ::setAction(__FUNCTION__, $jQAction);
+    jQ::setAction($function, $jQAction);
     return jQ::$jQ;
   }
-
+  
   /**
   * Closes alert/informations windows<br>
   * Cierra ventanas de alert/información

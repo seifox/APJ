@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Versión: 1.8.200420
+* Version: 1.9.200519
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -69,6 +69,27 @@ class APJModel extends APJPDO
   private $where = NULL;
 
   /**
+  * Array with join instructions for query methods<br>
+  * Arreglo con instrucciones join para los métodos de consultas
+  * @var array
+  */
+  private $joins = array();
+  
+  /**
+  * Limit of rows for query methods<br>
+  * Limite de filas para los métodos de consultas
+  * @var int
+  */
+  private $limit = NULL;
+  
+  /**
+  * Query order<br>
+  * Orden de la consulta
+  * @var string
+  */
+  private $order = NULL;
+  
+  /**
   * Define charset to use<br>
   * Define el juego de caractéres a usar
   * @var string
@@ -99,6 +120,8 @@ class APJModel extends APJPDO
   public $previousPage = 0;
   public $nextPage = 0;
   
+  private $quotes = array("'",'"');
+  
   // Common methods Trait
   use APJCommon;
   
@@ -119,7 +142,7 @@ class APJModel extends APJPDO
   public function setTable($table) {
     $this->_clearError();
     $this->table=$table;
-    $this->defineModel();
+    $this->_defineModel();
   }
   
   /**
@@ -139,8 +162,8 @@ class APJModel extends APJPDO
   * Extracts and define the model structure<br>
   * Extrae y define la estructura del modelo
   */
-  private function defineModel() {
-    $sql="SHOW FULL COLUMNS FROM ".$this->table;
+  private function _defineModel() {
+    $sql="SHOW FULL COLUMNS FROM `{$this->table}`";
     if ($struc=$this->rows($sql)) {
       foreach ($struc as $str) {
         $type=$this->_type($str['Type']);
@@ -160,6 +183,18 @@ class APJModel extends APJPDO
       }
       $this->fields = array_keys($this->structure);
     }
+  }
+
+  /**
+  * Extracts a foreign table structure<br>
+  * Extrae la estructura de una tabla foranea
+  */
+  private function _foreignModel($table) {
+    $sql="SHOW FULL COLUMNS FROM ".$table;
+    if ($structure=$this->rows($sql)) {
+      return $structure;
+    }
+    return false;
   }
 
   /**
@@ -360,7 +395,7 @@ class APJModel extends APJPDO
         $null = $this->structure[$fld]['Null'];
         $default = $this->structure[$fld]['Default'];
         $extra = $this->structure[$fld]['Extra'];
-        $comment = $this->structure[$fld]['Comment'];
+        $comment = $this->structure[$fld]['Comment']; 
         if (in_array($fld,$this->pk)==FALSE and $null === 'NO' and strlen($var)==0 and strlen($default)>0) {
           $var=$default;
           $this->variables[$fld]=$default;
@@ -468,8 +503,8 @@ class APJModel extends APJPDO
         $fieldsvals .= $column . " = :". $column . ",";
       }
       $fieldsvals = substr($fieldsvals , 0, -1);
-      if ($this->_condition($where)) {
-        $sql = "UPDATE " . $this->table .  " SET " . $fieldsvals . " WHERE " . $this->where;
+      if ($this->_condition($where,true)) {
+        $sql = "UPDATE " . $this->table .  " SET " . $fieldsvals . $this->_queryWhere();
         return $this->execute($sql,$this->values);
       }
     }
@@ -533,8 +568,8 @@ class APJModel extends APJPDO
   */
   public function delete($where='') {
     $this->_clearError();
-    if ($this->_condition($where)) {
-      $sql = "DELETE FROM `{$this->table}` WHERE ".$this->where;
+    if ($this->_condition($where,true)) {
+      $sql = "DELETE FROM `{$this->table}` {$this->_queryWhere()}";
     } else {
       return false;
     }
@@ -575,8 +610,8 @@ class APJModel extends APJPDO
   */
   public function find($where='') {
     $this->_clearError();
-    if ($this->_condition($where)) {
-      $sql="SELECT * FROM `{$this->table}` WHERE ".$this->where;
+    if ($this->_condition($where,true)) {
+      $sql=$this->_querySelect().$this->_queryWhere().$this->_queryOrder().$this->_queryLimit();
       return $this->variables = $this->row($sql,$this->values);
     }
     return false;
@@ -592,7 +627,7 @@ class APJModel extends APJPDO
   public function like($field, $search) {
     $this->_clearError();
     if (in_array($field,$this->fields) and $search) {
-      return $this->rows("SELECT * FROM `{$this->table}` WHERE {$field} LIKE '{$search}'");
+      return $this->rows($this->_querySelect()." WHERE {$field} LIKE '{$search}'".$this->_queryLimit());
     }
   }
   
@@ -604,8 +639,8 @@ class APJModel extends APJPDO
   */
   public function all($order=''){
     $this->_clearError();
-    $order=($order)?"ORDER BY {$order}":'';
-    return $this->rows("SELECT * FROM `{$this->table}` {$order}");
+    $order=($order)?" ORDER BY {$order}":$this->_queryOrder();
+    return $this->rows($this->_querySelect().$order.$this->_queryLimit());
   }
   
   /**
@@ -615,21 +650,144 @@ class APJModel extends APJPDO
   * @param (string) Comma separated order columns (optional)
   * @return (mixed) Associative rows array or false if any error
   */
-  public function select($condition, $order=''){
+  public function select($condition='', $order=''){
     $this->_clearError();
-    $order=($order)?"ORDER BY {$order}":'';
-    if ($this->_condition($condition)) {
-      return $this->rows("SELECT * FROM `{$this->table}` WHERE {$this->where} {$order}",$this->values);
+    $order=($order)?" ORDER BY {$order}":$this->_queryOrder();
+    if ($this->_condition($condition,false)) {
+      return $this->rows($this->_querySelect().$this->_queryWhere().$order.$this->_queryLimit(),$this->values);
     }
     return false;
   }
   
+  private function _queryJoin() {
+    $joins="";
+    if (count($this->joins)>0) {
+      foreach ($this->joins as $join) {
+        $joins.=$join." ";
+      }
+    }
+    return $joins;
+  }
+  
+  private function _querySelect() {
+    return "SELECT {$this->_queryColumns()} FROM `{$this->table}`".$this->_queryJoin();
+  }
+  
+  private function _queryColumns() {
+    $columns="*";
+    if (count($this->joins)>0) {
+      $columns="";
+      foreach ($this->fields as $field) {
+        $columns.="`{$this->table}`.{$field}, ";
+      }
+      $fieldArray=$this->fields;
+      $cumul=array();
+      $as=array();
+      foreach ($this->joins as $table=>$join) {
+        if ($fields=$this->_foreignModel($table)) {
+          foreach ($fields as $field) {
+            $col=$field['Field'];
+            $columns.="`{$table}`.{$col}";
+            if (in_array($col,$fieldArray)) {
+              $cumul[$col]++;
+              $as=$col.$cumul[$col];
+              $columns.=" AS {$as}";
+            }
+            $columns.=", "  ;
+            $fieldArray[]=$col;
+          }
+        }
+      }
+      $columns=substr($columns,0,-2);
+    }
+    return $columns;
+  }
+  
+  private function _queryWhere() {
+    $where="";
+    if ($this->where) {
+      $where=" WHERE ".$this->where;
+    }
+    return $where;
+  }
+  
+  private function _queryOrder() {
+    $order="";
+    if ($this->order) {
+      $order=" ORDER BY ".$this->order;
+    }
+    return $order;
+  }
+  
+  /**
+  * Sets a foreign table Join for query methods<br>
+  * Define un Join con tablas foráneas en los métodos de consultas
+  * @param (string) Foreign table name
+  * @param (string) Local column 
+  * @param (string) Column comparator
+  * @param (string) Foreign Key column to compare with
+  * @param (string) Type of join (INNER, LEFT, RIGHT) Default: INNER
+  * @return (mixed)
+  */
+  public function join($table,$column,$comparator,$foreignKey,$type="INNER") {
+    $types=array('INNER','LEFT','RIGHT','LEFT OUTER','RIGHT OUTER');
+    $type=strtoupper($type);
+    if ($table and in_array($type,$types)) {
+      $join=" {$type} JOIN `{$table}` ON (";
+      if ($column) {
+        $column=(strpos($column,'.')>0)?$column:"`{$this->table}`.{$column}";
+        $join.=$column;
+        if ($comparator) {
+          $join.=" {$comparator} ";
+          if ($foreignKey) {
+            $column=(strpos($foreignKey,'.')>0)?$foreignKey:"`{$table}`.{$foreignKey}";
+            $join.="{$column})";
+            $this->joins[$table]=$join;
+            return true;
+          }
+        }
+      }
+    }
+    $this->error = true;
+    $this->errormsg = "Error defining the join";
+    return false;
+  }  
+  
+  /**
+  * Sets query limits<br>
+  * Define los limites de consultas
+  */
+  private function _queryLimit() {
+    if ($this->limit > 0) {
+      return " LIMIT {$this->limit}";
+    }
+    return "";
+  }
+  
+  /**
+  * Sets query limit for query methods<br>
+  * Define el limie para los métodos de consulta
+  * 
+  * @param mixed $limit
+  */
+  public function limit($limit) {
+    $this->limit = $limit;
+  }  
+   
   /**
   * Clear columns values<br>
   * Limpia los valores de las columnas;
   */
   public function clearValues() {
-    $this->variables=array();  
+    $this->variables=array();
+  }
+  
+  /**
+  * Clear foreign joins<br>
+  * Limpia los joins foraneos
+  */
+  public function clearJoins() {
+    $this->joins = array();  
   }
   
   /**
@@ -641,13 +799,11 @@ class APJModel extends APJPDO
   */
   public function min($field,$condition=NULL)  {
     $this->_clearError();
-    $where="";
     $params="";
-    if ($condition and $this->_condition($condition)) {
-      $where=" WHERE {$this->where}";
+    if ($this->_condition($condition,false)) {
       $params=$this->values;
     }
-    if ($row = $this->row("SELECT MIN({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM)) {
+    if ($row = $this->row("SELECT MIN({$field}) FROM `{$this->table}` {$this->_queryWhere()}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -662,13 +818,11 @@ class APJModel extends APJPDO
   */
   public function max($field,$condition=NULL)  {
     $this->_clearError();
-    $where="";
     $params="";
-    if ($condition and $this->_condition($condition)) {
-      $where=" WHERE {$this->where}";
+    if ($this->_condition($condition,false)) {
       $params=$this->values;
     }
-    if ($row = $this->row("SELECT MAX({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM)) {
+    if ($row = $this->row("SELECT MAX({$field}) FROM `{$this->table}` {$this->_queryWhere()}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -683,13 +837,11 @@ class APJModel extends APJPDO
   */
   public function avg($field,$condition=NULL)  {
     $this->_clearError();
-    $where="";
     $params="";
-    if ($condition and $this->_condition($condition)) {
-      $where=" WHERE {$this->where}";
+    if ($this->_condition($condition,false)) {
       $params=$this->values;
     }
-    if ($row = $this->row("SELECT AVG({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM)) {
+    if ($row = $this->row("SELECT AVG({$field}) FROM `{$this->table}` {$this->_queryWhere()}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -704,13 +856,11 @@ class APJModel extends APJPDO
   */
   public function sum($field,$condition=NULL)  {
     $this->_clearError();
-    $where="";
     $params="";
-    if ($condition and $this->_condition($condition)) {
-      $where=" WHERE {$this->where}";
+    if ($this->_condition($condition,false)) {
       $params=$this->values;
     }
-    if ($row = $this->row("SELECT SUM({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM)) {
+    if ($row = $this->row("SELECT SUM({$field}) FROM `{$this->table}` {$this->_queryWhere()}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -725,13 +875,11 @@ class APJModel extends APJPDO
   */
   public function count($field,$condition=NULL)  {
     $this->_clearError();
-    $where="";
     $params="";
-    if ($condition and $this->_condition($condition)) {
-      $where=" WHERE {$this->where}";
+    if ($this->_condition($condition,false)) {
       $params=$this->values;
     }
-    if ($row = $this->row("SELECT COUNT({$field}) FROM `{$this->table}`{$where}",$params,PDO::FETCH_NUM)) {
+    if ($row = $this->row("SELECT COUNT({$field}) FROM `{$this->table}` {$this->_queryWhere()}",$params,PDO::FETCH_NUM)) {
       return $row[0];
     }
     return false;
@@ -747,7 +895,7 @@ class APJModel extends APJPDO
   */
   public function paging($query, $limit=20,$page=1) {
     if (empty($query)) {
-      $query="SELECT * FROM `{$this->table}`"; 
+      $query="SELECT {$this->_queryColumns()} FROM `{$this->table}`".$this->_queryJoin().$this->_queryWhere().$this->_queryOrder(); 
     }
     if ($all=$this->query($query)) {
       $this->lastPage = ceil($all / $limit);
@@ -795,14 +943,38 @@ class APJModel extends APJPDO
   }
   
   /**
+  * Sets query order<br>
+  * Establece el ordern de la consulta;
+  * @param string Order
+  */
+  public function order($order) {
+    $this->order = $order;
+  }  
+  
+  /**
+  * Sets query condition<br>
+  * Establece la condición de la consulta;
+  * @param mixed array or string condition
+  * @return (boolean)
+  */
+  public function where($condition) {
+    return $this->_condition($condition,true);
+  }  
+  
+  /**
   * Creates the WHERE condition<br>
   * Crea la condición WHERE
   * @param (mixed) Condicion
   * @return (boolean) True if condition could be created
   */
-  private function _condition($condition) {
+  private function _condition($condition,$mandatory=true) {
     $where='';
-    if(empty($condition) and $this->variables) {
+    if(empty($condition) and !empty($this->where) and $mandatory) {
+      return true;
+    } elseif(empty($condition) and !$mandatory) {      
+      $this->where = NULL;
+      return true;
+    } elseif(empty($condition) and $this->variables) {
       foreach ($this->pk as $inx=>$fld) {
         $fldinx=$fld.$inx;
         $where.= "{$fld} = :{$fldinx} AND ";
@@ -827,6 +999,7 @@ class APJModel extends APJPDO
       $this->where = $condition;
       return true;
     }
+    $this->where = NULL;
     $this->error=true;
     $this->errormsg="There are no defined conditions";
     return false;
@@ -853,8 +1026,17 @@ class APJModel extends APJPDO
   * @return (array) Size (integers,decimals)
   */
   private function _size($btype,$type) {
+    $type=str_replace($this->quotes, "", $type);
     if ($size=$this->getStringBetween($type,'(',')',1)) {
-      if (strpos($size,",")>0) {
+      if($btype=='enum' and strpos($size,",")) {
+        $enumValues=explode(',',$size);
+        $size=1;
+        foreach ($enumValues as $value) {
+          $esize=iconv_strlen($value);
+          $size=($esize>$size)?$esize:$size;
+        }
+        $result=array($size,NULL);
+      } elseif (strpos($size,",")>0) {
         $result=explode(",",$size);
       } else {
         $result=array($size,NULL);
@@ -873,7 +1055,6 @@ class APJModel extends APJPDO
         default:
           $result=array(NULL,NULL);
       }
-      
     }
     return $result;
   }
@@ -883,8 +1064,8 @@ class APJModel extends APJPDO
   * Limpia todas las propiedades de errores
   */
   private function _clearError() {
-    $this->error=false;
-    $this->errormsg=NULL;
+    $this->error = false;
+    $this->errormsg = NULL;
     $this->errors = array();
     $this->values = NULL;
   }  
@@ -897,4 +1078,5 @@ class APJModel extends APJPDO
   public function setCharset($charset="utf-8") {
     $this->charset = $charset;
   }
+  
 }
