@@ -7,8 +7,7 @@ class Index extends APJController
     parent::__construct($page);
   }
   
-  public function contenedor($params) {
-    $page=$params[0];
+  public function contenedor($page) {
     if ($page=="Fin") {
       session_destroy(); 
       $this->redirect('login.php?end=true',true);

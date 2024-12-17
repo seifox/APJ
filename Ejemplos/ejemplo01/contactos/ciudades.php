@@ -15,6 +15,8 @@ class Ciudades extends APJController
     $this->sessionControl();
     // Instancia los modelos
     $this->instanciaModelos();
+    // Los parámetros desde APJCall no se pasan como un arreglo
+    $this->useParametersAsArray = false;
     $this->gen = new APJHtmlGen();
     // Muestra la vista desde el contructor de APJController si es que es necesario
     parent::__construct($page);
@@ -38,8 +40,7 @@ class Ciudades extends APJController
   }
   
   // Llamado desde la vista con APJCall, por ello pasa los parametros como un array
-  public function buscaCiudad($params) {
-    $id=$params[0];
+  public function buscaCiudad($id) {
     // Busca en el modelo Ciudades por numero de Id
     if ($this->modeloCiudades->find($id)) {
       // Pasa los datos del modelo al objeto Form
@@ -73,9 +74,7 @@ class Ciudades extends APJController
   }
 
   // Lllamado desde la vista don APJCall para eliminar la ciudad
-  public function eliminar($params) {
-    // Si son varios parametros se puede usar list($id,$nombre,$otroParametro)=$params;
-    $id=$params[0];
+  public function eliminar($id) {
     // Llama al meoto delete del modelo Ciudades para eliminar.
     if ($this->modeloCiudades->delete($id)) {
       $this->jInfo("Ciudad eliminada.");
@@ -102,19 +101,13 @@ class Ciudades extends APJController
     $this->jError("Error en la base de datos, revise el LOG para más detalles.");
   }
   
-  public function cambiaGrilla($params) {
-    $grilla=" ".$this->grillaCiudades($params);
+  public function cambiaGrilla($pais) {
+    $grilla=" ".$this->grillaCiudades($pais);
     $this->jQ("#grillaCiudades")->html($grilla);
   }
   
   // Llamado desde la vista y este controlador para generar la grilla de Ciudades
-  public function grillaCiudades($params) {
-    //$params puede o no ser un array
-    if (is_array($params)) {
-      $pais=$params[0];  
-    } else {
-      $pais=$params;
-    }
+  public function grillaCiudades($pais) {
     // select($condiciones,$orden) devuelve un array de filas con los criterios dados
     $rows=$this->modeloCiudades->select(array('codigo_pais'=>$pais),'ciudad');
     $this->gen->start();

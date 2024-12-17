@@ -2,7 +2,7 @@
 /**
 * Common methods Trait<br>
 * Rasgo de métodos comunes
-* Version: 1.9.200512
+* Version: 1.9.210122
 * Author: Ricardo Seiffert
 */
 trait APJCommon
@@ -122,9 +122,10 @@ trait APJCommon
     $delimiters=array(' ','-','/');
     $months=array(array('ninguno','enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'),array('ninguno','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'),array('none','jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'));
     $separator=" ";
+    $strDate=$dateTime;
     foreach ($months as $month) {
       foreach ($delimiters as $delimiter) {
-        if ($this->arrayInString($month,strtolower($dateTime),$delimiter)) {
+        if ($this->arrayInString($month,strtolower($strDate),$delimiter)) {
           $arraymonth=$month;
           $separator=$delimiter;
           break;
@@ -132,7 +133,7 @@ trait APJCommon
       }
     }
     if (count($arraymonth)) {
-      $fa=explode($separator,strtolower($dateTime));
+      $fa=explode($separator,strtolower($strDate));
       $dd='';
       $mm='';
       $yy='';
@@ -150,15 +151,17 @@ trait APJCommon
         }
       }
       if ($dd and $mm and $yy) {
-        $dateTime=$mm.'/'.$dd.'/'.$yy;
+        $strDate=$mm.'/'.$dd.'/'.$yy;
       }
+    } elseif (strpos($strDate,'/')) {
+       $strDate=str_replace('/','-',$strDate);
     }
     try {
-      $dateTime=new DateTime($dateTime);  
+      $newDate=new DateTime($strDate);  
     } catch (Exception $e) {
       return "Error";
     }
-    return $dateTime->format($format);
+    return $newDate->format($format);
   }
   
   /**

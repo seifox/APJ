@@ -2,7 +2,7 @@
 /*
 * APJ Base Model that extends APJPDO class<br>
 * Modelo de base que extiende la clase APJPDO
-* Version: 1.9.200519
+* Version: 1.9.230828
 * Author: Ricardo Seiffert
 */
 class APJModel extends APJPDO
@@ -19,6 +19,12 @@ class APJModel extends APJPDO
   * @var string
   */
   public $pk = array();
+  /**
+  * Primary key full name<br>
+  * Ruta completa de la clave primaria 
+  * @var mixed
+  */
+  public $fullPk = array();
   /**
   * Columns values<br>
   * Valores de columnas
@@ -129,8 +135,8 @@ class APJModel extends APJPDO
   * Constructor (connects to database)<br>
   * Constructor (conecta con la base de datos)
   */
-  public function __construct() {
-    parent::__construct();    
+  public function __construct($dsn=NULL,$user=NULL,$password=NULL,$charset=NULL) {
+    parent::__construct($dsn,$user,$password,$charset);    
     $this->_clearError();
   }
   
@@ -179,6 +185,7 @@ class APJModel extends APJPDO
         $this->alias[$str['Field']]=$str['Comment'];
         if ($str['Key']=="PRI") {
           $this->pk[]=$str['Field'];
+          $this->fullPk[]="`{$this->table}`.".$str['Field'];
         }
       }
       $this->fields = array_keys($this->structure);
@@ -234,6 +241,14 @@ class APJModel extends APJPDO
     if ($this->pk) {
       $out.='$this->pk = array(';
       foreach ($this->pk as $pk) {
+        $out.="'{$pk}',";
+      }
+      $out=substr($out,0,-1);
+      $out.=');'.PHP_EOL;
+    }
+    if ($this->fullPk) {
+      $out.='$this->fullPk = array(';
+      foreach ($this->fullPk as $pk) {
         $out.="'{$pk}',";
       }
       $out=substr($out,0,-1);
@@ -582,7 +597,7 @@ class APJModel extends APJPDO
   * @param (string) $table
   * @return (mixed)
   */
-  public function truncate($table) {
+  public function truncate($table=NULL) {
     $this->_clearError();
     $table=($table)?$table:$this->table;
     return $this->query("TRUNCATE TABLE `{$table}`");
@@ -595,7 +610,7 @@ class APJModel extends APJPDO
   * @param (string) name of the table, if not specified it will be the current table (optional) 
   * @return (mixed)
   */
-  public function drop($temporary=false,$table) {
+  public function drop($temporary=false,$table=NULL) {
     $this->_clearError();
     $table=($table)?$table:$this->table;
     $temp=($temporary)?'TEMPORARY':'';
@@ -977,7 +992,7 @@ class APJModel extends APJPDO
     } elseif(empty($condition) and $this->variables) {
       foreach ($this->pk as $inx=>$fld) {
         $fldinx=$fld.$inx;
-        $where.= "{$fld} = :{$fldinx} AND ";
+        $where.= "{$this->fullPk[$inx]} = :{$fldinx} AND ";
         $this->values[$fldinx]=$this->variables[$fld];
       }
       $this->where=(strlen($where)>5)?substr($where,0,-5):$where;
@@ -993,7 +1008,7 @@ class APJModel extends APJPDO
       $this->where=(strlen($where)>5)?substr($where,0,-5):$where;
       return true;
     } elseif (strlen($condition)>0 and is_numeric($condition)) {
-      $this->where = "{$this->pk[0]}={$condition}";      
+      $this->where = "{$this->fullPk[0]}={$condition}";      
       return true;
     } elseif (strlen($condition)>0) {
       $this->where = $condition;
@@ -1068,6 +1083,7 @@ class APJModel extends APJPDO
     $this->errormsg = NULL;
     $this->errors = array();
     $this->values = NULL;
+    $this->where = NULL;
   }  
 
   /**

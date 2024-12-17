@@ -13,6 +13,7 @@ class Model_Paises extends APJModel
   public function __construct() {
     parent::__construct();
     $this->setTable('paises');
+    //$this->modeloPaises->showModel(true);
     $this->toUpper = array('codigo','pais');
   }
   
@@ -27,4 +28,9 @@ class Model_Paises extends APJModel
   public function buscarPais($param) {
     return $this->select("codigo='{$param}' OR pais LIKE '{$param}%'",'pais');
   }
+  
+  public function eliminar($id) {
+    return $this->delete(array('codigo'=>$id));
+  }  
+  
 }

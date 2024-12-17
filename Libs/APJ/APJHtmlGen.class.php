@@ -2,7 +2,7 @@
 /**
 * Html Generator class<br>
 * Clase Generadora de Html
-* Version: 1.9.200512
+* Version: 1.9.241217
 * Author: Ricardo Seiffert
 */
 class APJHtmlGen
@@ -195,6 +195,17 @@ class APJHtmlGen
   }
   
   /**
+  * Adds a onchange event
+  * Agrega un evento onchange
+  * @param (string) value
+  * @return APJHtmlGen
+  */
+  public function onmouseover($value) {
+    $this->content.=' onmouseover="'.$value.'"';
+    return $this;
+  }
+  
+  /**
   * Adds a literal
   * Agrega un literal
   * @param (string) literal
@@ -293,6 +304,6 @@ class APJHtmlGen
   }
   
   private function setSpecialClose() {
-    $this->specialClose = array('a','abr','address','article','aside','audio','b','bdi','blockquote','body','button','canvas','caption','cite','code','colgroup','datalist','dd','del','detail','dfn','dialog','div','dl','dt','em','embed','fieldset','figcaption','figure','footer','form','h1','h2','h3'.'h4','h5','h6','head','html','i','iframe','ins','kbd','label','legend','li','main','map','mark','menu','menuitem','meter','nav','noscript','object','ol','optgroup','option','output','p','picture','pre'.'progress','q','rp','rt','ruby','s','samp','script','section','select','small','span','strong','style','sub','summary','sup','table','tbody','td','textarea','tfoot','th','thead','time','title','tr','u','ul','var','video');
+    $this->specialClose = array('a','abr','address','article','aside','audio','b','bdi','blockquote','body','button','canvas','caption','cite','code','colgroup','datalist','dd','del','detail','dfn','dialog','div','dl','dt','em','embed','fieldset','figcaption','figure','footer','form','h1','h2','h3','h4','h5','h6','head','html','i','iframe','ins','kbd','label','legend','li','main','map','mark','menu','menuitem','meter','nav','noscript','object','ol','optgroup','option','output','p','picture','pre','progress','q','rp','rt','ruby','s','samp','script','section','select','small','span','strong','style','sub','summary','sup','table','tbody','td','textarea','tfoot','th','thead','time','title','tr','u','ul','var','video');
   }
 }

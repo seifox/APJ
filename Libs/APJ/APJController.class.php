@@ -2,7 +2,7 @@
 /**
 * APJ's parent Controller
 * Controlador padre de APJ
-* Version: 1.9.200714
+* Version: 1.9.241217
 * Author: Ricardo Seiffert
 */
 class APJController
@@ -12,7 +12,14 @@ class APJController
   * Puede renderizar
   * @var bool
   */
-  protected $canRender = true;
+  public $canRender = true;
+
+  /**
+  * has the controller rendered? 
+  * Ha renderizado el controlador
+  * @var bool
+  */
+  protected $hasRendered = false;
   /**
   * Controller filename<br>
   * Archivo del Controlador
@@ -75,14 +82,16 @@ class APJController
     $method = isset($_POST['action'])?$_POST['action']:null;
     $data = isset($_POST['data'])?$_POST['data']:$_POST;
     $this->_unsetAction();
-    if (method_exists($this,$method)) {
-      $data=$this->_isJson($data);
-      $this->getForm();
-      $this->{$method}($data);
-      $this->getResponse();
-    } elseif ($method) {
-      $this->jError("El método {$method} no existe!");
-      $this->getResponse();
+    if ($method) {
+      if (method_exists($this,$method)) {
+        $data=$this->_isJson($data);
+        $this->getForm();
+        $this->{$method}($data);
+        $this->getResponse();
+      } elseif ($method) {
+        $this->jError("El método {$method} no existe!");
+        $this->getResponse();
+      }
     } elseif ($page) {
       $this->render($page,false);
     }
@@ -106,6 +115,7 @@ class APJController
         } else {
           echo $html;
         }
+        $this->hasRendered = true;
       } else {
         $html="Can't open view ".$url;
         if ($return) {
@@ -128,7 +138,7 @@ class APJController
     APJSession::start(APPNAME,SESSION_LIMIT);
     if (!isset($_SESSION['id']) or !isset($_SESSION['IPaddress']) or !isset($_SESSION['userAgent'])) {
       $this->redirect(LOGIN,true);
-    }
+    }                   
     $app=md5($this->getController());
     if (in_array($app,$_SESSION['app'])==FALSE) {
       $this->redirect(LOGIN,true);
@@ -300,6 +310,7 @@ class APJController
   }
   
   private function _APJCall($params) {
+    $data=NULL;
     if (is_array($params)) {
       $func=$params[0];
       if (count($params)>1) {
@@ -313,6 +324,7 @@ class APJController
         }
       }
     }
+    return NULL;
   }
 
   private function _getContent($page) {
@@ -387,6 +399,9 @@ class APJController
           $paramArray=array($func);
         }
         $replace=$this->_APJCall($paramArray);
+        if (is_null($replace)) {
+            $replace = '';
+        }
         $html=str_replace($allNeedle,$replace,$html);
         $len=strlen($replace);
       }
@@ -421,7 +436,7 @@ class APJController
     }
     return $options;
   }
-  
+    
   /**
   * Return current filename to _self (used with url = "APJ:{self()}")<br>
   * Retorna el nombre del archivo actual a _self (para uso en url = "APJ:{self()}")

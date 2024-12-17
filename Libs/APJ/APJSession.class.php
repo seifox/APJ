@@ -83,7 +83,6 @@ class APJSession
       return false;
     if ($_SESSION['IPaddress'] != md5($_SERVER['REMOTE_ADDR']))
       return false;
-
     if( $_SESSION['userAgent'] != md5($_SERVER['HTTP_USER_AGENT']))
       return false;
 

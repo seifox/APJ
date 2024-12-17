@@ -14,11 +14,10 @@ class Paises extends APJController
   
   private function instanciaModelos() {
     $this->modeloPaises = new Model_Paises();
-    //$this->modeloPaises->showModel(true);
   }
   
-  public function buscaPais($params) {
-    if ($this->modeloPaises->find(array('codigo'=>$params[0]))) {
+  public function buscaPais($pais) {
+    if ($this->modeloPaises->find(array('codigo'=>$pais))) {
       $this->modelToForm($this->modeloPaises);
       $this->setFormValues();
       $menos=$this->gen->create("button")->type("button")->clas("smallButton")->onclick("jConfirm('Esta seguro de eliminar este País?','Confirme',APJCall,['eliminar','{$this->Form->codigo}']);return false;")->text("-")->end();
@@ -39,8 +38,8 @@ class Paises extends APJController
     }
   }
 
-  public function eliminar($params) {
-    if ($this->modeloPaises->delete(array('codigo'=>$params[0]))) {
+  public function eliminar($id) {
+    if ($this->modeloPaises->eliminar($id)) {
       $this->jInfo("Pais eliminado.");
       $this->jQ("#reset")->click();
     } else {

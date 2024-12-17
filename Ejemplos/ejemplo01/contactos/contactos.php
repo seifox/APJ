@@ -34,9 +34,9 @@ class Contactos extends APJController
     return $this->options($ciudades,'id','ciudad');
   }
 
-  public function buscarPais($params) {
-    if (strlen($params[0])) {
-      $rows=$this->modeloPaises->buscarPais($params[0]);
+  public function buscarPais($pais=NULL) {
+    if ($pais) {
+      $rows=$this->modeloPaises->buscarPais($pais);
     } else {
       $this->jWarning('Debe especificar que quiere buscar');
       return false;
@@ -67,8 +67,7 @@ class Contactos extends APJController
     $this->refrescaGrilla($pais);
   }
   
-  public function editaContacto($params) {
-    $id=$params[0];
+  public function editaContacto($id) {
     if ($this->modeloContactos->find($id)) {
       $this->modelToForm($this->modeloContactos);
       $this->seleccionaPais(array($this->Form->pais));
@@ -82,18 +81,17 @@ class Contactos extends APJController
     }
   }
   
-  public function buscarDNI($params) {
-    list($pais,$dni)=$params;
+  public function buscarDNI($pais,$dni) {
     if ($pais and $dni) {
       if ($this->modeloContactos->find(array('pais'=>$pais,'dni'=>$dni))) {
-        $this->editaContacto(array($this->modeloContactos->id));
+        $this->editaContacto($this->modeloContactos->id);
       }
     }
   }
   
-  public function buscarNombres($params) {
-    if (strlen($params[0])) {
-      $rows=$this->modeloContactos->buscarNombre($params[0]);
+  public function buscarNombres($nombre=NULL) {
+    if ($nombre) {
+      $rows=$this->modeloContactos->buscarNombre($nombre);
     } else {
       $this->jWarning('Debe especificar que quiere buscar');
       return false;
@@ -107,14 +105,14 @@ class Contactos extends APJController
     }
   }
   
-  public function seleccionaContacto($params) {
+  public function seleccionaContacto($id) {
     $this->jQ("#listadodiv")->hide();
-    $this->editaContacto($params);
+    $this->editaContacto($id);
   }
   
-  public function calculaEdad($params) {
-    if (!empty($params)) {
-      if ($edad=Helper_FuncionesFecha::edad($params[0])) {
+  public function calculaEdad($fecha) {
+    if (!empty($fecha)) {
+      if ($edad=Helper_FuncionesFecha::edad($fecha)) {
         $this->jQ("#edad")->text(" Edad:{$edad} años");
       } else {
         $this->jQ("#edad")->text(" Edad:0");
@@ -132,8 +130,7 @@ class Contactos extends APJController
     }
   }
 
-  public function eliminar($params) {
-    $id=$params[0];
+  public function eliminar($id) {
     if ($this->modeloContactos->delete($id)) {
       $this->jInfo("Contacto eliminado.");
       $this->refrescaGrilla($this->modeloContactos->pais);

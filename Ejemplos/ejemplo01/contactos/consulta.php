@@ -69,8 +69,7 @@ class Consulta extends APJController
     return $out;
   }
   
-  public function paginacion($params) {
-    $page=(is_array($params))?$params[0]:$params;
+  public function paginacion($page) {
     $this->gen->create("table")->clas("tabla")->add("tr")->clas("modo2");
     if ($page>1) {
       $this->gen->add("td")->

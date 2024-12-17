@@ -20,7 +20,7 @@ define("IMAGES",  APP.DIRECTORY_SEPARATOR."images".DIRECTORY_SEPARATOR); // Carp
 if (DEVELOPMENT) {
   error_reporting(E_ERROR | E_WARNING | E_PARSE);
   $domain="localhost";
-  $rootUrl="/contactos"; //URL raíz de la aplicación en desarrollo **DEBE MODIFICARSE**
+  $rootUrl="/APJ/Ejemplos/ejemplo01/contactos"; //URL raíz de la aplicación en desarrollo **DEBE MODIFICARSE**
   $es="ES";
 } else {
   error_reporting(0);

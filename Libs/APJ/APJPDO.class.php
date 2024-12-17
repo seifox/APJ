@@ -2,7 +2,7 @@
 /**
 * APJPDO Class for PDO managment<br>
 * Clase para la gestión de PDO
-* Version: 1.9.200513
+* Version: 1.9.231121
 * Author: Ricardo Seiffert
 */
 class APJPDO 
@@ -29,9 +29,9 @@ class APJPDO
   * @param string $user (optional)
   * @param strinf $password (optional)
   */
-	public function __construct($dsn=NULL,$user=NULL,$password=NULL)	{ 			
+	public function __construct($dsn=NULL,$user=NULL,$password=NULL,$charset=NULL)	{ 			
 		$this->_Log = new APJLog();	
-		$this->_connect($dsn,$user,$password);
+		$this->_connect($dsn,$user,$password,$charset);
 		$this->clearBinding();
 	}
   
@@ -39,7 +39,7 @@ class APJPDO
     $this->disconnect();
   }
 	
-	private function _connect($dsn,$user,$password) {
+	private function _connect($dsn=NULL,$user=NULL,$password=NULL,$charset=NULL) {
     if ($dsn==NULL) {
       $inifile=APJ.DIRECTORY_SEPARATOR."APJPDO.ini.php";
       if (is_readable($inifile)) {
@@ -55,6 +55,7 @@ class APJPDO
     } else {
       $this->_Settings["user"]=$user;
       $this->_Settings["password"]=$password;
+      $this->_Settings["charset"]=$charset;
     }
 		try {
       if (class_exists('PDO')) {
@@ -84,8 +85,8 @@ class APJPDO
   * @param (array) Parameters array
   */
 	private function _prepare($query,$parameters = "") {
-	  if(!$this->_Connected) { 
-      $this->Connect();
+    if (!$this->_Connected) {
+      $this->_connect();
     }
 	  try {
 			$this->_Qry = $this->_Pdo->prepare($query);
@@ -97,14 +98,10 @@ class APJPDO
 				}
 			}
 			$this->result = $this->_Qry->execute();		
-      $this->error = false;
-      $this->errornum = 0;
-      $this->errormsg = NULL;
+      $this->_setNoError();
 		}	catch(PDOException $e) {
 			$this->_errorLog($e->getMessage(), $query);
-      $this->error = true;
-      $this->errornum = $this->_Pdo->errorCode();
-      $this->errormsg = $e->getMessage();
+      $this->_setError();
 		}
 		$this->clearBinding();
 	}
@@ -170,9 +167,7 @@ class APJPDO
           return $rows;
         } catch(PDOException $e) {
           $this->_errorLog($e->getMessage());
-          $this->error = true;
-          $this->errornum = $this->_Pdo->errorCode();
-          $this->errormsg = $this->_Pdo->errorInfo();
+          $this->_setError();
           $this->numrows=0;
         }
       }
@@ -197,9 +192,7 @@ class APJPDO
           return $this->_Qry->fetch($fetchMode);
         } catch(PDOException $e) {
           $this->_errorLog($e->getMessage());
-          $this->error = true;
-          $this->errornum = $this->_Pdo->errorCode();
-          $this->errormsg = $this->_Pdo->errorInfo();
+          $this->_setError();
         }
       }
     }
@@ -218,9 +211,7 @@ class APJPDO
         return $this->_Qry->fetch($fetchmode);      
       } catch(PDOException $e) {
         $this->_errorLog($e->getMessage());
-        $this->error = true;
-        $this->errornum = $this->_Pdo->errorCode();
-        $this->errormsg = $this->_Pdo->errorInfo();
+        $this->_setError();
       }
     }
     return false;      
@@ -242,9 +233,7 @@ class APJPDO
           return $this->affected = $this->_Qry->rowCount();
         } catch(PDOException $e) {
           $this->_errorLog($e->getMessage());
-          $this->error = true;
-          $this->errornum = $this->_Pdo->errorCode();
-          $this->errormsg = $this->_Pdo->errorInfo();
+          $this->_setError();
         }
       }
 		}
@@ -266,18 +255,14 @@ class APJPDO
           return $this->affected = $this->_Qry->rowCount();
         } catch(PDOException $e) {
           $this->_errorLog($e->getMessage());
-          $this->error = true;
-          $this->errornum = $this->_Pdo->errorCode();
-          $this->errormsg = $this->_Pdo->errorInfo();
+          $this->_setError();
         }
       } else {
         try {
           return $this->numrows = $this->_Qry->rowCount();
         } catch(PDOException $e) {
           $this->_errorLog($e->getMessage());
-          $this->error = true;
-          $this->errornum = $this->_Pdo->errorCode();
-          $this->errormsg = $this->_Pdo->errorInfo();
+          $this->_setError();
         }
       }
     }
@@ -294,9 +279,7 @@ class APJPDO
       return $this->_Pdo->lastInsertId();
     } catch(PDOException $e) {
       $this->_errorLog($e->getMessage());
-      $this->error = true;
-      $this->errornum = $this->_Pdo->errorCode();
-      $this->errormsg = $this->_Pdo->errorInfo();
+      $this->_setError();
     }
     return false;      
   }  
@@ -309,12 +292,12 @@ class APJPDO
     try {
       $this->_Pdo->beginTransaction();
       $this->trans=true;
+      return true;
     } catch(PDOException $e) {
       $this->_errorLog($e->getMessage());
-      $this->error = true;
-      $this->errornum = $this->_Pdo->errorCode();
-      $this->errormsg = $this->_Pdo->errorInfo();
+      $this->_setError();
     }
+    return false;
   }  
   
   /**
@@ -326,13 +309,13 @@ class APJPDO
       try {
         $this->_Pdo->commit();
         $this->trans=false;
+        return true;
       } catch(PDOException $e) {
         $this->_errorLog($e->getMessage());
-        $this->error = true;
-        $this->errornum = $this->_Pdo->errorCode();
-        $this->errormsg = $this->_Pdo->errorInfo();
+        $this->_setError();
       }
     }
+    return false;
   }  
   
   /**
@@ -344,13 +327,13 @@ class APJPDO
       try {
         $this->_Pdo->rollBack();
         $this->trans=false;
+        return true;
       } catch(PDOException $e) {
         $this->_errorLog($e->getMessage());
-        $this->error = true;
-        $this->errornum = $this->_Pdo->errorCode();
-        $this->errormsg = $this->_Pdo->errorInfo();
+        $this->_setError();
       }
     }
+    return false;
   }  
   
   /**
@@ -365,7 +348,9 @@ class APJPDO
         $this->_Pdo->rollBack();
       }
       $this->trans=false;
+      return true;
     }
+    return false;
   }
   
   /**
@@ -481,6 +466,18 @@ class APJPDO
   public function getDataBaseName() {
     return $this->_Settings['dbname'];
   }  
+
+  private function _setError() {
+    $this->error = true;
+    $this->errornum = $this->_Pdo->errorCode();
+    $this->errormsg = $this->_Pdo->errorInfo();
+  }
+  
+  private function _setNoError() {
+    $this->error = false;
+    $this->errornum = 0;
+    $this->errormsg = NULL;
+  }
   
 }
 
@@ -539,7 +536,7 @@ class APJPDOConnection
         $conn->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND,'SET NAMES '.$settings['charset']);
       }
       $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+      $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, ATTR_EMULATE_PREPARES);
       return $conn;
     }  catch (PDOException $e) {
       throw $e;
@@ -556,5 +553,5 @@ class APJPDOConnection
     }
     return false;
   }
-  
+
 }

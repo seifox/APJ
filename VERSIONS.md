@@ -1,17 +1,6 @@
 # Versiones
-- Mejoras en APJSession
-  - Mejoras en constantes de la duración de la sessión
-- Mejoras en APJCommon
-  - Se agregó el método objectToArray permite crear un arreglo a partir de un objeto
-- Mejoras en APJController
-  - Se mejoraron los métodos setFieldType, setFormValues, options, showWarnings
-- Mejoras en APJHtmlGen
-  - Se mejoró el método add
-  - Se agregó el método src
-- Mejoras en APJModel
-  - Mejoras en el método paging
-  - Mejoras en el método condition
-  - Mejoras generales en las referencias a tablas
+## APJ 1.9.2412
+- 
 ## APJ 1.8.1907
 - Mejoras en APJModel
   - Se agregó el método truncate que permite truncar tablas
